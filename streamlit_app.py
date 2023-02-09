@@ -6,7 +6,7 @@ import streamlit as st
 import numpy as np
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
-st.title ('Welcome to the FiscalNote :purple[DeepRisk]:red[360] Demo')
+st.title ('Welcome to the FiscalNote _DeepRisk360_ Demo')
 
 ctx = snowflake.connect(user=os.environ['snowflake_user'],password=os.environ['snowflake_password'],
         account=os.environ['snowflake_account'],database="FORGEAI_ARTICLES_V0660",schema="ARTICLES_V0660")
@@ -46,10 +46,10 @@ grid_response = AgGrid(
     gridOptions=gridOptions,
     data_return_mode='AS_INPUT', 
     update_mode='MODEL_CHANGED', 
-    fit_columns_on_grid_load=False,
+    fit_columns_on_grid_load=True,
     theme='material', #Add theme color to the table
     enable_enterprise_modules=False,
-    height=350, 
+    height=450, 
     width='100%',
     reload_data=True
 )
