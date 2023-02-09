@@ -13,7 +13,9 @@ ctx = snowflake.connect(user=os.environ['snowflake_user'],password=os.environ['s
 cs = ctx.cursor()
 try:
     cs.execute("""        
-            select * from "SCRATCH_FORGEAI"."ANDYC"."KBDemo"
+           select NODE_DISTANCE,STARTING_NODE,ENDING_NODE,CATEGORY_EVENT_AND_TOPIC,INTENSITY,ENDNODE_SENTIMENT
+                ,ENDNODE_FINANCIALSENTIMENT,STARTNODE_SENTIMENT, STARTNODE_FINANCIALSENTIMENT
+                from "SCRATCH_FORGEAI"."ANDYC"."KBDemo"
            ;""")
     rows_big = cs.fetchall()
 except:
