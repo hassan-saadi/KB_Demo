@@ -4,7 +4,7 @@ import streamlit as st
 import numpy as np
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
-data= pd.read_csv('./data/results.csv', index_col=0) 
+data= pd.read_csv('results.csv') 
 gb = GridOptionsBuilder.from_dataframe(data)
 gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
 gb.configure_side_bar() #Add a sidebar
