@@ -22,7 +22,7 @@ finally:
     cs.close()
 ctx.close()
     
-data = pd.DataFrame(rows_big, columns=['GRAPH','NODE_DISTANCE', 'STARTING_NODE', 'ENDING_NODE', 'CATEGORY_EVENT_AND_TOPIC', 'INTENSITY', "ENODE_SENTIMENT", "ENODE_FINSENTIMENT",
+data = pd.DataFrame(rows_big, columns=['NODE_DISTANCE', 'STARTING_NODE', 'ENDING_NODE', 'CATEGORY_EVENT_AND_TOPIC', 'INTENSITY', "ENODE_SENTIMENT", "ENODE_FINSENTIMENT",
                                            'STNODE_SENTIMENT','STNODE_FINSENTIMENT'])
 gb = GridOptionsBuilder.from_dataframe(data)
 gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
