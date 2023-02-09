@@ -6,8 +6,8 @@ import streamlit as st
 import numpy as np
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
-st.title ('Welcome to the :blue[DeepRisk360] Demo')
-st.title ('by :purple[Fiscal]:red[Note]')
+st.title ('Welcome to the FiscalNote :purple[DeepRisk]:red[360] Demo')
+
 ctx = snowflake.connect(user=os.environ['snowflake_user'],password=os.environ['snowflake_password'],
         account=os.environ['snowflake_account'],database="FORGEAI_ARTICLES_V0660",schema="ARTICLES_V0660")
 cs = ctx.cursor()
