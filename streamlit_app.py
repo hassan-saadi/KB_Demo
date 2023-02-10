@@ -33,4 +33,8 @@ for index, row in df_graph.iterrows():
 
 # Display the network in Streamlit
 #st.write(net.show("my_network.html"), unsafe_allow_html=True)
-st.write(net.show("netout.html"))
+# Save the network chart as an HTML file
+net.save("network.html")
+
+# Display the HTML content in Streamlit
+st.html(open("network.html").read(), unsafe_allow_html=True)
