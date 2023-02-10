@@ -17,9 +17,39 @@ graphname = st.sidebar.selectbox("Please select a company as a starting node:", 
 df_graph = data[data['GRAPH']==graphname]
 #location = 'https://drive.google.com/file/d/1DpJtnYV9M9KfsxVMKmjNhvoPmiAuAeox/view?usp=share_link'
 #location = ("https://github.com/andychak/KB_Demo/blob/master/" + graphname + ".html")
-location = ("https://raw.githubusercontent.com/andychak/KB_Demo/master/"  + graphname + ".html")
-response = requests.get(location)
-components.html(response.text,width=1000, height=800)
+#location = ("https://raw.githubusercontent.com/andychak/KB_Demo/master/"  + graphname + ".html")
+#response = requests.get(location)
+#components.html(response.text,width=1000, height=800)
+
+
+nodes = []
+nodelist = list(set(df_graph['ENDING_NODE'].to_list()))
+nodelist = [x for x in nodelist if x != graphname]
+edges =[]
+nodes.append(Node(id = graphname, label = graphname, size =25))
+for element in nodelist:
+    nodes.append(Node(id = element, label = element, size =25))
+for i, row in df_graph.iterrows():
+    edges.append( Edge(source=row['STARTING_NODE'], 
+                   
+                   target=row['ENDING_NODE'], 
+                   # **kwargs
+                   ) 
+            ) 
+
+
+config = Config(width=750,
+                height=950,
+                directed=True, 
+                physics=True, 
+                hierarchical=False,
+                # **kwargs
+                )
+
+return_value = agraph(nodes=nodes, 
+                      edges=edges, 
+                      config=config)
+
 
 
 # Footer
