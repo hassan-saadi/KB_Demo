@@ -7,7 +7,11 @@ import numpy as np
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
 st.title ('Welcome to the FiscalNote _DeepRisk360_ Demo')
+data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/data/result.csv?token=GHSAT0AAAAAAB4J2SZYQQUUCBVEGWDZWT5IY7FRPNA')
 
+data
+
+"""
 ctx = snowflake.connect(user=os.environ['snowflake_user'],password=os.environ['snowflake_password'],
         account=os.environ['snowflake_account'],database="FORGEAI_ARTICLES_V0660",schema="ARTICLES_V0660")
 cs = ctx.cursor()
@@ -26,6 +30,8 @@ ctx.close()
     
 data = pd.DataFrame(rows_big, columns=['NODE_DISTANCE', 'STARTING_NODE', 'ENDING_NODE', 'CATEGORY_EVENT_AND_TOPIC', 'INTENSITY', "ENODE_SENTIMENT", "ENODE_FINSENTIMENT",
                                            'STNODE_SENTIMENT','STNODE_FINSENTIMENT'])
+
+
 gb = GridOptionsBuilder.from_dataframe(data)
 gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
 gb.configure_side_bar() #Add a sidebar
@@ -48,3 +54,4 @@ grid_response = AgGrid(
 data = grid_response['data']
 selected = grid_response['selected_rows'] 
 df = pd.DataFrame(selected) #Pass the selected rows to a new dataframe df
+"""
