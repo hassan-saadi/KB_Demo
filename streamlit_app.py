@@ -26,7 +26,7 @@ nodes = []
 nodelist = list(set(df_graph['ENDING_NODE'].to_list()))
 nodelist = [x for x in nodelist if x != graphname]
 edges =[]
-nodes.append(Node(id = graphname, label = graphname, size =25))
+nodes.append(Node(id = graphname, label = graphname, size =25, color = 'black'))
 for element in nodelist:
     nodes.append(Node(id = element, label = element, size =25))
 for i, row in df_graph.iterrows():
