@@ -40,7 +40,7 @@ html_code = net.show("my_network.html")
 #st.html(html_code)
 #p = open("./tmp/network.html")
 #components.html(p.read())
-st.components.v1.html(html_code)
+components(html_code)
 
 # Footer
 st.markdown(
