@@ -15,31 +15,10 @@ graphname = st.sidebar.selectbox("Please select a company as a starting node:", 
 
 df_graph = data[data['GRAPH']==graphname]
 
+location = "https://github.com/andychak/KB_Demo/blob/master/" + graphname + ".html"
+components.iframe(location)
 
 
-nodes = []
-edges = []
-nodeslist = []
-
-nodes.append(Node (id=graphname, label = graphname, color = 'black', size = 15))
-nodeslist = list(set(df_graph['ENDING_NODE'].to_list()))
-nodeslist = [x for x in nodeslist if x != graphname]
-for index, row in df_graph.iterrows():
-  try:
-    edges.append(Edge(source = row['STARTING_NODE'], target = row['ENDING_NODE'], size =10))
-  except: 
-    pass
-config = Config(height=800,
-		#width=700, 
-                nodeHighlightBehavior=True,
-                highlightColor="#F7A7A6", 
-                directed=True, 
-                collapsible=True)
-                 
-                 
-return_value = agraph(nodes=nodes, 
-                      edges=edges, 
-                      config=config)
 # Footer
 st.sidebar.markdown(
     """
