@@ -15,8 +15,9 @@ graphname = st.sidebar.selectbox("Please select a company as a starting node:", 
 
 df_graph = data[data['GRAPH']==graphname]
 
-location = "https://github.com/andychak/KB_Demo/blob/master/" + graphname + ".html"
-components.iframe(location)
+location = open("https://github.com/andychak/KB_Demo/blob/master/" + graphname + ".html", 'r', encoding ='utf-8')
+source = location.read()
+components.html(source)
 
 
 # Footer
