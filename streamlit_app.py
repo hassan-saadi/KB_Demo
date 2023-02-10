@@ -32,4 +32,4 @@ for index, row in df_graph.iterrows():
 
 
 # Display the network in Streamlit
-st.pyvis_chart(net.show("my_network.html"))
+st.write(net.show("my_network.html"), unsafe_allow_html=True)
