@@ -33,4 +33,4 @@ for index, row in df_graph.iterrows():
 
 # Display the network in Streamlit
 #st.write(net.show("my_network.html"), unsafe_allow_html=True)
-st.write(net.show())
+st.write(net.show("netout.html"))
