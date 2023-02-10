@@ -6,6 +6,7 @@ import streamlit.components.v1 as components
 from streamlit_agraph import agraph, Node, Edge, Config
 import streamlit as st
 import numpy as np
+import requests
 
 st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
 st.sidebar.title ('Welcome to the RiskConnector Sample Preview')
@@ -15,9 +16,9 @@ graphname = st.sidebar.selectbox("Please select a company as a starting node:", 
 
 df_graph = data[data['GRAPH']==graphname]
 #location = 'https://drive.google.com/file/d/1DpJtnYV9M9KfsxVMKmjNhvoPmiAuAeox/view?usp=share_link'
-location = open("https://github.com/andychak/KB_Demo/blob/master/" + graphname + ".html", 'r', encoding ='utf-8')
-source = location.read()
-st.write(source)
+location = open("https://github.com/andychak/KB_Demo/blob/master/" + graphname + ".html")
+response = requests.get(location)
+st.write(response.text, unsafe_allow_html = True)
 
 
 # Footer
