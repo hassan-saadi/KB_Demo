@@ -37,10 +37,10 @@ html_code = net.show("my_network.html")
 #st.write_html("./tmp/network.html")
 
 # Display the HTML content in Streamlit
-st.html(html_code)
+#st.html(html_code)
 #p = open("./tmp/network.html")
 #components.html(p.read())
-
+st.components.v1.html(html_code)
 
 # Footer
 st.markdown(
