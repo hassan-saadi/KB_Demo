@@ -38,8 +38,8 @@ for i, row in df_graph.iterrows():
             ) 
 
 
-config = Config(width=750,
-                height=950,
+config = Config(width=1200,
+                height=1200,
                 directed=True, 
                 physics=True, 
                 hierarchical=False,
