@@ -20,7 +20,9 @@ nodes = []
 edges = []
 
 nodes.append(Node (id=graphname, label = graphname, color = 'black', size = 100))
-nodeslist = df_graph['ENDING_NODE'].unique()
+nodeslist = list(set(df_graph['ENDING_NODE'].to_list()))
+nodeslist = nodeslist.remove(graphname)
+
 for nodeitem in nodeslist:
   nodes.append(Node(id=nodeitem, label=nodeitem, size = 10)) 
 for index, row in df_graph.iterrows():
