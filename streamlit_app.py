@@ -32,11 +32,22 @@ for index, row in df_graph.iterrows():
 
 
 # Display the network in Streamlit
-#st.write(net.show("my_network.html"), unsafe_allow_html=True)
+html_code = net.show("my_network.html")
 # Save the network chart as an HTML file
-net.write_html("./tmp/network.html")
+#st.write_html("./tmp/network.html")
 
 # Display the HTML content in Streamlit
-st.html(open("./tmp/network.html").read(), unsafe_allow_html=True)
+st.write(html_code, unsafe_allow_html=True)
 #p = open("./tmp/network.html")
 #components.html(p.read())
+
+
+# Footer
+st.markdown(
+    """
+    <br>
+    <h6><a href="https://fiscalnote.com/terms" target="_blank">Terms of Service</a></h6>
+    <h6><a href="https://fiscalnote.com/privacy" target="_blank">Privacy policy</a></h6>
+    <h6>All rights reserved. Copyright 2023 FiscalNote.</h6>
+    """, unsafe_allow_html=True
+    )
