@@ -37,7 +37,7 @@ html_code = net.show("my_network.html")
 #st.write_html("./tmp/network.html")
 
 # Display the HTML content in Streamlit
-st.write(html_code, unsafe_allow_html=True)
+#st.write(html_code, unsafe_allow_html=True)
 #p = open("./tmp/network.html")
 #components.html(p.read())
 
