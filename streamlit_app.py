@@ -1,6 +1,7 @@
 import pandas as pd
 import snowflake.connector as snowflake
 import os
+from PIL import Image
 from pyvis.network import Network
 import streamlit as st
 import numpy as np
