@@ -19,7 +19,7 @@ df_graph = data[data['GRAPH']==graphname]
 #location = ("https://github.com/andychak/KB_Demo/blob/master/" + graphname + ".html")
 location = ("https://raw.githubusercontent.com/andychak/KB_Demo/master/"  + graphname + ".html")
 response = requests.get(location)
-st.markdown(response.text, unsafe_allow_html = True)
+components.html(response.text, unsafe_allow_html = True)
 
 
 # Footer
