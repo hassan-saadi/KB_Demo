@@ -20,12 +20,12 @@ nodes = []
 edges = []
 nodeslist = []
 
-nodes.append(Node (id=graphname, label = graphname, color = 'black', size = 100))
+nodes.append(Node (id=graphname, label = graphname, color = 'black', size = 15))
 nodeslist = list(set(df_graph['ENDING_NODE'].to_list()))
 nodeslist = [x for x in nodeslist if x != graphname]
 for index, row in df_graph.iterrows():
   try:
-    edges.append(Edge(source = row['STARTING_NODE'], target = row['ENDING_NODE']))
+    edges.append(Edge(source = row['STARTING_NODE'], target = row['ENDING_NODE'], size =10))
   except: 
     pass
 config = Config(height=800,
