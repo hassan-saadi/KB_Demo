@@ -18,6 +18,7 @@ df_graph = data[data['GRAPH']==graphname]
 
 nodes = []
 edges = []
+nodeslist = []
 
 nodes.append(Node (id=graphname, label = graphname, color = 'black', size = 100))
 nodeslist = list(set(df_graph['ENDING_NODE'].to_list()))
