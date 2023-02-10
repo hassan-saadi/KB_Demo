@@ -39,28 +39,9 @@ config = Config(height=800,
 return_value = agraph(nodes=nodes, 
                       edges=edges, 
                       config=config)
-#path = 'tmp'
-#net.save_graph(f'pyvis_graph.html')
-#HtmlFile = open(f'pyvis_graph.html','r',encoding='utf-8')
-# Load HTML into HTML component for display on Streamlit
-#components.html(HtmlFile.read())
-
-
-# Display the network in Streamlit
-html_code = net.show("my_network.html")
-# Save the network chart as an HTML file
-#st.write_html("./tmp/network.html")
-
-# Display the HTML content in Streamlit
-#st.html(html_code)
-#p = open("./tmp/network.html")
-#components.html(p.read())
-components(html_code)
-
 # Footer
-st.markdown(
+st.sidebar.markdown(
     """
-    <br>
     <h6><a href="https://fiscalnote.com/terms" target="_blank">Terms of Service</a></h6>
     <h6><a href="https://fiscalnote.com/privacy" target="_blank">Privacy policy</a></h6>
     <h6>All rights reserved. Copyright 2023 FiscalNote.</h6>
