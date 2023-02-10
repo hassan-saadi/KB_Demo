@@ -24,8 +24,12 @@ for index, row in df_graph.iterrows():
     physics = False)
   except: 
     pass
-path = 'tmp'
-net.save_graph(f'pyvis_graph.html')
-HtmlFile = open(f'pyvis_graph.html','r',encoding='utf-8')
+#path = 'tmp'
+#net.save_graph(f'pyvis_graph.html')
+#HtmlFile = open(f'pyvis_graph.html','r',encoding='utf-8')
 # Load HTML into HTML component for display on Streamlit
-components.html(HtmlFile.read())
+#components.html(HtmlFile.read())
+
+
+# Display the network in Streamlit
+st.pyvis_chart(net.show("my_network.html"))
