@@ -22,17 +22,14 @@ nodeslist = []
 
 nodes.append(Node (id=graphname, label = graphname, color = 'black', size = 100))
 nodeslist = list(set(df_graph['ENDING_NODE'].to_list()))
-nodeslist = nodeslist.remove(graphname)
-
-for nodeitem in nodeslist:
-  nodes.append(Node(id=nodeitem, label=nodeitem, size = 10)) 
+nodeslist = [x for x in nodeslist if x != graphname]
 for index, row in df_graph.iterrows():
   try:
     edges.append(Edge(source = row['STARTING_NODE'], target = row['ENDING_NODE']))
   except: 
     pass
-config = Config(height=500,
-		width=700, 
+config = Config(height=800,
+		#width=700, 
                 nodeHighlightBehavior=True,
                 highlightColor="#F7A7A6", 
                 directed=True, 
