@@ -25,7 +25,7 @@ for index, row in df_graph.iterrows():
   except: 
     pass
 path = 'tmp'
-net.save_graph(f'/tmp/pyvis_graph.html')
-HtmlFile = open(f'/tmp/pyvis_graph.html','r',encoding='utf-8')
+net.save_graph(f'pyvis_graph.html')
+HtmlFile = open(f'pyvis_graph.html','r',encoding='utf-8')
 # Load HTML into HTML component for display on Streamlit
 components.html(HtmlFile.read())
