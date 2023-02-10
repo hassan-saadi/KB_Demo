@@ -19,13 +19,13 @@ df_graph = data[data['GRAPH']==graphname]
 nodes = []
 edges = []
 
-nodes.append(Node (id=graphname, label = graphname, color = 'black', size = 100)
+nodes.append(Node (id=graphname, label = graphname, color = 'black', size = 100))
 nodeslist = df_graph['ENDING_NODE'].unique()
 for nodeitem in nodeslist:
-  nodes.append(Node(id=nodeitem, size = 10)) 
+  nodes.append(Node(id=nodeitem, label=nodeitem, size = 10)) 
 for index, row in df_graph.iterrows():
   try:
-    edges.append(Edge(source = row['STARTING_NODE'], target = row['ENDING_NODE'])
+    edges.append(Edge(source = row['STARTING_NODE'], target = row['ENDING_NODE']))
   except: 
     pass
 config = Config(height=500,
