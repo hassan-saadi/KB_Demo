@@ -14,10 +14,10 @@ data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/re
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", data['GRAPH'].unique())
 
 df_graph = data[data['GRAPH']==graphname]
-
+#location = 'https://drive.google.com/file/d/1DpJtnYV9M9KfsxVMKmjNhvoPmiAuAeox/view?usp=share_link'
 location = open("https://github.com/andychak/KB_Demo/blob/master/" + graphname + ".html", 'r', encoding ='utf-8')
 source = location.read()
-components.html(source)
+st.write(source)
 
 
 # Footer
