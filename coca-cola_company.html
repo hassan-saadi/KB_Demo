@@ -1,0 +1,935 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+                <link href="lib/tom-select/tom-select.css" rel="stylesheet">
+                <script src="lib/tom-select/tom-select.complete.min.js"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1400px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1400px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+                <div id="select-menu" class="card-header">
+                    <div class="row no-gutters">
+                        <div class="col-10 pb-2">
+                            <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="selectNode([value]);"
+                            id="select-node"
+                            placeholder="Select node..."
+                            >
+                                <option selected>Select a Node by ID</option>
+                                
+                                    <option value="coca-cola_company">coca-cola_company</option>
+                                
+                                    <option value="bluestem_group_inc">bluestem_group_inc</option>
+                                
+                                    <option value="london_stock_exchange_group_plc">london_stock_exchange_group_plc</option>
+                                
+                                    <option value="altria_group">altria_group</option>
+                                
+                                    <option value="consol_coal_resources_lp">consol_coal_resources_lp</option>
+                                
+                                    <option value="owens_corning_inc">owens_corning_inc</option>
+                                
+                                    <option value="maxwell_technologies_inc">maxwell_technologies_inc</option>
+                                
+                                    <option value="ubs_group_ag">ubs_group_ag</option>
+                                
+                                    <option value="flowers_foods_inc">flowers_foods_inc</option>
+                                
+                                    <option value="intercontinental_exchange">intercontinental_exchange</option>
+                                
+                                    <option value="seacor_holdings_inc_/new/">seacor_holdings_inc_/new/</option>
+                                
+                                    <option value="jetblue_airways_corp">jetblue_airways_corp</option>
+                                
+                                    <option value="herbalife_nutrition_ltd">herbalife_nutrition_ltd</option>
+                                
+                                    <option value="berkshire_bancorp_inc_/de/">berkshire_bancorp_inc_/de/</option>
+                                
+                                    <option value="coca-cola_hbc_ag">coca-cola_hbc_ag</option>
+                                
+                                    <option value="banco_santander_sa">banco_santander_sa</option>
+                                
+                                    <option value="archer_daniels_midland_co">archer_daniels_midland_co</option>
+                                
+                                    <option value="dover_corp">dover_corp</option>
+                                
+                                    <option value="discover_financial_services">discover_financial_services</option>
+                                
+                                    <option value="chicos_fas_inc">chicos_fas_inc</option>
+                                
+                                    <option value="monster_beverage_corp">monster_beverage_corp</option>
+                                
+                                    <option value="singapore_airlines_ltd">singapore_airlines_ltd</option>
+                                
+                                    <option value="overseas_shipholding_group_inc">overseas_shipholding_group_inc</option>
+                                
+                                    <option value="delta_air_lines_inc">delta_air_lines_inc</option>
+                                
+                                    <option value="tsr_inc">tsr_inc</option>
+                                
+                                    <option value="mondelez_international_inc">mondelez_international_inc</option>
+                                
+                                    <option value="suntrust_banks_inc">suntrust_banks_inc</option>
+                                
+                                    <option value="diamond_resorts_international_inc">diamond_resorts_international_inc</option>
+                                
+                                    <option value="ingredion_inc">ingredion_inc</option>
+                                
+                                    <option value="diageo_plc">diageo_plc</option>
+                                
+                                    <option value="noble_group_ltd">noble_group_ltd</option>
+                                
+                                    <option value="wells_fargo_and_company">wells_fargo_and_company</option>
+                                
+                                    <option value="united_continental_holdings">united_continental_holdings</option>
+                                
+                                    <option value="ca_inc">ca_inc</option>
+                                
+                                    <option value="salesforce_com_inc">salesforce_com_inc</option>
+                                
+                                    <option value="compass_group_plc">compass_group_plc</option>
+                                
+                                    <option value="lyft_inc">lyft_inc</option>
+                                
+                                    <option value="microsemi_corp">microsemi_corp</option>
+                                
+                                    <option value="moodys_corp_/de/">moodys_corp_/de/</option>
+                                
+                                    <option value="honeywell_international_inc">honeywell_international_inc</option>
+                                
+                                    <option value="exxon_mobil_corp">exxon_mobil_corp</option>
+                                
+                                    <option value="anheuser-busch_inbev_sa">anheuser-busch_inbev_sa</option>
+                                
+                                    <option value="essa_bancorp_inc">essa_bancorp_inc</option>
+                                
+                                    <option value="yrc_worldwide">yrc_worldwide</option>
+                                
+                                    <option value="jefferies_financial_group_inc">jefferies_financial_group_inc</option>
+                                
+                                    <option value="agco_corp">agco_corp</option>
+                                
+                                    <option value="general_dynamics_corp">general_dynamics_corp</option>
+                                
+                                    <option value="nyse_euronext">nyse_euronext</option>
+                                
+                                    <option value="advanced_micro_devices_inc">advanced_micro_devices_inc</option>
+                                
+                                    <option value="wyndham_worldwide_corp">wyndham_worldwide_corp</option>
+                                
+                                    <option value="sandp_global_inc">sandp_global_inc</option>
+                                
+                                    <option value="xl_group_ltd">xl_group_ltd</option>
+                                
+                                    <option value="aol_inc">aol_inc</option>
+                                
+                                    <option value="barclays_plc">barclays_plc</option>
+                                
+                                    <option value="aes_corp">aes_corp</option>
+                                
+                                    <option value="nrg_energy">nrg_energy</option>
+                                
+                                    <option value="general_mills_inc">general_mills_inc</option>
+                                
+                                    <option value="bioverativ_inc">bioverativ_inc</option>
+                                
+                                    <option value="constellation_brands_inc">constellation_brands_inc</option>
+                                
+                                    <option value="performance_food_group_co">performance_food_group_co</option>
+                                
+                                    <option value="zimmer_biomet_holdings">zimmer_biomet_holdings</option>
+                                
+                                    <option value="the_carlyle_group_lp">the_carlyle_group_lp</option>
+                                
+                                    <option value="molson_coors_brewing_co">molson_coors_brewing_co</option>
+                                
+                                    <option value="costa_group_holdings_ltd">costa_group_holdings_ltd</option>
+                                
+                                    <option value="conagra_brands_inc">conagra_brands_inc</option>
+                                
+                                    <option value="interpublic_group_of_companies">interpublic_group_of_companies</option>
+                                
+                                    <option value="celestica_inc">celestica_inc</option>
+                                
+                                    <option value="cra_international">cra_international</option>
+                                
+                                    <option value="equifax_inc">equifax_inc</option>
+                                
+                                    <option value="dollar_general_corp">dollar_general_corp</option>
+                                
+                                    <option value="sei_investments_co">sei_investments_co</option>
+                                
+                                    <option value="bp_plc">bp_plc</option>
+                                
+                                    <option value="wilmar_international_ltd">wilmar_international_ltd</option>
+                                
+                                    <option value="oracle_corp">oracle_corp</option>
+                                
+                                    <option value="thomson_reuters_corp">thomson_reuters_corp</option>
+                                
+                                    <option value="credit_suisse_group">credit_suisse_group</option>
+                                
+                                    <option value="mandt_bank_corp">mandt_bank_corp</option>
+                                
+                                    <option value="heineken_n_v/s">heineken_n_v/s</option>
+                                
+                                    <option value="park_ohio_holdings_corp">park_ohio_holdings_corp</option>
+                                
+                                    <option value="eqt_corp">eqt_corp</option>
+                                
+                                    <option value="sgx_pharmaceuticals_inc">sgx_pharmaceuticals_inc</option>
+                                
+                                    <option value="goodyear_tire_and_rubber_co_/oh/">goodyear_tire_and_rubber_co_/oh/</option>
+                                
+                                    <option value="platform_specialty_products_corp">platform_specialty_products_corp</option>
+                                
+                                    <option value="gain_capital_holdings">gain_capital_holdings</option>
+                                
+                                    <option value="abbvie_inc">abbvie_inc</option>
+                                
+                                    <option value="embotelladora_andina_sa">embotelladora_andina_sa</option>
+                                
+                                    <option value="nextera_energy">nextera_energy</option>
+                                
+                                    <option value="uniti_group_inc">uniti_group_inc</option>
+                                
+                                    <option value="citigroup_inc">citigroup_inc</option>
+                                
+                                    <option value="bandg_foods_inc">bandg_foods_inc</option>
+                                
+                                    <option value="bank_of_america_corp">bank_of_america_corp</option>
+                                
+                                    <option value="dr_pepper_snapple_group_inc">dr_pepper_snapple_group_inc</option>
+                                
+                                    <option value="commonwealth_bank_of_australia">commonwealth_bank_of_australia</option>
+                                
+                                    <option value="new_york_times_co">new_york_times_co</option>
+                                
+                                    <option value="nu_skin_enterprises_inc">nu_skin_enterprises_inc</option>
+                                
+                                    <option value="hanesbrands_inc">hanesbrands_inc</option>
+                                
+                                    <option value="cme_group_inc">cme_group_inc</option>
+                                
+                                    <option value="waste_management_inc">waste_management_inc</option>
+                                
+                                    <option value="suntory_beverage_and_food_limited">suntory_beverage_and_food_limited</option>
+                                
+                                    <option value="l-3_communications_holdings">l-3_communications_holdings</option>
+                                
+                                    <option value="dowdupont_inc">dowdupont_inc</option>
+                                
+                                    <option value="nestle_sa_cham_et_ve">nestle_sa_cham_et_ve</option>
+                                
+                                    <option value="seaboard_corp">seaboard_corp</option>
+                                
+                                    <option value="kirby_corp">kirby_corp</option>
+                                
+                                    <option value="norfolk_southern_corp">norfolk_southern_corp</option>
+                                
+                                    <option value="jones_lang_lasalle_inc">jones_lang_lasalle_inc</option>
+                                
+                                    <option value="nci_inc">nci_inc</option>
+                                
+                                    <option value="fibrogen_inc">fibrogen_inc</option>
+                                
+                                    <option value="unilever_nv_ord">unilever_nv_ord</option>
+                                
+                                    <option value="energizer_holdings_inc">energizer_holdings_inc</option>
+                                
+                                    <option value="netlogic_microsystems_inc">netlogic_microsystems_inc</option>
+                                
+                                    <option value="coca-cola_amatil_ltd">coca-cola_amatil_ltd</option>
+                                
+                                    <option value="us_foods_holding_corp">us_foods_holding_corp</option>
+                                
+                                    <option value="adobe_inc">adobe_inc</option>
+                                
+                                    <option value="kellogg_company">kellogg_company</option>
+                                
+                                    <option value="allianz_se">allianz_se</option>
+                                
+                                    <option value="morgan_stanley_international_holdings_inc">morgan_stanley_international_holdings_inc</option>
+                                
+                                    <option value="altaba_inc">altaba_inc</option>
+                                
+                                    <option value="craft_brew_alliance">craft_brew_alliance</option>
+                                
+                                    <option value="nordson_corp">nordson_corp</option>
+                                
+                                    <option value="goldman_sachs_group_inc">goldman_sachs_group_inc</option>
+                                
+                                    <option value="harley_davidson_inc">harley_davidson_inc</option>
+                                
+                                    <option value="dean_foods_co">dean_foods_co</option>
+                                
+                                    <option value="oci_partners_lp">oci_partners_lp</option>
+                                
+                                    <option value="banco_santander-chile">banco_santander-chile</option>
+                                
+                                    <option value="msa_safety_inc">msa_safety_inc</option>
+                                
+                                    <option value="loews_corp">loews_corp</option>
+                                
+                                    <option value="coca-cola_european_partners_plc">coca-cola_european_partners_plc</option>
+                                
+                                    <option value="smtc_corp">smtc_corp</option>
+                                
+                                    <option value="fomento_economico_mexicano_sab_de_cv">fomento_economico_mexicano_sab_de_cv</option>
+                                
+                                    <option value="microstrategy_inc">microstrategy_inc</option>
+                                
+                                    <option value="reynolds_american_inc">reynolds_american_inc</option>
+                                
+                                    <option value="hormel_foods_corp">hormel_foods_corp</option>
+                                
+                                    <option value="cit_group_inc">cit_group_inc</option>
+                                
+                                    <option value="punjab_national_bank">punjab_national_bank</option>
+                                
+                                    <option value="cse_global_ltd">cse_global_ltd</option>
+                                
+                                    <option value="coca_cola_bottling_co_consolidated_/de/">coca_cola_bottling_co_consolidated_/de/</option>
+                                
+                                    <option value="rci_hospitality_holdings_inc">rci_hospitality_holdings_inc</option>
+                                
+                                    <option value="keurig_dr_pepper_inc">keurig_dr_pepper_inc</option>
+                                
+                                    <option value="annie's_inc">annie's_inc</option>
+                                
+                                    <option value="serica_energy_plc">serica_energy_plc</option>
+                                
+                                    <option value="national_beverage_corp">national_beverage_corp</option>
+                                
+                                    <option value="freshpet_inc_cs">freshpet_inc_cs</option>
+                                
+                                    <option value="amazon_com_inc">amazon_com_inc</option>
+                                
+                                    <option value="under_armour">under_armour</option>
+                                
+                                    <option value="rpm_international_inc/de/">rpm_international_inc/de/</option>
+                                
+                                    <option value="santander_holdings_usa_inc">santander_holdings_usa_inc</option>
+                                
+                                    <option value="hain_celestial_group_inc">hain_celestial_group_inc</option>
+                                
+                                    <option value="treehouse_foods">treehouse_foods</option>
+                                
+                                    <option value="kansas_city_southern">kansas_city_southern</option>
+                                
+                                    <option value="mercantil_bank_holding_corp">mercantil_bank_holding_corp</option>
+                                
+                                    <option value="gartner_inc">gartner_inc</option>
+                                
+                                    <option value="dollar_tree_inc">dollar_tree_inc</option>
+                                
+                                    <option value="whitbread_plc_[united_kingdom]">whitbread_plc_[united_kingdom]</option>
+                                
+                                    <option value="chevron_corp">chevron_corp</option>
+                                
+                                    <option value="ilg_inc">ilg_inc</option>
+                                
+                                    <option value="ipc_holdings_ltd">ipc_holdings_ltd</option>
+                                
+                                    <option value="anthem_inc">anthem_inc</option>
+                                
+                                    <option value="mastercard_inc">mastercard_inc</option>
+                                
+                                    <option value="sterling_bancorp_inc">sterling_bancorp_inc</option>
+                                
+                                    <option value="oxford_bank_corp">oxford_bank_corp</option>
+                                
+                                    <option value="federal_home_loan_mortgage_corp">federal_home_loan_mortgage_corp</option>
+                                
+                                    <option value="impinj_inc">impinj_inc</option>
+                                
+                                    <option value="kennametal_inc">kennametal_inc</option>
+                                
+                                    <option value="northrop_grumman_corp">northrop_grumman_corp</option>
+                                
+                                    <option value="applied_biosystems_inc">applied_biosystems_inc</option>
+                                
+                                    <option value="finisar_corp">finisar_corp</option>
+                                
+                                    <option value="white_mountains_insurance_group">white_mountains_insurance_group</option>
+                                
+                                    <option value="coca_cola_femsa_sab_de_cv">coca_cola_femsa_sab_de_cv</option>
+                                
+                                    <option value="beyond_meat_inc">beyond_meat_inc</option>
+                                
+                                    <option value="lancaster_colony_corp">lancaster_colony_corp</option>
+                                
+                                    <option value="innovate_biopharmaceuticals_inc">innovate_biopharmaceuticals_inc</option>
+                                
+                                    <option value="markel_corp">markel_corp</option>
+                                
+                                    <option value="cypress_semiconductor_corp_/de/">cypress_semiconductor_corp_/de/</option>
+                                
+                                    <option value="kraft_heinz_co">kraft_heinz_co</option>
+                                
+                                    <option value="twitter_inc">twitter_inc</option>
+                                
+                                    <option value="darling_ingredients_inc">darling_ingredients_inc</option>
+                                
+                                    <option value="sunedison_inc">sunedison_inc</option>
+                                
+                                    <option value="verint_systems_inc">verint_systems_inc</option>
+                                
+                                    <option value="campbell_soup_company">campbell_soup_company</option>
+                                
+                                    <option value="linkedin_corp">linkedin_corp</option>
+                                
+                                    <option value="kirin_holdings_co_ltd">kirin_holdings_co_ltd</option>
+                                
+                                    <option value="penn_national_gaming_inc">penn_national_gaming_inc</option>
+                                
+                                    <option value="canadian_pacific_railway_ltd/cn">canadian_pacific_railway_ltd/cn</option>
+                                
+                                    <option value="california_resources_corp">california_resources_corp</option>
+                                
+                                    <option value="post_holdings_inc">post_holdings_inc</option>
+                                
+                                    <option value="coca-cola_bottlers_japan_holdings_inc">coca-cola_bottlers_japan_holdings_inc</option>
+                                
+                                    <option value="crowdstrike_holdings_inc">crowdstrike_holdings_inc</option>
+                                
+                                    <option value="comscore_inc">comscore_inc</option>
+                                
+                                    <option value="macatawa_bank_corp">macatawa_bank_corp</option>
+                                
+                                    <option value="facebook_inc">facebook_inc</option>
+                                
+                                    <option value="city_office_reit_inc">city_office_reit_inc</option>
+                                
+                                    <option value="automatic_data_processing_inc">automatic_data_processing_inc</option>
+                                
+                                    <option value="home_depot_inc">home_depot_inc</option>
+                                
+                                    <option value="lam_research_corp">lam_research_corp</option>
+                                
+                                    <option value="energy_world_corp_ltd">energy_world_corp_ltd</option>
+                                
+                                    <option value="zep_inc">zep_inc</option>
+                                
+                                    <option value="lamb_weston_holdings_inc">lamb_weston_holdings_inc</option>
+                                
+                                    <option value="acuity_brands_inc">acuity_brands_inc</option>
+                                
+                                    <option value="ebay_inc">ebay_inc</option>
+                                
+                                    <option value="brown_forman_corp">brown_forman_corp</option>
+                                
+                                    <option value="sunpower_corp">sunpower_corp</option>
+                                
+                                    <option value="supervalu_inc">supervalu_inc</option>
+                                
+                                    <option value="principal_financial_group_inc">principal_financial_group_inc</option>
+                                
+                                    <option value="deutsche_bank">deutsche_bank</option>
+                                
+                                    <option value="pinnacle_foods_inc">pinnacle_foods_inc</option>
+                                
+                                    <option value="tyson_foods_inc">tyson_foods_inc</option>
+                                
+                                    <option value="petmed_express_inc">petmed_express_inc</option>
+                                
+                                    <option value="hershey_co">hershey_co</option>
+                                
+                                    <option value="morningstar_inc">morningstar_inc</option>
+                                
+                                    <option value="csx_corp">csx_corp</option>
+                                
+                                    <option value="pepsico_inc">pepsico_inc</option>
+                                
+                                    <option value="hostess_brands_inc">hostess_brands_inc</option>
+                                
+                                    <option value="boston_beer_co_inc">boston_beer_co_inc</option>
+                                
+                                    <option value="liberty_broadband_corp">liberty_broadband_corp</option>
+                                
+                                    <option value="vulcan_intl_cp">vulcan_intl_cp</option>
+                                
+                                    <option value="united_natural_foods_inc">united_natural_foods_inc</option>
+                                
+                                    <option value="world_fuel_services_corp">world_fuel_services_corp</option>
+                                
+                                    <option value="rockwell_automation_inc">rockwell_automation_inc</option>
+                                
+                                    <option value="dynegy_inc">dynegy_inc</option>
+                                
+                                    <option value="huntington_bancshares_inc/md">huntington_bancshares_inc/md</option>
+                                
+                                    <option value="philip_morris_international_inc">philip_morris_international_inc</option>
+                                
+                                    <option value="laurentian_bk_cda_qu">laurentian_bk_cda_qu</option>
+                                
+                                    <option value="cna_financial_corp">cna_financial_corp</option>
+                                
+                                    <option value="apple_inc">apple_inc</option>
+                                
+                                    <option value="unilever_plc">unilever_plc</option>
+                                
+                                    <option value="invesco_ltd">invesco_ltd</option>
+                                
+                                    <option value="koninklijke_bunge_bv">koninklijke_bunge_bv</option>
+                                
+                                    <option value="matson_inc">matson_inc</option>
+                                
+                                    <option value="broadcom_ltd">broadcom_ltd</option>
+                                
+                                    <option value="intel_corp">intel_corp</option>
+                                
+                                    <option value="flanigans_enterprises_inc">flanigans_enterprises_inc</option>
+                                
+                                    <option value="gatx_corp">gatx_corp</option>
+                                
+                                    <option value="actel_corp">actel_corp</option>
+                                
+                                    <option value="emc_corp">emc_corp</option>
+                                
+                                    <option value="corecivic_inc">corecivic_inc</option>
+                                
+                                    <option value="mbia_inc">mbia_inc</option>
+                                
+                                    <option value="valero_energy_corp/tx">valero_energy_corp/tx</option>
+                                
+                                    <option value="jp_morgan_chase_and_co">jp_morgan_chase_and_co</option>
+                                
+                                    <option value="str_holdings_inc">str_holdings_inc</option>
+                                
+                                    <option value="plains_all_american_pipeline_lp">plains_all_american_pipeline_lp</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-2 pb-2">
+                            <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset Selection</button>
+                        </div>
+                    </div>
+                </div>
+            
+            
+              <div id="filter-menu" class="card-header">
+                <div class="row no-gutters">
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="updateFilter(value, 'item')"
+                            id="select-item"
+                        >
+                        <option value="">Select a network item</option>
+                        <option value="edge">edge</option>
+                        <option value="node">node</option>
+                    </select>
+                  </div>
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="updateFilter(value, 'property')"
+                            id="select-property"
+                        >
+                        <option value="">Select a property...</option>
+                    </select>
+                  </div>
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            id="select-value"
+                        >
+                        <option value="">Select value(s)...</option>
+                    </select>
+                  </div>
+                  <div class="col-1 pb-2">
+                    <button type="button" class="btn btn-primary btn-block" onclick="highlightFilter(filter);">Filter</button>
+                  </div>
+                  <div class="col-2 pb-2">
+                    <button type="button" class="btn btn-primary btn-block" onclick="clearFilter(true)">Reset Selection</button>
+                  </div>
+                </div>
+              </div>
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+                  new TomSelect("#select-node",{
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      }
+                  });
+              
+
+              
+                  // explicitly using onItemAdd and this function as we need to save multiple values
+                  let updateValueFilter = function() {
+                      return function () {
+                      filter['value'].push(arguments[0])
+                      }
+                  }
+
+                  let valueControl = new TomSelect("#select-value",{
+                      maxItems: null,
+                      valueField: 'id',
+                      labelField: 'title',
+                      searchField: 'title',
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: updateValueFilter()
+                  });
+
+                  let addValues = function() {
+                      return function () {
+                          // clear the current value options and add the selected attribute values
+                          // tom-select handles duplicates
+                          let selectedProperty = arguments[0];
+                          valueControl.clear();
+                          valueControl.clearOptions();
+                          filter['value'] = []
+                          if (filter['item'] === 'node') {
+                              for (let each in allNodes) {
+                                  valueControl.addOption({
+                                      id:allNodes[each][selectedProperty],
+                                      title:allNodes[each][selectedProperty]
+                                  })
+                              }
+                          }
+                          else if (filter['item'] === 'edge') {
+                              for (let each in allEdges) {
+                                  valueControl.addOption({
+                                      id:allEdges[each][selectedProperty],
+                                      title:allEdges[each][selectedProperty]
+                                  })
+                              }
+                          }
+                      }
+                  };
+
+                  let propControl = new TomSelect("#select-property",{
+                      valueField: 'id',
+                      labelField: 'title',
+                      searchField: 'title',
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: addValues()
+                  });
+
+                  let addProperties = function() {
+                      return function () {
+                          // loops through the selected network item and adds the attributes to dropdown
+                          // tom-select handles duplicates
+                          clearFilter(false)
+                          if (arguments[0] === 'edge') {
+                              for (let each in allEdges) {
+                                  if (allEdges.hasOwnProperty(each)) {
+                                      for (let eachProp in allEdges[each]) {
+                                          if (allEdges[each].hasOwnProperty(eachProp)) {
+                                              propControl.addOption({id: eachProp, title: eachProp})
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                          else if (arguments[0] === 'node') {
+                              for (let each in allNodes) {
+                                  if (allNodes.hasOwnProperty(each)) {
+                                      for (let eachProp in allNodes[each]) {
+                                          if (allNodes[each].hasOwnProperty(eachProp)
+                                              && (eachProp !== 'hidden' && eachProp !== 'savedLabel'
+                                                  && eachProp !== 'hiddenLabel')) {
+                                              propControl.addOption({id: eachProp, title: eachProp})
+
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  };
+
+                  let itemControl = new TomSelect("#select-item",{
+                      create: false,
+                      sortField:{
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: addProperties()
+                  });
+
+                  function clearFilter(reset) {
+                      // utility function to clear all the selected filter options
+                      // if reset is set to true, the existing filter will be removed
+                      // else, only the dropdown options are cleared
+                      propControl.clear();
+                      propControl.clearOptions();
+                      valueControl.clear();
+                      valueControl.clearOptions();
+                      filter = {
+                          item : '',
+                          property : '',
+                          value : []
+                      }
+                      if (reset) {
+                          itemControl.clear();
+                          filterHighlight({nodes: []})
+                      }
+                  }
+
+                  function updateFilter(value, key) {
+                      // key could be 'item' or 'property' and value is as selected in dropdown
+                      filter[key] = value
+                  }
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "black", "id": "coca-cola_company", "label": "coca-cola_company", "shape": "dot"}, {"group": "", "id": "bluestem_group_inc", "label": "bluestem_group_inc", "shape": 2, "title": ["bluestem_group_inc", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "london_stock_exchange_group_plc", "label": "london_stock_exchange_group_plc", "shape": 1, "title": ["london_stock_exchange_group_plc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "altria_group", "label": "altria_group", "shape": 1, "title": ["altria_group", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "consol_coal_resources_lp", "label": "consol_coal_resources_lp", "shape": 1, "title": ["consol_coal_resources_lp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "owens_corning_inc", "label": "owens_corning_inc", "shape": 1, "title": ["owens_corning_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "maxwell_technologies_inc", "label": "maxwell_technologies_inc", "shape": 2, "title": ["maxwell_technologies_inc", "\nPrior: ", "seaboard_corp", "\n Event: ", ""]}, {"group": "", "id": "ubs_group_ag", "label": "ubs_group_ag", "shape": 2, "title": ["ubs_group_ag", "\nPrior: ", "moodys_corp_/de/", "\n Event: ", ""]}, {"group": "", "id": "flowers_foods_inc", "label": "flowers_foods_inc", "shape": 1, "title": ["flowers_foods_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "intercontinental_exchange", "label": "intercontinental_exchange", "shape": 3, "title": ["intercontinental_exchange", "\nPrior: ", "canadian_pacific_railway_ltd/cn", "\n Event: ", ""]}, {"group": "", "id": "seacor_holdings_inc_/new/", "label": "seacor_holdings_inc_/new/", "shape": 2, "title": ["seacor_holdings_inc_/new/", "\nPrior: ", "morgan_stanley_international_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "jetblue_airways_corp", "label": "jetblue_airways_corp", "shape": 2, "title": ["jetblue_airways_corp", "\nPrior: ", "hain_celestial_group_inc", "\n Event: ", ""]}, {"group": "", "id": "herbalife_nutrition_ltd", "label": "herbalife_nutrition_ltd", "shape": 1, "title": ["herbalife_nutrition_ltd", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "berkshire_bancorp_inc_/de/", "label": "berkshire_bancorp_inc_/de/", "shape": 2, "title": ["berkshire_bancorp_inc_/de/", "\nPrior: ", "bank_of_america_corp", "\n Event: ", ""]}, {"group": "", "id": "coca-cola_hbc_ag", "label": "coca-cola_hbc_ag", "shape": 1, "title": ["coca-cola_hbc_ag", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "Corporate", "id": "banco_santander_sa", "label": "banco_santander_sa", "shape": 1, "title": ["banco_santander_sa", "\nPrior: ", "coca-cola_company", "\n Event: ", "Corporate"]}, {"group": "", "id": "archer_daniels_midland_co", "label": "archer_daniels_midland_co", "shape": 3, "title": ["archer_daniels_midland_co", "\nPrior: ", "gain_capital_holdings", "\n Event: ", ""]}, {"group": "", "id": "dover_corp", "label": "dover_corp", "shape": 2, "title": ["dover_corp", "\nPrior: ", "pepsico_inc", "\n Event: ", ""]}, {"group": "", "id": "discover_financial_services", "label": "discover_financial_services", "shape": 2, "title": ["discover_financial_services", "\nPrior: ", "morgan_stanley_international_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "chicos_fas_inc", "label": "chicos_fas_inc", "shape": 2, "title": ["chicos_fas_inc", "\nPrior: ", "conagra_brands_inc", "\n Event: ", ""]}, {"group": "", "id": "monster_beverage_corp", "label": "monster_beverage_corp", "shape": 2, "title": ["monster_beverage_corp", "\nPrior: ", "post_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "singapore_airlines_ltd", "label": "singapore_airlines_ltd", "shape": 3, "title": ["singapore_airlines_ltd", "\nPrior: ", "united_continental_holdings", "\n Event: ", ""]}, {"group": "", "id": "overseas_shipholding_group_inc", "label": "overseas_shipholding_group_inc", "shape": 2, "title": ["overseas_shipholding_group_inc", "\nPrior: ", "archer_daniels_midland_co", "\n Event: ", ""]}, {"group": "", "id": "delta_air_lines_inc", "label": "delta_air_lines_inc", "shape": 3, "title": ["delta_air_lines_inc", "\nPrior: ", "jetblue_airways_corp", "\n Event: ", ""]}, {"group": "", "id": "tsr_inc", "label": "tsr_inc", "shape": 1, "title": ["tsr_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "mondelez_international_inc", "label": "mondelez_international_inc", "shape": 2, "title": ["mondelez_international_inc", "\nPrior: ", "dr_pepper_snapple_group_inc", "\n Event: ", ""]}, {"group": "", "id": "suntrust_banks_inc", "label": "suntrust_banks_inc", "shape": 1, "title": ["suntrust_banks_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "Corporate", "id": "diamond_resorts_international_inc", "label": "diamond_resorts_international_inc", "shape": 3, "title": ["diamond_resorts_international_inc", "\nPrior: ", "wyndham_worldwide_corp", "\n Event: ", "Corporate"]}, {"group": "", "id": "ingredion_inc", "label": "ingredion_inc", "shape": 1, "title": ["ingredion_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "diageo_plc", "label": "diageo_plc", "shape": 1, "title": ["diageo_plc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "noble_group_ltd", "label": "noble_group_ltd", "shape": 2, "title": ["noble_group_ltd", "\nPrior: ", "koninklijke_bunge_bv", "\n Event: ", ""]}, {"group": "", "id": "wells_fargo_and_company", "label": "wells_fargo_and_company", "shape": 2, "title": ["wells_fargo_and_company", "\nPrior: ", "post_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "united_continental_holdings", "label": "united_continental_holdings", "shape": 2, "title": ["united_continental_holdings", "\nPrior: ", "nrg_energy", "\n Event: ", ""]}, {"group": "SupplyChain", "id": "ca_inc", "label": "ca_inc", "shape": 1, "title": ["ca_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", "SupplyChain"]}, {"group": "", "id": "salesforce_com_inc", "label": "salesforce_com_inc", "shape": 3, "title": ["salesforce_com_inc", "\nPrior: ", "automatic_data_processing_inc", "\n Event: ", ""]}, {"group": "", "id": "compass_group_plc", "label": "compass_group_plc", "shape": 3, "title": ["compass_group_plc", "\nPrior: ", "jones_lang_lasalle_inc", "\n Event: ", ""]}, {"group": "", "id": "lyft_inc", "label": "lyft_inc", "shape": 3, "title": ["lyft_inc", "\nPrior: ", "jetblue_airways_corp", "\n Event: ", ""]}, {"group": "", "id": "microsemi_corp", "label": "microsemi_corp", "shape": 3, "title": ["microsemi_corp", "\nPrior: ", "maxwell_technologies_inc", "\n Event: ", ""]}, {"group": "", "id": "moodys_corp_/de/", "label": "moodys_corp_/de/", "shape": 1, "title": ["moodys_corp_/de/", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "honeywell_international_inc", "label": "honeywell_international_inc", "shape": 2, "title": ["honeywell_international_inc", "\nPrior: ", "citigroup_inc", "\n Event: ", ""]}, {"group": "", "id": "exxon_mobil_corp", "label": "exxon_mobil_corp", "shape": 2, "title": ["exxon_mobil_corp", "\nPrior: ", "chevron_corp", "\n Event: ", ""]}, {"group": "", "id": "anheuser-busch_inbev_sa", "label": "anheuser-busch_inbev_sa", "shape": 1, "title": ["anheuser-busch_inbev_sa", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "essa_bancorp_inc", "label": "essa_bancorp_inc", "shape": 3, "title": ["essa_bancorp_inc", "\nPrior: ", "pepsico_inc", "\n Event: ", ""]}, {"group": "", "id": "yrc_worldwide", "label": "yrc_worldwide", "shape": 3, "title": ["yrc_worldwide", "\nPrior: ", "rpm_international_inc/de/", "\n Event: ", ""]}, {"group": "", "id": "jefferies_financial_group_inc", "label": "jefferies_financial_group_inc", "shape": 1, "title": ["jefferies_financial_group_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "agco_corp", "label": "agco_corp", "shape": 2, "title": ["agco_corp", "\nPrior: ", "goldman_sachs_group_inc", "\n Event: ", ""]}, {"group": "", "id": "general_dynamics_corp", "label": "general_dynamics_corp", "shape": 3, "title": ["general_dynamics_corp", "\nPrior: ", "nci_inc", "\n Event: ", ""]}, {"group": "", "id": "nyse_euronext", "label": "nyse_euronext", "shape": 2, "title": ["nyse_euronext", "\nPrior: ", "intercontinental_exchange", "\n Event: ", ""]}, {"group": "", "id": "advanced_micro_devices_inc", "label": "advanced_micro_devices_inc", "shape": 3, "title": ["advanced_micro_devices_inc", "\nPrior: ", "automatic_data_processing_inc", "\n Event: ", ""]}, {"group": "", "id": "wyndham_worldwide_corp", "label": "wyndham_worldwide_corp", "shape": 2, "title": ["wyndham_worldwide_corp", "\nPrior: ", "freshpet_inc_cs", "\n Event: ", ""]}, {"group": "", "id": "sandp_global_inc", "label": "sandp_global_inc", "shape": 1, "title": ["sandp_global_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "xl_group_ltd", "label": "xl_group_ltd", "shape": 2, "title": ["xl_group_ltd", "\nPrior: ", "monster_beverage_corp", "\n Event: ", ""]}, {"group": "", "id": "aol_inc", "label": "aol_inc", "shape": 3, "title": ["aol_inc", "\nPrior: ", "comscore_inc", "\n Event: ", ""]}, {"group": "", "id": "barclays_plc", "label": "barclays_plc", "shape": 2, "title": ["barclays_plc", "\nPrior: ", "post_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "aes_corp", "label": "aes_corp", "shape": 3, "title": ["aes_corp", "\nPrior: ", "sunpower_corp", "\n Event: ", ""]}, {"group": "Corporate", "id": "nrg_energy", "label": "nrg_energy", "shape": 1, "title": ["nrg_energy", "\nPrior: ", "coca-cola_company", "\n Event: ", "Corporate"]}, {"group": "", "id": "general_mills_inc", "label": "general_mills_inc", "shape": 1, "title": ["general_mills_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "bioverativ_inc", "label": "bioverativ_inc", "shape": 3, "title": ["bioverativ_inc", "\nPrior: ", "discover_financial_services", "\n Event: ", ""]}, {"group": "", "id": "constellation_brands_inc", "label": "constellation_brands_inc", "shape": 1, "title": ["constellation_brands_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "performance_food_group_co", "label": "performance_food_group_co", "shape": 1, "title": ["performance_food_group_co", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "zimmer_biomet_holdings", "label": "zimmer_biomet_holdings", "shape": 3, "title": ["zimmer_biomet_holdings", "\nPrior: ", "norfolk_southern_corp", "\n Event: ", ""]}, {"group": "", "id": "the_carlyle_group_lp", "label": "the_carlyle_group_lp", "shape": 2, "title": ["the_carlyle_group_lp", "\nPrior: ", "freshpet_inc_cs", "\n Event: ", ""]}, {"group": "", "id": "molson_coors_brewing_co", "label": "molson_coors_brewing_co", "shape": 1, "title": ["molson_coors_brewing_co", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "costa_group_holdings_ltd", "label": "costa_group_holdings_ltd", "shape": 1, "title": ["costa_group_holdings_ltd", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "conagra_brands_inc", "label": "conagra_brands_inc", "shape": 1, "title": ["conagra_brands_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "interpublic_group_of_companies", "label": "interpublic_group_of_companies", "shape": 3, "title": ["interpublic_group_of_companies", "\nPrior: ", "ebay_inc", "\n Event: ", ""]}, {"group": "", "id": "celestica_inc", "label": "celestica_inc", "shape": 3, "title": ["celestica_inc", "\nPrior: ", "smtc_corp", "\n Event: ", ""]}, {"group": "", "id": "cra_international", "label": "cra_international", "shape": 2, "title": ["cra_international", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "equifax_inc", "label": "equifax_inc", "shape": 1, "title": ["equifax_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "dollar_general_corp", "label": "dollar_general_corp", "shape": 2, "title": ["dollar_general_corp", "\nPrior: ", "post_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "sei_investments_co", "label": "sei_investments_co", "shape": 3, "title": ["sei_investments_co", "\nPrior: ", "seacor_holdings_inc_/new/", "\n Event: ", ""]}, {"group": "", "id": "bp_plc", "label": "bp_plc", "shape": 2, "title": ["bp_plc", "\nPrior: ", "chevron_corp", "\n Event: ", ""]}, {"group": "", "id": "wilmar_international_ltd", "label": "wilmar_international_ltd", "shape": 2, "title": ["wilmar_international_ltd", "\nPrior: ", "archer_daniels_midland_co", "\n Event: ", ""]}, {"group": "", "id": "oracle_corp", "label": "oracle_corp", "shape": 2, "title": ["oracle_corp", "\nPrior: ", "adobe_inc", "\n Event: ", ""]}, {"group": "", "id": "thomson_reuters_corp", "label": "thomson_reuters_corp", "shape": 3, "title": ["thomson_reuters_corp", "\nPrior: ", "united_natural_foods_inc", "\n Event: ", ""]}, {"group": "", "id": "credit_suisse_group", "label": "credit_suisse_group", "shape": 2, "title": ["credit_suisse_group", "\nPrior: ", "koninklijke_bunge_bv", "\n Event: ", ""]}, {"group": "", "id": "mandt_bank_corp", "label": "mandt_bank_corp", "shape": 2, "title": ["mandt_bank_corp", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "heineken_n_v/s", "label": "heineken_n_v/s", "shape": 1, "title": ["heineken_n_v/s", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "park_ohio_holdings_corp", "label": "park_ohio_holdings_corp", "shape": 2, "title": ["park_ohio_holdings_corp", "\nPrior: ", "koninklijke_bunge_bv", "\n Event: ", ""]}, {"group": "", "id": "eqt_corp", "label": "eqt_corp", "shape": 3, "title": ["eqt_corp", "\nPrior: ", "plains_all_american_pipeline_lp", "\n Event: ", ""]}, {"group": "", "id": "sgx_pharmaceuticals_inc", "label": "sgx_pharmaceuticals_inc", "shape": 3, "title": ["sgx_pharmaceuticals_inc", "\nPrior: ", "cme_group_inc", "\n Event: ", ""]}, {"group": "", "id": "goodyear_tire_and_rubber_co_/oh/", "label": "goodyear_tire_and_rubber_co_/oh/", "shape": 3, "title": ["goodyear_tire_and_rubber_co_/oh/", "\nPrior: ", "loews_corp", "\n Event: ", ""]}, {"group": "", "id": "platform_specialty_products_corp", "label": "platform_specialty_products_corp", "shape": 2, "title": ["platform_specialty_products_corp", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "gain_capital_holdings", "label": "gain_capital_holdings", "shape": 2, "title": ["gain_capital_holdings", "\nPrior: ", "keurig_dr_pepper_inc", "\n Event: ", ""]}, {"group": "", "id": "abbvie_inc", "label": "abbvie_inc", "shape": 3, "title": ["abbvie_inc", "\nPrior: ", "united_natural_foods_inc", "\n Event: ", ""]}, {"group": "", "id": "embotelladora_andina_sa", "label": "embotelladora_andina_sa", "shape": 1, "title": ["embotelladora_andina_sa", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "nextera_energy", "label": "nextera_energy", "shape": 1, "title": ["nextera_energy", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "uniti_group_inc", "label": "uniti_group_inc", "shape": 1, "title": ["uniti_group_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "citigroup_inc", "label": "citigroup_inc", "shape": 3, "title": ["citigroup_inc", "\nPrior: ", "monster_beverage_corp", "\n Event: ", ""]}, {"group": "", "id": "bandg_foods_inc", "label": "bandg_foods_inc", "shape": 1, "title": ["bandg_foods_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "bank_of_america_corp", "label": "bank_of_america_corp", "shape": 1, "title": ["bank_of_america_corp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "dr_pepper_snapple_group_inc", "label": "dr_pepper_snapple_group_inc", "shape": 1, "title": ["dr_pepper_snapple_group_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "commonwealth_bank_of_australia", "label": "commonwealth_bank_of_australia", "shape": 1, "title": ["commonwealth_bank_of_australia", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "new_york_times_co", "label": "new_york_times_co", "shape": 3, "title": ["new_york_times_co", "\nPrior: ", "rci_hospitality_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "nu_skin_enterprises_inc", "label": "nu_skin_enterprises_inc", "shape": 2, "title": ["nu_skin_enterprises_inc", "\nPrior: ", "herbalife_nutrition_ltd", "\n Event: ", ""]}, {"group": "", "id": "hanesbrands_inc", "label": "hanesbrands_inc", "shape": 2, "title": ["hanesbrands_inc", "\nPrior: ", "hain_celestial_group_inc", "\n Event: ", ""]}, {"group": "", "id": "cme_group_inc", "label": "cme_group_inc", "shape": 2, "title": ["cme_group_inc", "\nPrior: ", "sandp_global_inc", "\n Event: ", ""]}, {"group": "", "id": "waste_management_inc", "label": "waste_management_inc", "shape": 2, "title": ["waste_management_inc", "\nPrior: ", "molson_coors_brewing_co", "\n Event: ", ""]}, {"group": "", "id": "suntory_beverage_and_food_limited", "label": "suntory_beverage_and_food_limited", "shape": 1, "title": ["suntory_beverage_and_food_limited", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "l-3_communications_holdings", "label": "l-3_communications_holdings", "shape": 3, "title": ["l-3_communications_holdings", "\nPrior: ", "netlogic_microsystems_inc", "\n Event: ", ""]}, {"group": "", "id": "dowdupont_inc", "label": "dowdupont_inc", "shape": 2, "title": ["dowdupont_inc", "\nPrior: ", "archer_daniels_midland_co", "\n Event: ", ""]}, {"group": "", "id": "nestle_sa_cham_et_ve", "label": "nestle_sa_cham_et_ve", "shape": 1, "title": ["nestle_sa_cham_et_ve", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "seaboard_corp", "label": "seaboard_corp", "shape": 1, "title": ["seaboard_corp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "kirby_corp", "label": "kirby_corp", "shape": 3, "title": ["kirby_corp", "\nPrior: ", "seacor_holdings_inc_/new/", "\n Event: ", ""]}, {"group": "", "id": "norfolk_southern_corp", "label": "norfolk_southern_corp", "shape": 2, "title": ["norfolk_southern_corp", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "jones_lang_lasalle_inc", "label": "jones_lang_lasalle_inc", "shape": 2, "title": ["jones_lang_lasalle_inc", "\nPrior: ", "city_office_reit_inc", "\n Event: ", ""]}, {"group": "", "id": "nci_inc", "label": "nci_inc", "shape": 2, "title": ["nci_inc", "\nPrior: ", "altria_group", "\n Event: ", ""]}, {"group": "", "id": "fibrogen_inc", "label": "fibrogen_inc", "shape": 3, "title": ["fibrogen_inc", "\nPrior: ", "lam_research_corp", "\n Event: ", ""]}, {"group": "", "id": "unilever_nv_ord", "label": "unilever_nv_ord", "shape": 2, "title": ["unilever_nv_ord", "\nPrior: ", "philip_morris_international_inc", "\n Event: ", ""]}, {"group": "", "id": "energizer_holdings_inc", "label": "energizer_holdings_inc", "shape": 2, "title": ["energizer_holdings_inc", "\nPrior: ", "post_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "netlogic_microsystems_inc", "label": "netlogic_microsystems_inc", "shape": 2, "title": ["netlogic_microsystems_inc", "\nPrior: ", "broadcom_ltd", "\n Event: ", ""]}, {"group": "", "id": "coca-cola_amatil_ltd", "label": "coca-cola_amatil_ltd", "shape": 1, "title": ["coca-cola_amatil_ltd", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "us_foods_holding_corp", "label": "us_foods_holding_corp", "shape": 1, "title": ["us_foods_holding_corp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "adobe_inc", "label": "adobe_inc", "shape": 1, "title": ["adobe_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "kellogg_company", "label": "kellogg_company", "shape": 1, "title": ["kellogg_company", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "allianz_se", "label": "allianz_se", "shape": 3, "title": ["allianz_se", "\nPrior: ", "xl_group_ltd", "\n Event: ", ""]}, {"group": "Corporate", "id": "morgan_stanley_international_holdings_inc", "label": "morgan_stanley_international_holdings_inc", "shape": 1, "title": ["morgan_stanley_international_holdings_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", "Corporate"]}, {"group": "", "id": "altaba_inc", "label": "altaba_inc", "shape": 3, "title": ["altaba_inc", "\nPrior: ", "ebay_inc", "\n Event: ", ""]}, {"group": "Corporate", "id": "craft_brew_alliance", "label": "craft_brew_alliance", "shape": 2, "title": ["craft_brew_alliance", "\nPrior: ", "boston_beer_co_inc", "\n Event: ", "Corporate"]}, {"group": "", "id": "nordson_corp", "label": "nordson_corp", "shape": 3, "title": ["nordson_corp", "\nPrior: ", "dover_corp", "\n Event: ", ""]}, {"group": "Corporate", "id": "goldman_sachs_group_inc", "label": "goldman_sachs_group_inc", "shape": 1, "title": ["goldman_sachs_group_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", "Corporate"]}, {"group": "", "id": "harley_davidson_inc", "label": "harley_davidson_inc", "shape": 3, "title": ["harley_davidson_inc", "\nPrior: ", "automatic_data_processing_inc", "\n Event: ", ""]}, {"group": "", "id": "dean_foods_co", "label": "dean_foods_co", "shape": 1, "title": ["dean_foods_co", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "oci_partners_lp", "label": "oci_partners_lp", "shape": 1, "title": ["oci_partners_lp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "banco_santander-chile", "label": "banco_santander-chile", "shape": 2, "title": ["banco_santander-chile", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "msa_safety_inc", "label": "msa_safety_inc", "shape": 3, "title": ["msa_safety_inc", "\nPrior: ", "reynolds_american_inc", "\n Event: ", ""]}, {"group": "", "id": "loews_corp", "label": "loews_corp", "shape": 2, "title": ["loews_corp", "\nPrior: ", "reynolds_american_inc", "\n Event: ", ""]}, {"group": "", "id": "coca-cola_european_partners_plc", "label": "coca-cola_european_partners_plc", "shape": 1, "title": ["coca-cola_european_partners_plc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "smtc_corp", "label": "smtc_corp", "shape": 2, "title": ["smtc_corp", "\nPrior: ", "citigroup_inc", "\n Event: ", ""]}, {"group": "", "id": "fomento_economico_mexicano_sab_de_cv", "label": "fomento_economico_mexicano_sab_de_cv", "shape": 1, "title": ["fomento_economico_mexicano_sab_de_cv", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "microstrategy_inc", "label": "microstrategy_inc", "shape": 3, "title": ["microstrategy_inc", "\nPrior: ", "comscore_inc", "\n Event: ", ""]}, {"group": "", "id": "reynolds_american_inc", "label": "reynolds_american_inc", "shape": 1, "title": ["reynolds_american_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "hormel_foods_corp", "label": "hormel_foods_corp", "shape": 1, "title": ["hormel_foods_corp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "cit_group_inc", "label": "cit_group_inc", "shape": 3, "title": ["cit_group_inc", "\nPrior: ", "waste_management_inc", "\n Event: ", ""]}, {"group": "", "id": "punjab_national_bank", "label": "punjab_national_bank", "shape": 3, "title": ["punjab_national_bank", "\nPrior: ", "principal_financial_group_inc", "\n Event: ", ""]}, {"group": "", "id": "cse_global_ltd", "label": "cse_global_ltd", "shape": 3, "title": ["cse_global_ltd", "\nPrior: ", "pepsico_inc", "\n Event: ", ""]}, {"group": "", "id": "coca_cola_bottling_co_consolidated_/de/", "label": "coca_cola_bottling_co_consolidated_/de/", "shape": 1, "title": ["coca_cola_bottling_co_consolidated_/de/", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "rci_hospitality_holdings_inc", "label": "rci_hospitality_holdings_inc", "shape": 2, "title": ["rci_hospitality_holdings_inc", "\nPrior: ", "hormel_foods_corp", "\n Event: ", ""]}, {"group": "", "id": "keurig_dr_pepper_inc", "label": "keurig_dr_pepper_inc", "shape": 1, "title": ["keurig_dr_pepper_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "annie\u0027s_inc", "label": "annie\u0027s_inc", "shape": 2, "title": ["annie\u0027s_inc", "\nPrior: ", "general_mills_inc", "\n Event: ", ""]}, {"group": "", "id": "serica_energy_plc", "label": "serica_energy_plc", "shape": 3, "title": ["serica_energy_plc", "\nPrior: ", "sunpower_corp", "\n Event: ", ""]}, {"group": "", "id": "national_beverage_corp", "label": "national_beverage_corp", "shape": 1, "title": ["national_beverage_corp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "freshpet_inc_cs", "label": "freshpet_inc_cs", "shape": 1, "title": ["freshpet_inc_cs", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "amazon_com_inc", "label": "amazon_com_inc", "shape": 3, "title": ["amazon_com_inc", "\nPrior: ", "ebay_inc", "\n Event: ", ""]}, {"group": "", "id": "under_armour", "label": "under_armour", "shape": 3, "title": ["under_armour", "\nPrior: ", "monster_beverage_corp", "\n Event: ", ""]}, {"group": "", "id": "rpm_international_inc/de/", "label": "rpm_international_inc/de/", "shape": 2, "title": ["rpm_international_inc/de/", "\nPrior: ", "nrg_energy", "\n Event: ", ""]}, {"group": "Corporate", "id": "santander_holdings_usa_inc", "label": "santander_holdings_usa_inc", "shape": 1, "title": ["santander_holdings_usa_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", "Corporate"]}, {"group": "", "id": "hain_celestial_group_inc", "label": "hain_celestial_group_inc", "shape": 1, "title": ["hain_celestial_group_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "treehouse_foods", "label": "treehouse_foods", "shape": 1, "title": ["treehouse_foods", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "kansas_city_southern", "label": "kansas_city_southern", "shape": 3, "title": ["kansas_city_southern", "\nPrior: ", "canadian_pacific_railway_ltd/cn", "\n Event: ", ""]}, {"group": "", "id": "mercantil_bank_holding_corp", "label": "mercantil_bank_holding_corp", "shape": 2, "title": ["mercantil_bank_holding_corp", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "gartner_inc", "label": "gartner_inc", "shape": 3, "title": ["gartner_inc", "\nPrior: ", "gain_capital_holdings", "\n Event: ", ""]}, {"group": "", "id": "dollar_tree_inc", "label": "dollar_tree_inc", "shape": 3, "title": ["dollar_tree_inc", "\nPrior: ", "dollar_general_corp", "\n Event: ", ""]}, {"group": "", "id": "whitbread_plc_[united_kingdom]", "label": "whitbread_plc_[united_kingdom]", "shape": 1, "title": ["whitbread_plc_[united_kingdom]", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "chevron_corp", "label": "chevron_corp", "shape": 1, "title": ["chevron_corp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "ilg_inc", "label": "ilg_inc", "shape": 2, "title": ["ilg_inc", "\nPrior: ", "brown_forman_corp", "\n Event: ", ""]}, {"group": "", "id": "ipc_holdings_ltd", "label": "ipc_holdings_ltd", "shape": 3, "title": ["ipc_holdings_ltd", "\nPrior: ", "smtc_corp", "\n Event: ", ""]}, {"group": "", "id": "anthem_inc", "label": "anthem_inc", "shape": 3, "title": ["anthem_inc", "\nPrior: ", "smtc_corp", "\n Event: ", ""]}, {"group": "", "id": "mastercard_inc", "label": "mastercard_inc", "shape": 3, "title": ["mastercard_inc", "\nPrior: ", "wells_fargo_and_company", "\n Event: ", ""]}, {"group": "", "id": "sterling_bancorp_inc", "label": "sterling_bancorp_inc", "shape": 3, "title": ["sterling_bancorp_inc", "\nPrior: ", "overseas_shipholding_group_inc", "\n Event: ", ""]}, {"group": "", "id": "oxford_bank_corp", "label": "oxford_bank_corp", "shape": 2, "title": ["oxford_bank_corp", "\nPrior: ", "flowers_foods_inc", "\n Event: ", ""]}, {"group": "", "id": "federal_home_loan_mortgage_corp", "label": "federal_home_loan_mortgage_corp", "shape": 2, "title": ["federal_home_loan_mortgage_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "impinj_inc", "label": "impinj_inc", "shape": 3, "title": ["impinj_inc", "\nPrior: ", "overseas_shipholding_group_inc", "\n Event: ", ""]}, {"group": "", "id": "kennametal_inc", "label": "kennametal_inc", "shape": 3, "title": ["kennametal_inc", "\nPrior: ", "mondelez_international_inc", "\n Event: ", ""]}, {"group": "", "id": "northrop_grumman_corp", "label": "northrop_grumman_corp", "shape": 3, "title": ["northrop_grumman_corp", "\nPrior: ", "nci_inc", "\n Event: ", ""]}, {"group": "", "id": "applied_biosystems_inc", "label": "applied_biosystems_inc", "shape": 1, "title": ["applied_biosystems_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "finisar_corp", "label": "finisar_corp", "shape": 3, "title": ["finisar_corp", "\nPrior: ", "broadcom_ltd", "\n Event: ", ""]}, {"group": "", "id": "white_mountains_insurance_group", "label": "white_mountains_insurance_group", "shape": 3, "title": ["white_mountains_insurance_group", "\nPrior: ", "exxon_mobil_corp", "\n Event: ", ""]}, {"group": "", "id": "coca_cola_femsa_sab_de_cv", "label": "coca_cola_femsa_sab_de_cv", "shape": 1, "title": ["coca_cola_femsa_sab_de_cv", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "beyond_meat_inc", "label": "beyond_meat_inc", "shape": 1, "title": ["beyond_meat_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "lancaster_colony_corp", "label": "lancaster_colony_corp", "shape": 2, "title": ["lancaster_colony_corp", "\nPrior: ", "flowers_foods_inc", "\n Event: ", ""]}, {"group": "", "id": "innovate_biopharmaceuticals_inc", "label": "innovate_biopharmaceuticals_inc", "shape": 1, "title": ["innovate_biopharmaceuticals_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "markel_corp", "label": "markel_corp", "shape": 3, "title": ["markel_corp", "\nPrior: ", "xl_group_ltd", "\n Event: ", ""]}, {"group": "", "id": "cypress_semiconductor_corp_/de/", "label": "cypress_semiconductor_corp_/de/", "shape": 3, "title": ["cypress_semiconductor_corp_/de/", "\nPrior: ", "sunpower_corp", "\n Event: ", ""]}, {"group": "", "id": "kraft_heinz_co", "label": "kraft_heinz_co", "shape": 1, "title": ["kraft_heinz_co", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "twitter_inc", "label": "twitter_inc", "shape": 1, "title": ["twitter_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "darling_ingredients_inc", "label": "darling_ingredients_inc", "shape": 1, "title": ["darling_ingredients_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "sunedison_inc", "label": "sunedison_inc", "shape": 2, "title": ["sunedison_inc", "\nPrior: ", "lamb_weston_holdings_inc", "\n Event: ", ""]}, {"group": "", "id": "verint_systems_inc", "label": "verint_systems_inc", "shape": 3, "title": ["verint_systems_inc", "\nPrior: ", "seacor_holdings_inc_/new/", "\n Event: ", ""]}, {"group": "", "id": "campbell_soup_company", "label": "campbell_soup_company", "shape": 1, "title": ["campbell_soup_company", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "linkedin_corp", "label": "linkedin_corp", "shape": 3, "title": ["linkedin_corp", "\nPrior: ", "twitter_inc", "\n Event: ", ""]}, {"group": "", "id": "kirin_holdings_co_ltd", "label": "kirin_holdings_co_ltd", "shape": 1, "title": ["kirin_holdings_co_ltd", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "penn_national_gaming_inc", "label": "penn_national_gaming_inc", "shape": 3, "title": ["penn_national_gaming_inc", "\nPrior: ", "norfolk_southern_corp", "\n Event: ", ""]}, {"group": "", "id": "canadian_pacific_railway_ltd/cn", "label": "canadian_pacific_railway_ltd/cn", "shape": 2, "title": ["canadian_pacific_railway_ltd/cn", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "california_resources_corp", "label": "california_resources_corp", "shape": 3, "title": ["california_resources_corp", "\nPrior: ", "plains_all_american_pipeline_lp", "\n Event: ", ""]}, {"group": "", "id": "post_holdings_inc", "label": "post_holdings_inc", "shape": 1, "title": ["post_holdings_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "coca-cola_bottlers_japan_holdings_inc", "label": "coca-cola_bottlers_japan_holdings_inc", "shape": 1, "title": ["coca-cola_bottlers_japan_holdings_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "crowdstrike_holdings_inc", "label": "crowdstrike_holdings_inc", "shape": 3, "title": ["crowdstrike_holdings_inc", "\nPrior: ", "broadcom_ltd", "\n Event: ", ""]}, {"group": "", "id": "comscore_inc", "label": "comscore_inc", "shape": 2, "title": ["comscore_inc", "\nPrior: ", "adobe_inc", "\n Event: ", ""]}, {"group": "", "id": "macatawa_bank_corp", "label": "macatawa_bank_corp", "shape": 2, "title": ["macatawa_bank_corp", "\nPrior: ", "molson_coors_brewing_co", "\n Event: ", ""]}, {"group": "", "id": "facebook_inc", "label": "facebook_inc", "shape": 1, "title": ["facebook_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "city_office_reit_inc", "label": "city_office_reit_inc", "shape": 1, "title": ["city_office_reit_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "automatic_data_processing_inc", "label": "automatic_data_processing_inc", "shape": 2, "title": ["automatic_data_processing_inc", "\nPrior: ", "equifax_inc", "\n Event: ", ""]}, {"group": "", "id": "home_depot_inc", "label": "home_depot_inc", "shape": 2, "title": ["home_depot_inc", "\nPrior: ", "citigroup_inc", "\n Event: ", ""]}, {"group": "", "id": "lam_research_corp", "label": "lam_research_corp", "shape": 2, "title": ["lam_research_corp", "\nPrior: ", "jefferies_financial_group_inc", "\n Event: ", ""]}, {"group": "", "id": "energy_world_corp_ltd", "label": "energy_world_corp_ltd", "shape": 3, "title": ["energy_world_corp_ltd", "\nPrior: ", "plains_all_american_pipeline_lp", "\n Event: ", ""]}, {"group": "", "id": "zep_inc", "label": "zep_inc", "shape": 3, "title": ["zep_inc", "\nPrior: ", "acuity_brands_inc", "\n Event: ", ""]}, {"group": "", "id": "lamb_weston_holdings_inc", "label": "lamb_weston_holdings_inc", "shape": 1, "title": ["lamb_weston_holdings_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "acuity_brands_inc", "label": "acuity_brands_inc", "shape": 2, "title": ["acuity_brands_inc", "\nPrior: ", "equifax_inc", "\n Event: ", ""]}, {"group": "", "id": "ebay_inc", "label": "ebay_inc", "shape": 2, "title": ["ebay_inc", "\nPrior: ", "citigroup_inc", "\n Event: ", ""]}, {"group": "", "id": "brown_forman_corp", "label": "brown_forman_corp", "shape": 1, "title": ["brown_forman_corp", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "sunpower_corp", "label": "sunpower_corp", "shape": 2, "title": ["sunpower_corp", "\nPrior: ", "nrg_energy", "\n Event: ", ""]}, {"group": "", "id": "supervalu_inc", "label": "supervalu_inc", "shape": 3, "title": ["supervalu_inc", "\nPrior: ", "united_natural_foods_inc", "\n Event: ", ""]}, {"group": "", "id": "principal_financial_group_inc", "label": "principal_financial_group_inc", "shape": 2, "title": ["principal_financial_group_inc", "\nPrior: ", "us_foods_holding_corp", "\n Event: ", ""]}, {"group": "", "id": "deutsche_bank", "label": "deutsche_bank", "shape": 3, "title": ["deutsche_bank", "\nPrior: ", "sunpower_corp", "\n Event: ", ""]}, {"group": "", "id": "pinnacle_foods_inc", "label": "pinnacle_foods_inc", "shape": 1, "title": ["pinnacle_foods_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "tyson_foods_inc", "label": "tyson_foods_inc", "shape": 1, "title": ["tyson_foods_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "petmed_express_inc", "label": "petmed_express_inc", "shape": 3, "title": ["petmed_express_inc", "\nPrior: ", "comscore_inc", "\n Event: ", ""]}, {"group": "", "id": "hershey_co", "label": "hershey_co", "shape": 1, "title": ["hershey_co", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "morningstar_inc", "label": "morningstar_inc", "shape": 3, "title": ["morningstar_inc", "\nPrior: ", "dean_foods_co", "\n Event: ", ""]}, {"group": "", "id": "csx_corp", "label": "csx_corp", "shape": 3, "title": ["csx_corp", "\nPrior: ", "norfolk_southern_corp", "\n Event: ", ""]}, {"group": "", "id": "pepsico_inc", "label": "pepsico_inc", "shape": 1, "title": ["pepsico_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "hostess_brands_inc", "label": "hostess_brands_inc", "shape": 2, "title": ["hostess_brands_inc", "\nPrior: ", "flowers_foods_inc", "\n Event: ", ""]}, {"group": "", "id": "boston_beer_co_inc", "label": "boston_beer_co_inc", "shape": 1, "title": ["boston_beer_co_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "liberty_broadband_corp", "label": "liberty_broadband_corp", "shape": 3, "title": ["liberty_broadband_corp", "\nPrior: ", "ilg_inc", "\n Event: ", ""]}, {"group": "", "id": "vulcan_intl_cp", "label": "vulcan_intl_cp", "shape": 3, "title": ["vulcan_intl_cp", "\nPrior: ", "plains_all_american_pipeline_lp", "\n Event: ", ""]}, {"group": "", "id": "united_natural_foods_inc", "label": "united_natural_foods_inc", "shape": 2, "title": ["united_natural_foods_inc", "\nPrior: ", "hain_celestial_group_inc", "\n Event: ", ""]}, {"group": "", "id": "world_fuel_services_corp", "label": "world_fuel_services_corp", "shape": 2, "title": ["world_fuel_services_corp", "\nPrior: ", "freshpet_inc_cs", "\n Event: ", ""]}, {"group": "", "id": "rockwell_automation_inc", "label": "rockwell_automation_inc", "shape": 3, "title": ["rockwell_automation_inc", "\nPrior: ", "dover_corp", "\n Event: ", ""]}, {"group": "", "id": "dynegy_inc", "label": "dynegy_inc", "shape": 2, "title": ["dynegy_inc", "\nPrior: ", "nrg_energy", "\n Event: ", ""]}, {"group": "", "id": "huntington_bancshares_inc/md", "label": "huntington_bancshares_inc/md", "shape": 3, "title": ["huntington_bancshares_inc/md", "\nPrior: ", "lancaster_colony_corp", "\n Event: ", ""]}, {"group": "", "id": "philip_morris_international_inc", "label": "philip_morris_international_inc", "shape": 1, "title": ["philip_morris_international_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "laurentian_bk_cda_qu", "label": "laurentian_bk_cda_qu", "shape": 2, "title": ["laurentian_bk_cda_qu", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", ""]}, {"group": "", "id": "cna_financial_corp", "label": "cna_financial_corp", "shape": 3, "title": ["cna_financial_corp", "\nPrior: ", "loews_corp", "\n Event: ", ""]}, {"group": "", "id": "apple_inc", "label": "apple_inc", "shape": 1, "title": ["apple_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "unilever_plc", "label": "unilever_plc", "shape": 1, "title": ["unilever_plc", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "invesco_ltd", "label": "invesco_ltd", "shape": 3, "title": ["invesco_ltd", "\nPrior: ", "the_carlyle_group_lp", "\n Event: ", ""]}, {"group": "", "id": "koninklijke_bunge_bv", "label": "koninklijke_bunge_bv", "shape": 1, "title": ["koninklijke_bunge_bv", "\nPrior: ", "coca-cola_company", "\n Event: ", ""]}, {"group": "", "id": "matson_inc", "label": "matson_inc", "shape": 3, "title": ["matson_inc", "\nPrior: ", "park_ohio_holdings_corp", "\n Event: ", ""]}, {"group": "SupplyChain", "id": "broadcom_ltd", "label": "broadcom_ltd", "shape": 1, "title": ["broadcom_ltd", "\nPrior: ", "coca-cola_company", "\n Event: ", "SupplyChain"]}, {"group": "", "id": "intel_corp", "label": "intel_corp", "shape": 3, "title": ["intel_corp", "\nPrior: ", "oracle_corp", "\n Event: ", ""]}, {"group": "", "id": "flanigans_enterprises_inc", "label": "flanigans_enterprises_inc", "shape": 2, "title": ["flanigans_enterprises_inc", "\nPrior: ", "molson_coors_brewing_co", "\n Event: ", ""]}, {"group": "", "id": "gatx_corp", "label": "gatx_corp", "shape": 3, "title": ["gatx_corp", "\nPrior: ", "plains_all_american_pipeline_lp", "\n Event: ", ""]}, {"group": "", "id": "actel_corp", "label": "actel_corp", "shape": 3, "title": ["actel_corp", "\nPrior: ", "netlogic_microsystems_inc", "\n Event: ", ""]}, {"group": "", "id": "emc_corp", "label": "emc_corp", "shape": 3, "title": ["emc_corp", "\nPrior: ", "comscore_inc", "\n Event: ", ""]}, {"group": "SupplyChain", "id": "corecivic_inc", "label": "corecivic_inc", "shape": 1, "title": ["corecivic_inc", "\nPrior: ", "coca-cola_company", "\n Event: ", "SupplyChain"]}, {"group": "Corporate", "id": "mbia_inc", "label": "mbia_inc", "shape": 2, "title": ["mbia_inc", "\nPrior: ", "santander_holdings_usa_inc", "\n Event: ", "Corporate"]}, {"group": "", "id": "valero_energy_corp/tx", "label": "valero_energy_corp/tx", "shape": 2, "title": ["valero_energy_corp/tx", "\nPrior: ", "oci_partners_lp", "\n Event: ", ""]}, {"group": "Corporate", "id": "jp_morgan_chase_and_co", "label": "jp_morgan_chase_and_co", "shape": 1, "title": ["jp_morgan_chase_and_co", "\nPrior: ", "coca-cola_company", "\n Event: ", "Corporate"]}, {"group": "", "id": "str_holdings_inc", "label": "str_holdings_inc", "shape": 3, "title": ["str_holdings_inc", "\nPrior: ", "wyndham_worldwide_corp", "\n Event: ", ""]}, {"group": "Corporate", "id": "plains_all_american_pipeline_lp", "label": "plains_all_american_pipeline_lp", "shape": 2, "title": ["plains_all_american_pipeline_lp", "\nPrior: ", "nrg_energy", "\n Event: ", "Corporate"]}]);
+                  edges = new vis.DataSet([{"color": 2, "from": "santander_holdings_usa_inc", "to": "bluestem_group_inc", "value": 60.0}, {"color": 1, "from": "coca-cola_company", "to": "london_stock_exchange_group_plc", "value": 216.0}, {"color": 1, "from": "coca-cola_company", "to": "altria_group", "value": 144.0}, {"color": 1, "from": "coca-cola_company", "to": "consol_coal_resources_lp", "value": 180.0}, {"color": 1, "from": "coca-cola_company", "to": "owens_corning_inc", "value": 72.0}, {"color": 2, "from": "seaboard_corp", "to": "maxwell_technologies_inc", "value": 24.0}, {"color": 2, "from": "moodys_corp_/de/", "to": "ubs_group_ag", "value": 23808.0}, {"color": 1, "from": "coca-cola_company", "to": "flowers_foods_inc", "value": 36.0}, {"color": 3, "from": "canadian_pacific_railway_ltd/cn", "to": "intercontinental_exchange", "value": 18564.0}, {"color": 2, "from": "morgan_stanley_international_holdings_inc", "to": "seacor_holdings_inc_/new/", "value": 270.0}, {"color": 2, "from": "hain_celestial_group_inc", "to": "jetblue_airways_corp", "value": 20.0}, {"color": 1, "from": "coca-cola_company", "to": "herbalife_nutrition_ltd", "value": 48.0}, {"color": 2, "from": "bank_of_america_corp", "to": "berkshire_bancorp_inc_/de/", "value": 285.0}, {"color": 1, "from": "coca-cola_company", "to": "coca-cola_hbc_ag", "value": 252.0}, {"color": 1, "from": "coca-cola_company", "to": "banco_santander_sa", "value": 336.0}, {"color": 3, "from": "gain_capital_holdings", "to": "archer_daniels_midland_co", "value": 272.0}, {"color": 2, "from": "pepsico_inc", "to": "dover_corp", "value": 390.0}, {"color": 2, "from": "morgan_stanley_international_holdings_inc", "to": "discover_financial_services", "value": 1596.0}, {"color": 2, "from": "conagra_brands_inc", "to": "chicos_fas_inc", "value": 850.0}, {"color": 2, "from": "post_holdings_inc", "to": "monster_beverage_corp", "value": 252.0}, {"color": 3, "from": "united_continental_holdings", "to": "singapore_airlines_ltd", "value": 72.0}, {"color": 2, "from": "archer_daniels_midland_co", "to": "overseas_shipholding_group_inc", "value": 192.0}, {"color": 3, "from": "jetblue_airways_corp", "to": "delta_air_lines_inc", "value": 50.0}, {"color": 1, "from": "coca-cola_company", "to": "tsr_inc", "value": 18.0}, {"color": 2, "from": "dr_pepper_snapple_group_inc", "to": "mondelez_international_inc", "value": 13755.0}, {"color": 1, "from": "coca-cola_company", "to": "suntrust_banks_inc", "value": 360.0}, {"color": 3, "from": "wyndham_worldwide_corp", "to": "diamond_resorts_international_inc", "value": 24.0}, {"color": 1, "from": "coca-cola_company", "to": "ingredion_inc", "value": 48.0}, {"color": 1, "from": "coca-cola_company", "to": "diageo_plc", "value": 180.0}, {"color": 2, "from": "koninklijke_bunge_bv", "to": "noble_group_ltd", "value": 48.0}, {"color": 2, "from": "post_holdings_inc", "to": "wells_fargo_and_company", "value": 8000.0}, {"color": 2, "from": "nrg_energy", "to": "united_continental_holdings", "value": 300.0}, {"color": 1, "from": "coca-cola_company", "to": "ca_inc", "value": 576.0}, {"color": 3, "from": "automatic_data_processing_inc", "to": "salesforce_com_inc", "value": 192.0}, {"color": 3, "from": "jones_lang_lasalle_inc", "to": "compass_group_plc", "value": 80.0}, {"color": 3, "from": "jetblue_airways_corp", "to": "lyft_inc", "value": 90.0}, {"color": 3, "from": "maxwell_technologies_inc", "to": "microsemi_corp", "value": 2.0}, {"color": 1, "from": "coca-cola_company", "to": "moodys_corp_/de/", "value": 168.0}, {"color": 2, "from": "citigroup_inc", "to": "honeywell_international_inc", "value": 1320.0}, {"color": 2, "from": "chevron_corp", "to": "exxon_mobil_corp", "value": 144.0}, {"color": 1, "from": "coca-cola_company", "to": "anheuser-busch_inbev_sa", "value": 1800.0}, {"color": 3, "from": "pepsico_inc", "to": "essa_bancorp_inc", "value": 234.0}, {"color": 3, "from": "rpm_international_inc/de/", "to": "yrc_worldwide", "value": 36.0}, {"color": 1, "from": "coca-cola_company", "to": "jefferies_financial_group_inc", "value": 72.0}, {"color": 2, "from": "goldman_sachs_group_inc", "to": "agco_corp", "value": 1792.0}, {"color": 3, "from": "nci_inc", "to": "general_dynamics_corp", "value": 9.0}, {"color": 2, "from": "intercontinental_exchange", "to": "nyse_euronext", "value": 48.0}, {"color": 3, "from": "automatic_data_processing_inc", "to": "advanced_micro_devices_inc", "value": 1848.0}, {"color": 2, "from": "freshpet_inc_cs", "to": "wyndham_worldwide_corp", "value": 60.0}, {"color": 1, "from": "coca-cola_company", "to": "sandp_global_inc", "value": 1512.0}, {"color": 2, "from": "monster_beverage_corp", "to": "xl_group_ltd", "value": 196.0}, {"color": 3, "from": "comscore_inc", "to": "aol_inc", "value": 1.0}, {"color": 1, "from": "coca-cola_company", "to": "monster_beverage_corp", "value": 2100.0}, {"color": 2, "from": "post_holdings_inc", "to": "barclays_plc", "value": 5950.0}, {"color": 1, "from": "coca-cola_company", "to": "intercontinental_exchange", "value": 1468.8}, {"color": 3, "from": "sunpower_corp", "to": "aes_corp", "value": 56.0}, {"color": 1, "from": "coca-cola_company", "to": "nrg_energy", "value": 1320.0}, {"color": 1, "from": "coca-cola_company", "to": "general_mills_inc", "value": 108.0}, {"color": 3, "from": "discover_financial_services", "to": "bioverativ_inc", "value": 7.0}, {"color": 1, "from": "coca-cola_company", "to": "constellation_brands_inc", "value": 162.0}, {"color": 1, "from": "coca-cola_company", "to": "performance_food_group_co", "value": 96.0}, {"color": 3, "from": "norfolk_southern_corp", "to": "zimmer_biomet_holdings", "value": 56.0}, {"color": 2, "from": "nrg_energy", "to": "tsr_inc", "value": 456.0}, {"color": 2, "from": "freshpet_inc_cs", "to": "the_carlyle_group_lp", "value": 96.0}, {"color": 1, "from": "coca-cola_company", "to": "molson_coors_brewing_co", "value": 72.0}, {"color": 1, "from": "coca-cola_company", "to": "costa_group_holdings_ltd", "value": 180.0}, {"color": 1, "from": "coca-cola_company", "to": "conagra_brands_inc", "value": 60.0}, {"color": 3, "from": "ebay_inc", "to": "interpublic_group_of_companies", "value": 72.0}, {"color": 3, "from": "smtc_corp", "to": "celestica_inc", "value": 10.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "cra_international", "value": 1410.0}, {"color": 1, "from": "coca-cola_company", "to": "equifax_inc", "value": 108.0}, {"color": 2, "from": "post_holdings_inc", "to": "dollar_general_corp", "value": 96.0}, {"color": 3, "from": "seacor_holdings_inc_/new/", "to": "sei_investments_co", "value": 54.0}, {"color": 2, "from": "chevron_corp", "to": "bp_plc", "value": 384.0}, {"color": 2, "from": "archer_daniels_midland_co", "to": "wilmar_international_ltd", "value": 120.0}, {"color": 2, "from": "adobe_inc", "to": "oracle_corp", "value": 2760.0}, {"color": 3, "from": "united_natural_foods_inc", "to": "thomson_reuters_corp", "value": 400.0}, {"color": 2, "from": "koninklijke_bunge_bv", "to": "credit_suisse_group", "value": 7696.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "mandt_bank_corp", "value": 96.0}, {"color": 1, "from": "coca-cola_company", "to": "heineken_n_v/s", "value": 168.0}, {"color": 2, "from": "koninklijke_bunge_bv", "to": "park_ohio_holdings_corp", "value": 16.0}, {"color": 3, "from": "plains_all_american_pipeline_lp", "to": "eqt_corp", "value": 72.0}, {"color": 3, "from": "cme_group_inc", "to": "sgx_pharmaceuticals_inc", "value": 32.0}, {"color": 3, "from": "loews_corp", "to": "goodyear_tire_and_rubber_co_/oh/", "value": 378.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "platform_specialty_products_corp", "value": 32.0}, {"color": 2, "from": "keurig_dr_pepper_inc", "to": "gain_capital_holdings", "value": 8.0}, {"color": 3, "from": "united_natural_foods_inc", "to": "abbvie_inc", "value": 160.0}, {"color": 1, "from": "coca-cola_company", "to": "embotelladora_andina_sa", "value": 960.0}, {"color": 1, "from": "coca-cola_company", "to": "nextera_energy", "value": 648.0}, {"color": 1, "from": "coca-cola_company", "to": "uniti_group_inc", "value": 960.0}, {"color": 3, "from": "monster_beverage_corp", "to": "citigroup_inc", "value": 13524.0}, {"color": 1, "from": "coca-cola_company", "to": "bandg_foods_inc", "value": 36.0}, {"color": 1, "from": "coca-cola_company", "to": "bank_of_america_corp", "value": 20178.0}, {"color": 1, "from": "coca-cola_company", "to": "dr_pepper_snapple_group_inc", "value": 196.0}, {"color": 1, "from": "coca-cola_company", "to": "commonwealth_bank_of_australia", "value": 4320.0}, {"color": 3, "from": "rci_hospitality_holdings_inc", "to": "new_york_times_co", "value": 36.0}, {"color": 2, "from": "herbalife_nutrition_ltd", "to": "nu_skin_enterprises_inc", "value": 32.0}, {"color": 2, "from": "hain_celestial_group_inc", "to": "hanesbrands_inc", "value": 20.0}, {"color": 2, "from": "sandp_global_inc", "to": "cme_group_inc", "value": 2808.0}, {"color": 2, "from": "molson_coors_brewing_co", "to": "waste_management_inc", "value": 504.0}, {"color": 1, "from": "coca-cola_company", "to": "suntory_beverage_and_food_limited", "value": 48.0}, {"color": 3, "from": "netlogic_microsystems_inc", "to": "l-3_communications_holdings", "value": 38.0}, {"color": 2, "from": "archer_daniels_midland_co", "to": "dowdupont_inc", "value": 224.0}, {"color": 1, "from": "coca-cola_company", "to": "nestle_sa_cham_et_ve", "value": 540.0}, {"color": 1, "from": "coca-cola_company", "to": "seaboard_corp", "value": 64.0}, {"color": 3, "from": "seacor_holdings_inc_/new/", "to": "kirby_corp", "value": 9.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "norfolk_southern_corp", "value": 120.0}, {"color": 2, "from": "city_office_reit_inc", "to": "jones_lang_lasalle_inc", "value": 12.0}, {"color": 2, "from": "altria_group", "to": "nci_inc", "value": 108.0}, {"color": 3, "from": "lam_research_corp", "to": "fibrogen_inc", "value": 30.0}, {"color": 2, "from": "philip_morris_international_inc", "to": "unilever_nv_ord", "value": 540.0}, {"color": 2, "from": "post_holdings_inc", "to": "energizer_holdings_inc", "value": 75.0}, {"color": 2, "from": "broadcom_ltd", "to": "netlogic_microsystems_inc", "value": 1710.0}, {"color": 1, "from": "coca-cola_company", "to": "coca-cola_amatil_ltd", "value": 312.0}, {"color": 1, "from": "coca-cola_company", "to": "us_foods_holding_corp", "value": 36.0}, {"color": 1, "from": "coca-cola_company", "to": "adobe_inc", "value": 1080.0}, {"color": 1, "from": "coca-cola_company", "to": "kellogg_company", "value": 96.0}, {"color": 3, "from": "xl_group_ltd", "to": "allianz_se", "value": 72.0}, {"color": 1, "from": "coca-cola_company", "to": "morgan_stanley_international_holdings_inc", "value": 360.0}, {"color": 3, "from": "ebay_inc", "to": "altaba_inc", "value": 280.0}, {"color": 2, "from": "boston_beer_co_inc", "to": "craft_brew_alliance", "value": 288.0}, {"color": 3, "from": "dover_corp", "to": "nordson_corp", "value": 18.0}, {"color": 1, "from": "coca-cola_company", "to": "goldman_sachs_group_inc", "value": 1536.0}, {"color": 3, "from": "automatic_data_processing_inc", "to": "harley_davidson_inc", "value": 48.0}, {"color": 1, "from": "coca-cola_company", "to": "dean_foods_co", "value": 24.0}, {"color": 1, "from": "coca-cola_company", "to": "oci_partners_lp", "value": 96.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "banco_santander-chile", "value": 8.0}, {"color": 3, "from": "reynolds_american_inc", "to": "msa_safety_inc", "value": 162.0}, {"color": 2, "from": "pepsico_inc", "to": "nestle_sa_cham_et_ve", "value": 4545.0}, {"color": 2, "from": "reynolds_american_inc", "to": "loews_corp", "value": 28.0}, {"color": 1, "from": "coca-cola_company", "to": "coca-cola_european_partners_plc", "value": 810.0}, {"color": 3, "from": "sunpower_corp", "to": "credit_suisse_group", "value": 962.0}, {"color": 2, "from": "citigroup_inc", "to": "smtc_corp", "value": 3390.0}, {"color": 1, "from": "coca-cola_company", "to": "fomento_economico_mexicano_sab_de_cv", "value": 864.0}, {"color": 3, "from": "comscore_inc", "to": "microstrategy_inc", "value": 6.0}, {"color": 1, "from": "coca-cola_company", "to": "reynolds_american_inc", "value": 12.0}, {"color": 1, "from": "coca-cola_company", "to": "hormel_foods_corp", "value": 72.0}, {"color": 3, "from": "waste_management_inc", "to": "cit_group_inc", "value": 252.0}, {"color": 3, "from": "principal_financial_group_inc", "to": "punjab_national_bank", "value": 24.0}, {"color": 3, "from": "pepsico_inc", "to": "cse_global_ltd", "value": 130.0}, {"color": 1, "from": "coca-cola_company", "to": "coca_cola_bottling_co_consolidated_/de/", "value": 48.0}, {"color": 2, "from": "hormel_foods_corp", "to": "rci_hospitality_holdings_inc", "value": 968.0}, {"color": 1, "from": "coca-cola_company", "to": "keurig_dr_pepper_inc", "value": 24.0}, {"color": 2, "from": "general_mills_inc", "to": "annie\u0027s_inc", "value": 108.0}, {"color": 3, "from": "sunpower_corp", "to": "serica_energy_plc", "value": 75.0}, {"color": 1, "from": "coca-cola_company", "to": "national_beverage_corp", "value": 96.0}, {"color": 1, "from": "coca-cola_company", "to": "freshpet_inc_cs", "value": 48.0}, {"color": 3, "from": "ebay_inc", "to": "amazon_com_inc", "value": 468.0}, {"color": 3, "from": "monster_beverage_corp", "to": "under_armour", "value": 91.0}, {"color": 3, "from": "federal_home_loan_mortgage_corp", "to": "sandp_global_inc", "value": 13824.0}, {"color": 2, "from": "nrg_energy", "to": "rpm_international_inc/de/", "value": 75.0}, {"color": 1, "from": "coca-cola_company", "to": "santander_holdings_usa_inc", "value": 24.0}, {"color": 1, "from": "coca-cola_company", "to": "hain_celestial_group_inc", "value": 48.0}, {"color": 1, "from": "coca-cola_company", "to": "treehouse_foods", "value": 36.0}, {"color": 3, "from": "canadian_pacific_railway_ltd/cn", "to": "kansas_city_southern", "value": 48.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "mercantil_bank_holding_corp", "value": 24.0}, {"color": 3, "from": "gain_capital_holdings", "to": "gartner_inc", "value": 4210.0}, {"color": 3, "from": "dollar_general_corp", "to": "dollar_tree_inc", "value": 96.0}, {"color": 1, "from": "coca-cola_company", "to": "whitbread_plc_[united_kingdom]", "value": 288.0}, {"color": 2, "from": "campbell_soup_company", "to": "intercontinental_exchange", "value": 228420.0}, {"color": 1, "from": "coca-cola_company", "to": "chevron_corp", "value": 144.0}, {"color": 2, "from": "brown_forman_corp", "to": "ilg_inc", "value": 48.0}, {"color": 3, "from": "smtc_corp", "to": "ipc_holdings_ltd", "value": 2.0}, {"color": 3, "from": "smtc_corp", "to": "anthem_inc", "value": 16.0}, {"color": 3, "from": "wells_fargo_and_company", "to": "mastercard_inc", "value": 3474.0}, {"color": 3, "from": "overseas_shipholding_group_inc", "to": "sterling_bancorp_inc", "value": 126.0}, {"color": 2, "from": "flowers_foods_inc", "to": "oxford_bank_corp", "value": 9.0}, {"color": 2, "from": "jp_morgan_chase_and_co", "to": "federal_home_loan_mortgage_corp", "value": 72436.0}, {"color": 3, "from": "overseas_shipholding_group_inc", "to": "impinj_inc", "value": 15.0}, {"color": 3, "from": "mondelez_international_inc", "to": "kennametal_inc", "value": 80.0}, {"color": 3, "from": "nci_inc", "to": "northrop_grumman_corp", "value": 9.0}, {"color": 1, "from": "coca-cola_company", "to": "applied_biosystems_inc", "value": 216.0}, {"color": 3, "from": "broadcom_ltd", "to": "finisar_corp", "value": 27.0}, {"color": 3, "from": "sunpower_corp", "to": "archer_daniels_midland_co", "value": 216.0}, {"color": 3, "from": "exxon_mobil_corp", "to": "white_mountains_insurance_group", "value": 72.0}, {"color": 1, "from": "coca-cola_company", "to": "coca_cola_femsa_sab_de_cv", "value": 252.0}, {"color": 1, "from": "coca-cola_company", "to": "beyond_meat_inc", "value": 96.0}, {"color": 2, "from": "flowers_foods_inc", "to": "lancaster_colony_corp", "value": 99.0}, {"color": 1, "from": "coca-cola_company", "to": "innovate_biopharmaceuticals_inc", "value": 60.0}, {"color": 3, "from": "xl_group_ltd", "to": "markel_corp", "value": 108.0}, {"color": 3, "from": "sunpower_corp", "to": "cypress_semiconductor_corp_/de/", "value": 280.0}, {"color": 1, "from": "coca-cola_company", "to": "kraft_heinz_co", "value": 216.0}, {"color": 1, "from": "coca-cola_company", "to": "citigroup_inc", "value": 504.0}, {"color": 1, "from": "coca-cola_company", "to": "twitter_inc", "value": 300.0}, {"color": 1, "from": "coca-cola_company", "to": "darling_ingredients_inc", "value": 48.0}, {"color": 2, "from": "lamb_weston_holdings_inc", "to": "sunedison_inc", "value": 80.0}, {"color": 3, "from": "seacor_holdings_inc_/new/", "to": "verint_systems_inc", "value": 15.0}, {"color": 1, "from": "coca-cola_company", "to": "campbell_soup_company", "value": 84.0}, {"color": 3, "from": "twitter_inc", "to": "linkedin_corp", "value": 42.0}, {"color": 1, "from": "coca-cola_company", "to": "kirin_holdings_co_ltd", "value": 60.0}, {"color": 1, "from": "coca-cola_company", "to": "unilever_nv_ord", "value": 180.0}, {"color": 3, "from": "norfolk_southern_corp", "to": "penn_national_gaming_inc", "value": 168.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "canadian_pacific_railway_ltd/cn", "value": 918.0}, {"color": 3, "from": "plains_all_american_pipeline_lp", "to": "california_resources_corp", "value": 12.0}, {"color": 1, "from": "coca-cola_company", "to": "post_holdings_inc", "value": 60.0}, {"color": 1, "from": "coca-cola_company", "to": "coca-cola_bottlers_japan_holdings_inc", "value": 160.0}, {"color": 3, "from": "broadcom_ltd", "to": "crowdstrike_holdings_inc", "value": 36.0}, {"color": 2, "from": "adobe_inc", "to": "comscore_inc", "value": 20.0}, {"color": 2, "from": "molson_coors_brewing_co", "to": "macatawa_bank_corp", "value": 1968.0}, {"color": 1, "from": "coca-cola_company", "to": "barclays_plc", "value": 168.0}, {"color": 1, "from": "coca-cola_company", "to": "facebook_inc", "value": 360.0}, {"color": 1, "from": "coca-cola_company", "to": "city_office_reit_inc", "value": 36.0}, {"color": 2, "from": "equifax_inc", "to": "automatic_data_processing_inc", "value": 144.0}, {"color": 2, "from": "citigroup_inc", "to": "home_depot_inc", "value": 924.0}, {"color": 2, "from": "jefferies_financial_group_inc", "to": "lam_research_corp", "value": 288.0}, {"color": 3, "from": "plains_all_american_pipeline_lp", "to": "energy_world_corp_ltd", "value": 6.0}, {"color": 2, "from": "monster_beverage_corp", "to": "coca-cola_european_partners_plc", "value": 2646.0}, {"color": 3, "from": "acuity_brands_inc", "to": "zep_inc", "value": 12.0}, {"color": 1, "from": "coca-cola_company", "to": "lamb_weston_holdings_inc", "value": 60.0}, {"color": 2, "from": "equifax_inc", "to": "acuity_brands_inc", "value": 48.0}, {"color": 2, "from": "citigroup_inc", "to": "ebay_inc", "value": 1008.0}, {"color": 1, "from": "coca-cola_company", "to": "brown_forman_corp", "value": 144.0}, {"color": 2, "from": "nrg_energy", "to": "sunpower_corp", "value": 375.0}, {"color": 3, "from": "united_natural_foods_inc", "to": "supervalu_inc", "value": 10.0}, {"color": 2, "from": "us_foods_holding_corp", "to": "principal_financial_group_inc", "value": 324.0}, {"color": 3, "from": "sunpower_corp", "to": "deutsche_bank", "value": 4342.0}, {"color": 1, "from": "coca-cola_company", "to": "pinnacle_foods_inc", "value": 12.0}, {"color": 2, "from": "equifax_inc", "to": "cra_international", "value": 2262.0}, {"color": 1, "from": "coca-cola_company", "to": "deutsche_bank", "value": 4368.0}, {"color": 1, "from": "coca-cola_company", "to": "archer_daniels_midland_co", "value": 96.0}, {"color": 1, "from": "coca-cola_company", "to": "tyson_foods_inc", "value": 84.0}, {"color": 2, "from": "coca_cola_bottling_co_consolidated_/de/", "to": "commonwealth_bank_of_australia", "value": 1472.0}, {"color": 3, "from": "comscore_inc", "to": "petmed_express_inc", "value": 12.0}, {"color": 1, "from": "coca-cola_company", "to": "hershey_co", "value": 84.0}, {"color": 3, "from": "dean_foods_co", "to": "morningstar_inc", "value": 424.0}, {"color": 3, "from": "oracle_corp", "to": "salesforce_com_inc", "value": 768.0}, {"color": 3, "from": "seacor_holdings_inc_/new/", "to": "bp_plc", "value": 2272.0}, {"color": 3, "from": "broadcom_ltd", "to": "ca_inc", "value": 288.0}, {"color": 1, "from": "coca-cola_company", "to": "linkedin_corp", "value": 60.0}, {"color": 3, "from": "norfolk_southern_corp", "to": "csx_corp", "value": 320.0}, {"color": 1, "from": "coca-cola_company", "to": "pepsico_inc", "value": 312.0}, {"color": 2, "from": "flowers_foods_inc", "to": "hostess_brands_inc", "value": 216.0}, {"color": 1, "from": "coca-cola_company", "to": "boston_beer_co_inc", "value": 48.0}, {"color": 3, "from": "ilg_inc", "to": "liberty_broadband_corp", "value": 6.0}, {"color": 3, "from": "plains_all_american_pipeline_lp", "to": "vulcan_intl_cp", "value": 6.0}, {"color": 2, "from": "hain_celestial_group_inc", "to": "united_natural_foods_inc", "value": 60.0}, {"color": 2, "from": "freshpet_inc_cs", "to": "world_fuel_services_corp", "value": 8.0}, {"color": 3, "from": "dover_corp", "to": "rockwell_automation_inc", "value": 42.0}, {"color": 2, "from": "nrg_energy", "to": "dynegy_inc", "value": 150.0}, {"color": 1, "from": "coca-cola_company", "to": "lancaster_colony_corp", "value": 36.0}, {"color": 3, "from": "lancaster_colony_corp", "to": "huntington_bancshares_inc/md", "value": 30.0}, {"color": 2, "from": "keurig_dr_pepper_inc", "to": "dr_pepper_snapple_group_inc", "value": 28.0}, {"color": 1, "from": "coca-cola_company", "to": "philip_morris_international_inc", "value": 108.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "laurentian_bk_cda_qu", "value": 16.0}, {"color": 3, "from": "loews_corp", "to": "cna_financial_corp", "value": 3852.0}, {"color": 1, "from": "coca-cola_company", "to": "apple_inc", "value": 312.0}, {"color": 1, "from": "coca-cola_company", "to": "unilever_plc", "value": 132.0}, {"color": 3, "from": "the_carlyle_group_lp", "to": "invesco_ltd", "value": 264.0}, {"color": 3, "from": "jones_lang_lasalle_inc", "to": "sandp_global_inc", "value": 8190.0}, {"color": 1, "from": "coca-cola_company", "to": "koninklijke_bunge_bv", "value": 96.0}, {"color": 3, "from": "park_ohio_holdings_corp", "to": "matson_inc", "value": 42.0}, {"color": 1, "from": "coca-cola_company", "to": "broadcom_ltd", "value": 3888.0}, {"color": 3, "from": "oracle_corp", "to": "intel_corp", "value": 1344.0}, {"color": 2, "from": "molson_coors_brewing_co", "to": "flanigans_enterprises_inc", "value": 432.0}, {"color": 3, "from": "plains_all_american_pipeline_lp", "to": "gatx_corp", "value": 72.0}, {"color": 3, "from": "netlogic_microsystems_inc", "to": "actel_corp", "value": 19.0}, {"color": 3, "from": "comscore_inc", "to": "emc_corp", "value": 2.0}, {"color": 1, "from": "coca-cola_company", "to": "corecivic_inc", "value": 504.0}, {"color": 2, "from": "santander_holdings_usa_inc", "to": "mbia_inc", "value": 64.0}, {"color": 2, "from": "oci_partners_lp", "to": "valero_energy_corp/tx", "value": 1442.0}, {"color": 1, "from": "coca-cola_company", "to": "jp_morgan_chase_and_co", "value": 4590.0}, {"color": 3, "from": "wyndham_worldwide_corp", "to": "str_holdings_inc", "value": 36.0}, {"color": 2, "from": "nrg_energy", "to": "plains_all_american_pipeline_lp", "value": 300.0}, {"color": 3, "from": "broadcom_ltd", "to": "broadcom_ltd", "value": 4860.0}, {"color": 3, "from": "ebay_inc", "to": "ebay_inc", "value": 1572.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+                    network.on("click", neighbourhoodHighlight);
+                  
+
+                  
+                    network.on("selectNode", neighbourhoodHighlight);
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

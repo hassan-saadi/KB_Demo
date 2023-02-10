@@ -1,0 +1,871 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+                <link href="lib/tom-select/tom-select.css" rel="stylesheet">
+                <script src="lib/tom-select/tom-select.complete.min.js"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1400px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 1400px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+                <div id="select-menu" class="card-header">
+                    <div class="row no-gutters">
+                        <div class="col-10 pb-2">
+                            <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="selectNode([value]);"
+                            id="select-node"
+                            placeholder="Select node..."
+                            >
+                                <option selected>Select a Node by ID</option>
+                                
+                                    <option value="jp_morgan_chase_and_co">jp_morgan_chase_and_co</option>
+                                
+                                    <option value="oci_partners_lp">oci_partners_lp</option>
+                                
+                                    <option value="regions_financial_corp">regions_financial_corp</option>
+                                
+                                    <option value="united_microelectronics_corp">united_microelectronics_corp</option>
+                                
+                                    <option value="kenexa_corp">kenexa_corp</option>
+                                
+                                    <option value="cse_global_ltd">cse_global_ltd</option>
+                                
+                                    <option value="teradata_corp">teradata_corp</option>
+                                
+                                    <option value="sika_ag">sika_ag</option>
+                                
+                                    <option value="leidos_holdings_inc">leidos_holdings_inc</option>
+                                
+                                    <option value="terraform_power_inc">terraform_power_inc</option>
+                                
+                                    <option value="societe_generale">societe_generale</option>
+                                
+                                    <option value="brixmor_property_group_inc">brixmor_property_group_inc</option>
+                                
+                                    <option value="ubs_group_ag">ubs_group_ag</option>
+                                
+                                    <option value="perkinelmer_inc">perkinelmer_inc</option>
+                                
+                                    <option value="voya_financial_inc">voya_financial_inc</option>
+                                
+                                    <option value="trimas_corp">trimas_corp</option>
+                                
+                                    <option value="pfizer_inc">pfizer_inc</option>
+                                
+                                    <option value="shimadzu_corp">shimadzu_corp</option>
+                                
+                                    <option value="vanguard_group">vanguard_group</option>
+                                
+                                    <option value="ralph_lauren_corp">ralph_lauren_corp</option>
+                                
+                                    <option value="tsr_inc">tsr_inc</option>
+                                
+                                    <option value="fmc_corp">fmc_corp</option>
+                                
+                                    <option value="astellas_pharma_inc">astellas_pharma_inc</option>
+                                
+                                    <option value="public_storage">public_storage</option>
+                                
+                                    <option value="koc_holdings_as">koc_holdings_as</option>
+                                
+                                    <option value="maiden_holdings_ltd">maiden_holdings_ltd</option>
+                                
+                                    <option value="spx_corp">spx_corp</option>
+                                
+                                    <option value="magellan_health_inc">magellan_health_inc</option>
+                                
+                                    <option value="restaurant_brands_international">restaurant_brands_international</option>
+                                
+                                    <option value="sap_se">sap_se</option>
+                                
+                                    <option value="cpi_international_inc">cpi_international_inc</option>
+                                
+                                    <option value="apollo_global_management_llc">apollo_global_management_llc</option>
+                                
+                                    <option value="square_inc">square_inc</option>
+                                
+                                    <option value="deutsche_bank">deutsche_bank</option>
+                                
+                                    <option value="pra_group_inc">pra_group_inc</option>
+                                
+                                    <option value="bank_of_china_ltd_ad">bank_of_china_ltd_ad</option>
+                                
+                                    <option value="general_dynamics_corp">general_dynamics_corp</option>
+                                
+                                    <option value="ipsco_inc">ipsco_inc</option>
+                                
+                                    <option value="emergent_biosolutions">emergent_biosolutions</option>
+                                
+                                    <option value="bbandt_corp">bbandt_corp</option>
+                                
+                                    <option value="duke_realty_corp">duke_realty_corp</option>
+                                
+                                    <option value="endurance_specialty_holdings_ltd">endurance_specialty_holdings_ltd</option>
+                                
+                                    <option value="pnc_financial_services_group_inc">pnc_financial_services_group_inc</option>
+                                
+                                    <option value="gap_inc">gap_inc</option>
+                                
+                                    <option value="bank_of_america_corp">bank_of_america_corp</option>
+                                
+                                    <option value="federal_home_loan_mortgage_corp">federal_home_loan_mortgage_corp</option>
+                                
+                                    <option value="nomura_holdings_inc">nomura_holdings_inc</option>
+                                
+                                    <option value="cboe_global_markets_inc">cboe_global_markets_inc</option>
+                                
+                                    <option value="cold_spring_capital_inc">cold_spring_capital_inc</option>
+                                
+                                    <option value="smtc_corp">smtc_corp</option>
+                                
+                                    <option value="equifax_inc">equifax_inc</option>
+                                
+                                    <option value="pfenex_inc">pfenex_inc</option>
+                                
+                                    <option value="the_northern_trust_company">the_northern_trust_company</option>
+                                
+                                    <option value="starbucks_corp">starbucks_corp</option>
+                                
+                                    <option value="realogy_holdings_corp">realogy_holdings_corp</option>
+                                
+                                    <option value="iec_electronics_corp">iec_electronics_corp</option>
+                                
+                                    <option value="usa_capital_management_inc">usa_capital_management_inc</option>
+                                
+                                    <option value="sandp_global_inc">sandp_global_inc</option>
+                                
+                                    <option value="federal_national_mortgage_association">federal_national_mortgage_association</option>
+                                
+                                    <option value="wec_energy_group_inc">wec_energy_group_inc</option>
+                                
+                                    <option value="tibco_software_inc">tibco_software_inc</option>
+                                
+                                    <option value="united_rentals_inc_/de">united_rentals_inc_/de</option>
+                                
+                                    <option value="american_biltrite_inc">american_biltrite_inc</option>
+                                
+                                    <option value="pepsico_inc">pepsico_inc</option>
+                                
+                                    <option value="fair_isaac_corp">fair_isaac_corp</option>
+                                
+                                    <option value="kelly_services_inc">kelly_services_inc</option>
+                                
+                                    <option value="rci_hospitality_holdings_inc">rci_hospitality_holdings_inc</option>
+                                
+                                    <option value="sysco_corp">sysco_corp</option>
+                                
+                                    <option value="uniti_group_inc">uniti_group_inc</option>
+                                
+                                    <option value="linkedin_corp">linkedin_corp</option>
+                                
+                                    <option value="amazon_com_inc">amazon_com_inc</option>
+                                
+                                    <option value="infinera_corp">infinera_corp</option>
+                                
+                                    <option value="plains_gp_holdings_lp">plains_gp_holdings_lp</option>
+                                
+                                    <option value="avnet_inc">avnet_inc</option>
+                                
+                                    <option value="ecolab_inc">ecolab_inc</option>
+                                
+                                    <option value="mastercard_inc">mastercard_inc</option>
+                                
+                                    <option value="v_f_corp">v_f_corp</option>
+                                
+                                    <option value="emc_corp">emc_corp</option>
+                                
+                                    <option value="nike_inc">nike_inc</option>
+                                
+                                    <option value="harley_davidson_inc">harley_davidson_inc</option>
+                                
+                                    <option value="the_travelers_companies_inc">the_travelers_companies_inc</option>
+                                
+                                    <option value="tim_hortons_inc">tim_hortons_inc</option>
+                                
+                                    <option value="crown_castle_international_corp">crown_castle_international_corp</option>
+                                
+                                    <option value="georgia_pacific_corp">georgia_pacific_corp</option>
+                                
+                                    <option value="allstate_corp">allstate_corp</option>
+                                
+                                    <option value="corcept_therapeutics_inc">corcept_therapeutics_inc</option>
+                                
+                                    <option value="jp_morgan_investment_management_inc">jp_morgan_investment_management_inc</option>
+                                
+                                    <option value="nn_inc">nn_inc</option>
+                                
+                                    <option value="kindred_healthcare_inc">kindred_healthcare_inc</option>
+                                
+                                    <option value="sanmina_corp">sanmina_corp</option>
+                                
+                                    <option value="legacy_bancorp_inc">legacy_bancorp_inc</option>
+                                
+                                    <option value="morningstar_inc">morningstar_inc</option>
+                                
+                                    <option value="cognizant_technology_solutions_corp">cognizant_technology_solutions_corp</option>
+                                
+                                    <option value="philip_morris_international_inc">philip_morris_international_inc</option>
+                                
+                                    <option value="the_carlyle_group_lp">the_carlyle_group_lp</option>
+                                
+                                    <option value="msa_safety_inc">msa_safety_inc</option>
+                                
+                                    <option value="fidelity_national_financial">fidelity_national_financial</option>
+                                
+                                    <option value="cf_industries_holdings">cf_industries_holdings</option>
+                                
+                                    <option value="nasdaq_inc">nasdaq_inc</option>
+                                
+                                    <option value="lincoln_national_corp">lincoln_national_corp</option>
+                                
+                                    <option value="altaba_inc">altaba_inc</option>
+                                
+                                    <option value="stratagene__corp">stratagene__corp</option>
+                                
+                                    <option value="retail_opportunity_investments_corp">retail_opportunity_investments_corp</option>
+                                
+                                    <option value="student_transportation_inc">student_transportation_inc</option>
+                                
+                                    <option value="fifth_third_bancorp">fifth_third_bancorp</option>
+                                
+                                    <option value="terra_nitrogen_co_l_p_/de">terra_nitrogen_co_l_p_/de</option>
+                                
+                                    <option value="corelogic">corelogic</option>
+                                
+                                    <option value="aon_plc">aon_plc</option>
+                                
+                                    <option value="brp_inc">brp_inc</option>
+                                
+                                    <option value="boston_scientific_corp">boston_scientific_corp</option>
+                                
+                                    <option value="humana_inc">humana_inc</option>
+                                
+                                    <option value="kraft_foods_group_inc">kraft_foods_group_inc</option>
+                                
+                                    <option value="international_business_machines_corp">international_business_machines_corp</option>
+                                
+                                    <option value="chicos_fas_inc">chicos_fas_inc</option>
+                                
+                                    <option value="pimco_dynamic_credit_income_fun">pimco_dynamic_credit_income_fun</option>
+                                
+                                    <option value="coty_inc">coty_inc</option>
+                                
+                                    <option value="curtiss-wright_corp">curtiss-wright_corp</option>
+                                
+                                    <option value="cbs_corp">cbs_corp</option>
+                                
+                                    <option value="fastenal_co">fastenal_co</option>
+                                
+                                    <option value="london_stock_exchange_group_plc">london_stock_exchange_group_plc</option>
+                                
+                                    <option value="mci_inc">mci_inc</option>
+                                
+                                    <option value="sun_pharmaceutical_industries_inc">sun_pharmaceutical_industries_inc</option>
+                                
+                                    <option value="evolent_health_inc">evolent_health_inc</option>
+                                
+                                    <option value="euronext_nv">euronext_nv</option>
+                                
+                                    <option value="honeywell_international_inc">honeywell_international_inc</option>
+                                
+                                    <option value="air_products_and_chemicals_inc_/de/">air_products_and_chemicals_inc_/de/</option>
+                                
+                                    <option value="verisk_analytics_inc">verisk_analytics_inc</option>
+                                
+                                    <option value="bp_plc">bp_plc</option>
+                                
+                                    <option value="rpm_international_inc/de/">rpm_international_inc/de/</option>
+                                
+                                    <option value="berkshire_hathaway_inc">berkshire_hathaway_inc</option>
+                                
+                                    <option value="hlth_corp">hlth_corp</option>
+                                
+                                    <option value="coastal_financial_corp">coastal_financial_corp</option>
+                                
+                                    <option value="arc_group_inc">arc_group_inc</option>
+                                
+                                    <option value="cross_country_healthcare_inc">cross_country_healthcare_inc</option>
+                                
+                                    <option value="united_therapeutics_corp">united_therapeutics_corp</option>
+                                
+                                    <option value="allied_capital_corp">allied_capital_corp</option>
+                                
+                                    <option value="dreamworks_animation_llc">dreamworks_animation_llc</option>
+                                
+                                    <option value="earthlink_holdings_llc">earthlink_holdings_llc</option>
+                                
+                                    <option value="ultra_petroleum_corp">ultra_petroleum_corp</option>
+                                
+                                    <option value="netflix_inc">netflix_inc</option>
+                                
+                                    <option value="ust_inc">ust_inc</option>
+                                
+                                    <option value="bnp_paribas">bnp_paribas</option>
+                                
+                                    <option value="jabil_inc">jabil_inc</option>
+                                
+                                    <option value="tenet_healthcare_corp">tenet_healthcare_corp</option>
+                                
+                                    <option value="first_republic_bank">first_republic_bank</option>
+                                
+                                    <option value="kimberly-clark_corp">kimberly-clark_corp</option>
+                                
+                                    <option value="exxon_mobil_corp">exxon_mobil_corp</option>
+                                
+                                    <option value="fiserv_inc">fiserv_inc</option>
+                                
+                                    <option value="credit_suisse_group">credit_suisse_group</option>
+                                
+                                    <option value="msci_inc">msci_inc</option>
+                                
+                                    <option value="partnerre_ltd">partnerre_ltd</option>
+                                
+                                    <option value="agilent_technologies_inc">agilent_technologies_inc</option>
+                                
+                                    <option value="nrg_energy">nrg_energy</option>
+                                
+                                    <option value="pearson_plc">pearson_plc</option>
+                                
+                                    <option value="verizon_communications_inc">verizon_communications_inc</option>
+                                
+                                    <option value="suntrust_banks_inc">suntrust_banks_inc</option>
+                                
+                                    <option value="moodys_corp_/de/">moodys_corp_/de/</option>
+                                
+                                    <option value="toshiba_corp">toshiba_corp</option>
+                                
+                                    <option value="estee_lauder_companies_inc">estee_lauder_companies_inc</option>
+                                
+                                    <option value="ironwood_pharmaceuticals_inc">ironwood_pharmaceuticals_inc</option>
+                                
+                                    <option value="zimmer_biomet_holdings">zimmer_biomet_holdings</option>
+                                
+                                    <option value="hp_inc">hp_inc</option>
+                                
+                                    <option value="franklin_financial_network_inc">franklin_financial_network_inc</option>
+                                
+                                    <option value="stewart_information_services_corp">stewart_information_services_corp</option>
+                                
+                                    <option value="dna_brands_inc">dna_brands_inc</option>
+                                
+                                    <option value="bruker_corp">bruker_corp</option>
+                                
+                                    <option value="visa_inc">visa_inc</option>
+                                
+                                    <option value="t-mobile_us">t-mobile_us</option>
+                                
+                                    <option value="cme_group_inc">cme_group_inc</option>
+                                
+                                    <option value="coinbase_global_inc">coinbase_global_inc</option>
+                                
+                                    <option value="command_security_corp">command_security_corp</option>
+                                
+                                    <option value="vereit_inc">vereit_inc</option>
+                                
+                                    <option value="intercontinental_exchange">intercontinental_exchange</option>
+                                
+                                    <option value="rockwell_automation_inc">rockwell_automation_inc</option>
+                                
+                                    <option value="harte_hanks_inc">harte_hanks_inc</option>
+                                
+                                    <option value="ennis_inc">ennis_inc</option>
+                                
+                                    <option value="goodyear_tire_and_rubber_co_/oh/">goodyear_tire_and_rubber_co_/oh/</option>
+                                
+                                    <option value="brightsphere_investment_group_inc">brightsphere_investment_group_inc</option>
+                                
+                                    <option value="lattice_semiconductor_corp">lattice_semiconductor_corp</option>
+                                
+                                    <option value="alliance_data_systems_corp">alliance_data_systems_corp</option>
+                                
+                                    <option value="wandt_offshore_inc">wandt_offshore_inc</option>
+                                
+                                    <option value="mgic_investment_corp">mgic_investment_corp</option>
+                                
+                                    <option value="altimmune_inc">altimmune_inc</option>
+                                
+                                    <option value="canadian_pacific_railway_ltd/cn">canadian_pacific_railway_ltd/cn</option>
+                                
+                                    <option value="ims_health_holdings_inc">ims_health_holdings_inc</option>
+                                
+                                    <option value="wipro_ltd">wipro_ltd</option>
+                                
+                                    <option value="columbia_sportswear_co">columbia_sportswear_co</option>
+                                
+                                    <option value="twitter_inc">twitter_inc</option>
+                                
+                                    <option value="dominion_energy_inc">dominion_energy_inc</option>
+                                
+                                    <option value="bhp_billiton_plc">bhp_billiton_plc</option>
+                                
+                                    <option value="oasis_petroleum_inc">oasis_petroleum_inc</option>
+                                
+                                    <option value="qep_resources">qep_resources</option>
+                                
+                                    <option value="goldman_sachs_group_inc">goldman_sachs_group_inc</option>
+                                
+                                    <option value="superconductor_technologies_inc">superconductor_technologies_inc</option>
+                                
+                                    <option value="capital_one_financial_corp">capital_one_financial_corp</option>
+                                
+                                    <option value="comcast_corp_a">comcast_corp_a</option>
+                                
+                                    <option value="chase_corp">chase_corp</option>
+                                
+                                    <option value="discover_financial_services">discover_financial_services</option>
+                                
+                                    <option value="rmr_real_estate_income_fund">rmr_real_estate_income_fund</option>
+                                
+                                    <option value="ciena_corp">ciena_corp</option>
+                                
+                                    <option value="globus_medical_inc">globus_medical_inc</option>
+                                
+                                    <option value="city_office_reit_inc">city_office_reit_inc</option>
+                                
+                                    <option value="vivos_inc">vivos_inc</option>
+                                
+                                    <option value="mrc_global_inc">mrc_global_inc</option>
+                                
+                                    <option value="home_depot_inc">home_depot_inc</option>
+                                
+                                    <option value="cumulus_media_inc">cumulus_media_inc</option>
+                                
+                                    <option value="lions_gate_entertainment_corp_/cn/">lions_gate_entertainment_corp_/cn/</option>
+                                
+                                    <option value="ally_financial">ally_financial</option>
+                                
+                                    <option value="national_australia_bank_ltd">national_australia_bank_ltd</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-2 pb-2">
+                            <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset Selection</button>
+                        </div>
+                    </div>
+                </div>
+            
+            
+              <div id="filter-menu" class="card-header">
+                <div class="row no-gutters">
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="updateFilter(value, 'item')"
+                            id="select-item"
+                        >
+                        <option value="">Select a network item</option>
+                        <option value="edge">edge</option>
+                        <option value="node">node</option>
+                    </select>
+                  </div>
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="updateFilter(value, 'property')"
+                            id="select-property"
+                        >
+                        <option value="">Select a property...</option>
+                    </select>
+                  </div>
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            id="select-value"
+                        >
+                        <option value="">Select value(s)...</option>
+                    </select>
+                  </div>
+                  <div class="col-1 pb-2">
+                    <button type="button" class="btn btn-primary btn-block" onclick="highlightFilter(filter);">Filter</button>
+                  </div>
+                  <div class="col-2 pb-2">
+                    <button type="button" class="btn btn-primary btn-block" onclick="clearFilter(true)">Reset Selection</button>
+                  </div>
+                </div>
+              </div>
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+                  new TomSelect("#select-node",{
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      }
+                  });
+              
+
+              
+                  // explicitly using onItemAdd and this function as we need to save multiple values
+                  let updateValueFilter = function() {
+                      return function () {
+                      filter['value'].push(arguments[0])
+                      }
+                  }
+
+                  let valueControl = new TomSelect("#select-value",{
+                      maxItems: null,
+                      valueField: 'id',
+                      labelField: 'title',
+                      searchField: 'title',
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: updateValueFilter()
+                  });
+
+                  let addValues = function() {
+                      return function () {
+                          // clear the current value options and add the selected attribute values
+                          // tom-select handles duplicates
+                          let selectedProperty = arguments[0];
+                          valueControl.clear();
+                          valueControl.clearOptions();
+                          filter['value'] = []
+                          if (filter['item'] === 'node') {
+                              for (let each in allNodes) {
+                                  valueControl.addOption({
+                                      id:allNodes[each][selectedProperty],
+                                      title:allNodes[each][selectedProperty]
+                                  })
+                              }
+                          }
+                          else if (filter['item'] === 'edge') {
+                              for (let each in allEdges) {
+                                  valueControl.addOption({
+                                      id:allEdges[each][selectedProperty],
+                                      title:allEdges[each][selectedProperty]
+                                  })
+                              }
+                          }
+                      }
+                  };
+
+                  let propControl = new TomSelect("#select-property",{
+                      valueField: 'id',
+                      labelField: 'title',
+                      searchField: 'title',
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: addValues()
+                  });
+
+                  let addProperties = function() {
+                      return function () {
+                          // loops through the selected network item and adds the attributes to dropdown
+                          // tom-select handles duplicates
+                          clearFilter(false)
+                          if (arguments[0] === 'edge') {
+                              for (let each in allEdges) {
+                                  if (allEdges.hasOwnProperty(each)) {
+                                      for (let eachProp in allEdges[each]) {
+                                          if (allEdges[each].hasOwnProperty(eachProp)) {
+                                              propControl.addOption({id: eachProp, title: eachProp})
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                          else if (arguments[0] === 'node') {
+                              for (let each in allNodes) {
+                                  if (allNodes.hasOwnProperty(each)) {
+                                      for (let eachProp in allNodes[each]) {
+                                          if (allNodes[each].hasOwnProperty(eachProp)
+                                              && (eachProp !== 'hidden' && eachProp !== 'savedLabel'
+                                                  && eachProp !== 'hiddenLabel')) {
+                                              propControl.addOption({id: eachProp, title: eachProp})
+
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  };
+
+                  let itemControl = new TomSelect("#select-item",{
+                      create: false,
+                      sortField:{
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: addProperties()
+                  });
+
+                  function clearFilter(reset) {
+                      // utility function to clear all the selected filter options
+                      // if reset is set to true, the existing filter will be removed
+                      // else, only the dropdown options are cleared
+                      propControl.clear();
+                      propControl.clearOptions();
+                      valueControl.clear();
+                      valueControl.clearOptions();
+                      filter = {
+                          item : '',
+                          property : '',
+                          value : []
+                      }
+                      if (reset) {
+                          itemControl.clear();
+                          filterHighlight({nodes: []})
+                      }
+                  }
+
+                  function updateFilter(value, key) {
+                      // key could be 'item' or 'property' and value is as selected in dropdown
+                      filter[key] = value
+                  }
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "black", "id": "jp_morgan_chase_and_co", "label": "jp_morgan_chase_and_co", "shape": "dot"}, {"group": "", "id": "oci_partners_lp", "label": "oci_partners_lp", "shape": 1, "title": ["oci_partners_lp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "regions_financial_corp", "label": "regions_financial_corp", "shape": 2, "title": ["regions_financial_corp", "\nPrior: ", "pra_group_inc", "\n Event: ", ""]}, {"group": "", "id": "united_microelectronics_corp", "label": "united_microelectronics_corp", "shape": 3, "title": ["united_microelectronics_corp", "\nPrior: ", "lattice_semiconductor_corp", "\n Event: ", ""]}, {"group": "", "id": "kenexa_corp", "label": "kenexa_corp", "shape": 3, "title": ["kenexa_corp", "\nPrior: ", "international_business_machines_corp", "\n Event: ", ""]}, {"group": "", "id": "cse_global_ltd", "label": "cse_global_ltd", "shape": 3, "title": ["cse_global_ltd", "\nPrior: ", "pepsico_inc", "\n Event: ", ""]}, {"group": "", "id": "teradata_corp", "label": "teradata_corp", "shape": 3, "title": ["teradata_corp", "\nPrior: ", "hp_inc", "\n Event: ", ""]}, {"group": "", "id": "sika_ag", "label": "sika_ag", "shape": 3, "title": ["sika_ag", "\nPrior: ", "rpm_international_inc/de/", "\n Event: ", ""]}, {"group": "", "id": "leidos_holdings_inc", "label": "leidos_holdings_inc", "shape": 2, "title": ["leidos_holdings_inc", "\nPrior: ", "federal_national_mortgage_association", "\n Event: ", ""]}, {"group": "", "id": "terraform_power_inc", "label": "terraform_power_inc", "shape": 3, "title": ["terraform_power_inc", "\nPrior: ", "tenet_healthcare_corp", "\n Event: ", ""]}, {"group": "", "id": "societe_generale", "label": "societe_generale", "shape": 3, "title": ["societe_generale", "\nPrior: ", "msci_inc", "\n Event: ", ""]}, {"group": "", "id": "brixmor_property_group_inc", "label": "brixmor_property_group_inc", "shape": 2, "title": ["brixmor_property_group_inc", "\nPrior: ", "duke_realty_corp", "\n Event: ", ""]}, {"group": "", "id": "ubs_group_ag", "label": "ubs_group_ag", "shape": 2, "title": ["ubs_group_ag", "\nPrior: ", "morningstar_inc", "\n Event: ", ""]}, {"group": "", "id": "perkinelmer_inc", "label": "perkinelmer_inc", "shape": 2, "title": ["perkinelmer_inc", "\nPrior: ", "agilent_technologies_inc", "\n Event: ", ""]}, {"group": "", "id": "voya_financial_inc", "label": "voya_financial_inc", "shape": 2, "title": ["voya_financial_inc", "\nPrior: ", "maiden_holdings_ltd", "\n Event: ", ""]}, {"group": "", "id": "trimas_corp", "label": "trimas_corp", "shape": 3, "title": ["trimas_corp", "\nPrior: ", "nasdaq_inc", "\n Event: ", ""]}, {"group": "", "id": "pfizer_inc", "label": "pfizer_inc", "shape": 3, "title": ["pfizer_inc", "\nPrior: ", "emergent_biosolutions", "\n Event: ", ""]}, {"group": "", "id": "shimadzu_corp", "label": "shimadzu_corp", "shape": 2, "title": ["shimadzu_corp", "\nPrior: ", "agilent_technologies_inc", "\n Event: ", ""]}, {"group": "", "id": "vanguard_group", "label": "vanguard_group", "shape": 3, "title": ["vanguard_group", "\nPrior: ", "morningstar_inc", "\n Event: ", ""]}, {"group": "", "id": "ralph_lauren_corp", "label": "ralph_lauren_corp", "shape": 3, "title": ["ralph_lauren_corp", "\nPrior: ", "estee_lauder_companies_inc", "\n Event: ", ""]}, {"group": "", "id": "tsr_inc", "label": "tsr_inc", "shape": 3, "title": ["tsr_inc", "\nPrior: ", "canadian_pacific_railway_ltd/cn", "\n Event: ", ""]}, {"group": "", "id": "fmc_corp", "label": "fmc_corp", "shape": 3, "title": ["fmc_corp", "\nPrior: ", "perkinelmer_inc", "\n Event: ", ""]}, {"group": "", "id": "astellas_pharma_inc", "label": "astellas_pharma_inc", "shape": 3, "title": ["astellas_pharma_inc", "\nPrior: ", "emergent_biosolutions", "\n Event: ", ""]}, {"group": "Transaction", "id": "public_storage", "label": "public_storage", "shape": 1, "title": ["public_storage", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", "Transaction"]}, {"group": "", "id": "koc_holdings_as", "label": "koc_holdings_as", "shape": 3, "title": ["koc_holdings_as", "\nPrior: ", "dna_brands_inc", "\n Event: ", ""]}, {"group": "", "id": "maiden_holdings_ltd", "label": "maiden_holdings_ltd", "shape": 1, "title": ["maiden_holdings_ltd", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "spx_corp", "label": "spx_corp", "shape": 3, "title": ["spx_corp", "\nPrior: ", "rpm_international_inc/de/", "\n Event: ", ""]}, {"group": "", "id": "magellan_health_inc", "label": "magellan_health_inc", "shape": 3, "title": ["magellan_health_inc", "\nPrior: ", "ally_financial", "\n Event: ", ""]}, {"group": "", "id": "restaurant_brands_international", "label": "restaurant_brands_international", "shape": 2, "title": ["restaurant_brands_international", "\nPrior: ", "berkshire_hathaway_inc", "\n Event: ", ""]}, {"group": "", "id": "sap_se", "label": "sap_se", "shape": 3, "title": ["sap_se", "\nPrior: ", "estee_lauder_companies_inc", "\n Event: ", ""]}, {"group": "", "id": "cpi_international_inc", "label": "cpi_international_inc", "shape": 1, "title": ["cpi_international_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "apollo_global_management_llc", "label": "apollo_global_management_llc", "shape": 2, "title": ["apollo_global_management_llc", "\nPrior: ", "morningstar_inc", "\n Event: ", ""]}, {"group": "", "id": "square_inc", "label": "square_inc", "shape": 2, "title": ["square_inc", "\nPrior: ", "starbucks_corp", "\n Event: ", ""]}, {"group": "Legal", "id": "deutsche_bank", "label": "deutsche_bank", "shape": 1, "title": ["deutsche_bank", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", "Legal"]}, {"group": "", "id": "pra_group_inc", "label": "pra_group_inc", "shape": 1, "title": ["pra_group_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "Legal", "id": "bank_of_china_ltd_ad", "label": "bank_of_china_ltd_ad", "shape": 2, "title": ["bank_of_china_ltd_ad", "\nPrior: ", "brightsphere_investment_group_inc", "\n Event: ", "Legal"]}, {"group": "", "id": "general_dynamics_corp", "label": "general_dynamics_corp", "shape": 1, "title": ["general_dynamics_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "ipsco_inc", "label": "ipsco_inc", "shape": 2, "title": ["ipsco_inc", "\nPrior: ", "mastercard_inc", "\n Event: ", ""]}, {"group": "", "id": "emergent_biosolutions", "label": "emergent_biosolutions", "shape": 2, "title": ["emergent_biosolutions", "\nPrior: ", "maiden_holdings_ltd", "\n Event: ", ""]}, {"group": "", "id": "bbandt_corp", "label": "bbandt_corp", "shape": 3, "title": ["bbandt_corp", "\nPrior: ", "pnc_financial_services_group_inc", "\n Event: ", ""]}, {"group": "", "id": "duke_realty_corp", "label": "duke_realty_corp", "shape": 1, "title": ["duke_realty_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "endurance_specialty_holdings_ltd", "label": "endurance_specialty_holdings_ltd", "shape": 3, "title": ["endurance_specialty_holdings_ltd", "\nPrior: ", "maiden_holdings_ltd", "\n Event: ", ""]}, {"group": "", "id": "pnc_financial_services_group_inc", "label": "pnc_financial_services_group_inc", "shape": 2, "title": ["pnc_financial_services_group_inc", "\nPrior: ", "federal_home_loan_mortgage_corp", "\n Event: ", ""]}, {"group": "", "id": "gap_inc", "label": "gap_inc", "shape": 3, "title": ["gap_inc", "\nPrior: ", "ally_financial", "\n Event: ", ""]}, {"group": "", "id": "bank_of_america_corp", "label": "bank_of_america_corp", "shape": 3, "title": ["bank_of_america_corp", "\nPrior: ", "kimberly-clark_corp", "\n Event: ", ""]}, {"group": "", "id": "federal_home_loan_mortgage_corp", "label": "federal_home_loan_mortgage_corp", "shape": 2, "title": ["federal_home_loan_mortgage_corp", "\nPrior: ", "federal_national_mortgage_association", "\n Event: ", ""]}, {"group": "", "id": "nomura_holdings_inc", "label": "nomura_holdings_inc", "shape": 1, "title": ["nomura_holdings_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "cboe_global_markets_inc", "label": "cboe_global_markets_inc", "shape": 3, "title": ["cboe_global_markets_inc", "\nPrior: ", "nasdaq_inc", "\n Event: ", ""]}, {"group": "", "id": "cold_spring_capital_inc", "label": "cold_spring_capital_inc", "shape": 1, "title": ["cold_spring_capital_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "smtc_corp", "label": "smtc_corp", "shape": 1, "title": ["smtc_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "equifax_inc", "label": "equifax_inc", "shape": 2, "title": ["equifax_inc", "\nPrior: ", "fair_isaac_corp", "\n Event: ", ""]}, {"group": "", "id": "pfenex_inc", "label": "pfenex_inc", "shape": 3, "title": ["pfenex_inc", "\nPrior: ", "emergent_biosolutions", "\n Event: ", ""]}, {"group": "", "id": "the_northern_trust_company", "label": "the_northern_trust_company", "shape": 2, "title": ["the_northern_trust_company", "\nPrior: ", "federal_home_loan_mortgage_corp", "\n Event: ", ""]}, {"group": "", "id": "starbucks_corp", "label": "starbucks_corp", "shape": 3, "title": ["starbucks_corp", "\nPrior: ", "square_inc", "\n Event: ", ""]}, {"group": "", "id": "realogy_holdings_corp", "label": "realogy_holdings_corp", "shape": 1, "title": ["realogy_holdings_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "iec_electronics_corp", "label": "iec_electronics_corp", "shape": 2, "title": ["iec_electronics_corp", "\nPrior: ", "smtc_corp", "\n Event: ", ""]}, {"group": "", "id": "usa_capital_management_inc", "label": "usa_capital_management_inc", "shape": 1, "title": ["usa_capital_management_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "sandp_global_inc", "label": "sandp_global_inc", "shape": 1, "title": ["sandp_global_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "federal_national_mortgage_association", "label": "federal_national_mortgage_association", "shape": 1, "title": ["federal_national_mortgage_association", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "wec_energy_group_inc", "label": "wec_energy_group_inc", "shape": 3, "title": ["wec_energy_group_inc", "\nPrior: ", "dominion_energy_inc", "\n Event: ", ""]}, {"group": "", "id": "tibco_software_inc", "label": "tibco_software_inc", "shape": 3, "title": ["tibco_software_inc", "\nPrior: ", "perkinelmer_inc", "\n Event: ", ""]}, {"group": "", "id": "united_rentals_inc_/de", "label": "united_rentals_inc_/de", "shape": 2, "title": ["united_rentals_inc_/de", "\nPrior: ", "msa_safety_inc", "\n Event: ", ""]}, {"group": "", "id": "american_biltrite_inc", "label": "american_biltrite_inc", "shape": 2, "title": ["american_biltrite_inc", "\nPrior: ", "chase_corp", "\n Event: ", ""]}, {"group": "", "id": "pepsico_inc", "label": "pepsico_inc", "shape": 2, "title": ["pepsico_inc", "\nPrior: ", "starbucks_corp", "\n Event: ", ""]}, {"group": "Corporate", "id": "fair_isaac_corp", "label": "fair_isaac_corp", "shape": 1, "title": ["fair_isaac_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", "Corporate"]}, {"group": "", "id": "kelly_services_inc", "label": "kelly_services_inc", "shape": 2, "title": ["kelly_services_inc", "\nPrior: ", "amazon_com_inc", "\n Event: ", ""]}, {"group": "", "id": "rci_hospitality_holdings_inc", "label": "rci_hospitality_holdings_inc", "shape": 3, "title": ["rci_hospitality_holdings_inc", "\nPrior: ", "emc_corp", "\n Event: ", ""]}, {"group": "", "id": "sysco_corp", "label": "sysco_corp", "shape": 2, "title": ["sysco_corp", "\nPrior: ", "starbucks_corp", "\n Event: ", ""]}, {"group": "", "id": "uniti_group_inc", "label": "uniti_group_inc", "shape": 2, "title": ["uniti_group_inc", "\nPrior: ", "oasis_petroleum_inc", "\n Event: ", ""]}, {"group": "", "id": "linkedin_corp", "label": "linkedin_corp", "shape": 2, "title": ["linkedin_corp", "\nPrior: ", "sandp_global_inc", "\n Event: ", ""]}, {"group": "", "id": "amazon_com_inc", "label": "amazon_com_inc", "shape": 1, "title": ["amazon_com_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "infinera_corp", "label": "infinera_corp", "shape": 3, "title": ["infinera_corp", "\nPrior: ", "ciena_corp", "\n Event: ", ""]}, {"group": "", "id": "plains_gp_holdings_lp", "label": "plains_gp_holdings_lp", "shape": 3, "title": ["plains_gp_holdings_lp", "\nPrior: ", "wandt_offshore_inc", "\n Event: ", ""]}, {"group": "", "id": "avnet_inc", "label": "avnet_inc", "shape": 2, "title": ["avnet_inc", "\nPrior: ", "smtc_corp", "\n Event: ", ""]}, {"group": "", "id": "ecolab_inc", "label": "ecolab_inc", "shape": 1, "title": ["ecolab_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "mastercard_inc", "label": "mastercard_inc", "shape": 1, "title": ["mastercard_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "v_f_corp", "label": "v_f_corp", "shape": 1, "title": ["v_f_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "emc_corp", "label": "emc_corp", "shape": 2, "title": ["emc_corp", "\nPrior: ", "international_business_machines_corp", "\n Event: ", ""]}, {"group": "", "id": "nike_inc", "label": "nike_inc", "shape": 2, "title": ["nike_inc", "\nPrior: ", "amazon_com_inc", "\n Event: ", ""]}, {"group": "", "id": "harley_davidson_inc", "label": "harley_davidson_inc", "shape": 3, "title": ["harley_davidson_inc", "\nPrior: ", "the_northern_trust_company", "\n Event: ", ""]}, {"group": "", "id": "the_travelers_companies_inc", "label": "the_travelers_companies_inc", "shape": 3, "title": ["the_travelers_companies_inc", "\nPrior: ", "allstate_corp", "\n Event: ", ""]}, {"group": "", "id": "tim_hortons_inc", "label": "tim_hortons_inc", "shape": 3, "title": ["tim_hortons_inc", "\nPrior: ", "restaurant_brands_international", "\n Event: ", ""]}, {"group": "", "id": "crown_castle_international_corp", "label": "crown_castle_international_corp", "shape": 2, "title": ["crown_castle_international_corp", "\nPrior: ", "oasis_petroleum_inc", "\n Event: ", ""]}, {"group": "", "id": "georgia_pacific_corp", "label": "georgia_pacific_corp", "shape": 3, "title": ["georgia_pacific_corp", "\nPrior: ", "kimberly-clark_corp", "\n Event: ", ""]}, {"group": "", "id": "allstate_corp", "label": "allstate_corp", "shape": 2, "title": ["allstate_corp", "\nPrior: ", "federal_home_loan_mortgage_corp", "\n Event: ", ""]}, {"group": "", "id": "corcept_therapeutics_inc", "label": "corcept_therapeutics_inc", "shape": 2, "title": ["corcept_therapeutics_inc", "\nPrior: ", "berkshire_hathaway_inc", "\n Event: ", ""]}, {"group": "", "id": "jp_morgan_investment_management_inc", "label": "jp_morgan_investment_management_inc", "shape": 1, "title": ["jp_morgan_investment_management_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "nn_inc", "label": "nn_inc", "shape": 3, "title": ["nn_inc", "\nPrior: ", "discover_financial_services", "\n Event: ", ""]}, {"group": "", "id": "kindred_healthcare_inc", "label": "kindred_healthcare_inc", "shape": 3, "title": ["kindred_healthcare_inc", "\nPrior: ", "tenet_healthcare_corp", "\n Event: ", ""]}, {"group": "", "id": "sanmina_corp", "label": "sanmina_corp", "shape": 2, "title": ["sanmina_corp", "\nPrior: ", "smtc_corp", "\n Event: ", ""]}, {"group": "", "id": "legacy_bancorp_inc", "label": "legacy_bancorp_inc", "shape": 3, "title": ["legacy_bancorp_inc", "\nPrior: ", "ciena_corp", "\n Event: ", ""]}, {"group": "", "id": "morningstar_inc", "label": "morningstar_inc", "shape": 1, "title": ["morningstar_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "cognizant_technology_solutions_corp", "label": "cognizant_technology_solutions_corp", "shape": 3, "title": ["cognizant_technology_solutions_corp", "\nPrior: ", "federal_home_loan_mortgage_corp", "\n Event: ", ""]}, {"group": "", "id": "philip_morris_international_inc", "label": "philip_morris_international_inc", "shape": 2, "title": ["philip_morris_international_inc", "\nPrior: ", "federal_national_mortgage_association", "\n Event: ", ""]}, {"group": "", "id": "the_carlyle_group_lp", "label": "the_carlyle_group_lp", "shape": 3, "title": ["the_carlyle_group_lp", "\nPrior: ", "comcast_corp_a", "\n Event: ", ""]}, {"group": "", "id": "msa_safety_inc", "label": "msa_safety_inc", "shape": 1, "title": ["msa_safety_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "fidelity_national_financial", "label": "fidelity_national_financial", "shape": 2, "title": ["fidelity_national_financial", "\nPrior: ", "realogy_holdings_corp", "\n Event: ", ""]}, {"group": "", "id": "cf_industries_holdings", "label": "cf_industries_holdings", "shape": 2, "title": ["cf_industries_holdings", "\nPrior: ", "oci_partners_lp", "\n Event: ", ""]}, {"group": "", "id": "nasdaq_inc", "label": "nasdaq_inc", "shape": 2, "title": ["nasdaq_inc", "\nPrior: ", "intercontinental_exchange", "\n Event: ", ""]}, {"group": "", "id": "lincoln_national_corp", "label": "lincoln_national_corp", "shape": 3, "title": ["lincoln_national_corp", "\nPrior: ", "cumulus_media_inc", "\n Event: ", ""]}, {"group": "", "id": "altaba_inc", "label": "altaba_inc", "shape": 3, "title": ["altaba_inc", "\nPrior: ", "morningstar_inc", "\n Event: ", ""]}, {"group": "", "id": "stratagene__corp", "label": "stratagene__corp", "shape": 2, "title": ["stratagene__corp", "\nPrior: ", "agilent_technologies_inc", "\n Event: ", ""]}, {"group": "", "id": "retail_opportunity_investments_corp", "label": "retail_opportunity_investments_corp", "shape": 2, "title": ["retail_opportunity_investments_corp", "\nPrior: ", "starbucks_corp", "\n Event: ", ""]}, {"group": "", "id": "student_transportation_inc", "label": "student_transportation_inc", "shape": 1, "title": ["student_transportation_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "fifth_third_bancorp", "label": "fifth_third_bancorp", "shape": 2, "title": ["fifth_third_bancorp", "\nPrior: ", "franklin_financial_network_inc", "\n Event: ", ""]}, {"group": "", "id": "terra_nitrogen_co_l_p_/de", "label": "terra_nitrogen_co_l_p_/de", "shape": 3, "title": ["terra_nitrogen_co_l_p_/de", "\nPrior: ", "cf_industries_holdings", "\n Event: ", ""]}, {"group": "", "id": "corelogic", "label": "corelogic", "shape": 2, "title": ["corelogic", "\nPrior: ", "fair_isaac_corp", "\n Event: ", ""]}, {"group": "Transaction", "id": "aon_plc", "label": "aon_plc", "shape": 1, "title": ["aon_plc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", "Transaction"]}, {"group": "", "id": "brp_inc", "label": "brp_inc", "shape": 3, "title": ["brp_inc", "\nPrior: ", "dominion_energy_inc", "\n Event: ", ""]}, {"group": "", "id": "boston_scientific_corp", "label": "boston_scientific_corp", "shape": 2, "title": ["boston_scientific_corp", "\nPrior: ", "zimmer_biomet_holdings", "\n Event: ", ""]}, {"group": "", "id": "humana_inc", "label": "humana_inc", "shape": 3, "title": ["humana_inc", "\nPrior: ", "tenet_healthcare_corp", "\n Event: ", ""]}, {"group": "", "id": "kraft_foods_group_inc", "label": "kraft_foods_group_inc", "shape": 2, "title": ["kraft_foods_group_inc", "\nPrior: ", "berkshire_hathaway_inc", "\n Event: ", ""]}, {"group": "", "id": "international_business_machines_corp", "label": "international_business_machines_corp", "shape": 1, "title": ["international_business_machines_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "chicos_fas_inc", "label": "chicos_fas_inc", "shape": 2, "title": ["chicos_fas_inc", "\nPrior: ", "general_dynamics_corp", "\n Event: ", ""]}, {"group": "", "id": "pimco_dynamic_credit_income_fun", "label": "pimco_dynamic_credit_income_fun", "shape": 1, "title": ["pimco_dynamic_credit_income_fun", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "coty_inc", "label": "coty_inc", "shape": 3, "title": ["coty_inc", "\nPrior: ", "estee_lauder_companies_inc", "\n Event: ", ""]}, {"group": "", "id": "curtiss-wright_corp", "label": "curtiss-wright_corp", "shape": 3, "title": ["curtiss-wright_corp", "\nPrior: ", "lions_gate_entertainment_corp_/cn/", "\n Event: ", ""]}, {"group": "", "id": "cbs_corp", "label": "cbs_corp", "shape": 1, "title": ["cbs_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "fastenal_co", "label": "fastenal_co", "shape": 2, "title": ["fastenal_co", "\nPrior: ", "msa_safety_inc", "\n Event: ", ""]}, {"group": "", "id": "london_stock_exchange_group_plc", "label": "london_stock_exchange_group_plc", "shape": 3, "title": ["london_stock_exchange_group_plc", "\nPrior: ", "nasdaq_inc", "\n Event: ", ""]}, {"group": "", "id": "mci_inc", "label": "mci_inc", "shape": 2, "title": ["mci_inc", "\nPrior: ", "federal_national_mortgage_association", "\n Event: ", ""]}, {"group": "Legal", "id": "sun_pharmaceutical_industries_inc", "label": "sun_pharmaceutical_industries_inc", "shape": 3, "title": ["sun_pharmaceutical_industries_inc", "\nPrior: ", "corcept_therapeutics_inc", "\n Event: ", "Legal"]}, {"group": "", "id": "evolent_health_inc", "label": "evolent_health_inc", "shape": 3, "title": ["evolent_health_inc", "\nPrior: ", "msci_inc", "\n Event: ", ""]}, {"group": "", "id": "euronext_nv", "label": "euronext_nv", "shape": 3, "title": ["euronext_nv", "\nPrior: ", "morningstar_inc", "\n Event: ", ""]}, {"group": "", "id": "honeywell_international_inc", "label": "honeywell_international_inc", "shape": 3, "title": ["honeywell_international_inc", "\nPrior: ", "perkinelmer_inc", "\n Event: ", ""]}, {"group": "Communication", "id": "air_products_and_chemicals_inc_/de/", "label": "air_products_and_chemicals_inc_/de/", "shape": 3, "title": ["air_products_and_chemicals_inc_/de/", "\nPrior: ", "canadian_pacific_railway_ltd/cn", "\n Event: ", "Communication"]}, {"group": "", "id": "verisk_analytics_inc", "label": "verisk_analytics_inc", "shape": 2, "title": ["verisk_analytics_inc", "\nPrior: ", "sandp_global_inc", "\n Event: ", ""]}, {"group": "", "id": "bp_plc", "label": "bp_plc", "shape": 2, "title": ["bp_plc", "\nPrior: ", "cbs_corp", "\n Event: ", ""]}, {"group": "", "id": "rpm_international_inc/de/", "label": "rpm_international_inc/de/", "shape": 2, "title": ["rpm_international_inc/de/", "\nPrior: ", "chase_corp", "\n Event: ", ""]}, {"group": "", "id": "berkshire_hathaway_inc", "label": "berkshire_hathaway_inc", "shape": 1, "title": ["berkshire_hathaway_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "hlth_corp", "label": "hlth_corp", "shape": 2, "title": ["hlth_corp", "\nPrior: ", "general_dynamics_corp", "\n Event: ", ""]}, {"group": "Communication", "id": "coastal_financial_corp", "label": "coastal_financial_corp", "shape": 1, "title": ["coastal_financial_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", "Communication"]}, {"group": "", "id": "arc_group_inc", "label": "arc_group_inc", "shape": 3, "title": ["arc_group_inc", "\nPrior: ", "pepsico_inc", "\n Event: ", ""]}, {"group": "", "id": "cross_country_healthcare_inc", "label": "cross_country_healthcare_inc", "shape": 2, "title": ["cross_country_healthcare_inc", "\nPrior: ", "oasis_petroleum_inc", "\n Event: ", ""]}, {"group": "", "id": "united_therapeutics_corp", "label": "united_therapeutics_corp", "shape": 3, "title": ["united_therapeutics_corp", "\nPrior: ", "emergent_biosolutions", "\n Event: ", ""]}, {"group": "", "id": "allied_capital_corp", "label": "allied_capital_corp", "shape": 3, "title": ["allied_capital_corp", "\nPrior: ", "cbs_corp", "\n Event: ", ""]}, {"group": "Corporate", "id": "dreamworks_animation_llc", "label": "dreamworks_animation_llc", "shape": 3, "title": ["dreamworks_animation_llc", "\nPrior: ", "comcast_corp_a", "\n Event: ", "Corporate"]}, {"group": "", "id": "earthlink_holdings_llc", "label": "earthlink_holdings_llc", "shape": 3, "title": ["earthlink_holdings_llc", "\nPrior: ", "equifax_inc", "\n Event: ", ""]}, {"group": "", "id": "ultra_petroleum_corp", "label": "ultra_petroleum_corp", "shape": 3, "title": ["ultra_petroleum_corp", "\nPrior: ", "qep_resources", "\n Event: ", ""]}, {"group": "", "id": "netflix_inc", "label": "netflix_inc", "shape": 3, "title": ["netflix_inc", "\nPrior: ", "cbs_corp", "\n Event: ", ""]}, {"group": "", "id": "ust_inc", "label": "ust_inc", "shape": 2, "title": ["ust_inc", "\nPrior: ", "bank_of_america_corp", "\n Event: ", ""]}, {"group": "", "id": "bnp_paribas", "label": "bnp_paribas", "shape": 3, "title": ["bnp_paribas", "\nPrior: ", "intercontinental_exchange", "\n Event: ", ""]}, {"group": "", "id": "jabil_inc", "label": "jabil_inc", "shape": 2, "title": ["jabil_inc", "\nPrior: ", "smtc_corp", "\n Event: ", ""]}, {"group": "", "id": "tenet_healthcare_corp", "label": "tenet_healthcare_corp", "shape": 2, "title": ["tenet_healthcare_corp", "\nPrior: ", "federal_national_mortgage_association", "\n Event: ", ""]}, {"group": "", "id": "first_republic_bank", "label": "first_republic_bank", "shape": 1, "title": ["first_republic_bank", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "kimberly-clark_corp", "label": "kimberly-clark_corp", "shape": 2, "title": ["kimberly-clark_corp", "\nPrior: ", "starbucks_corp", "\n Event: ", ""]}, {"group": "", "id": "exxon_mobil_corp", "label": "exxon_mobil_corp", "shape": 2, "title": ["exxon_mobil_corp", "\nPrior: ", "oci_partners_lp", "\n Event: ", ""]}, {"group": "", "id": "fiserv_inc", "label": "fiserv_inc", "shape": 2, "title": ["fiserv_inc", "\nPrior: ", "coastal_financial_corp", "\n Event: ", ""]}, {"group": "", "id": "credit_suisse_group", "label": "credit_suisse_group", "shape": 2, "title": ["credit_suisse_group", "\nPrior: ", "agilent_technologies_inc", "\n Event: ", ""]}, {"group": "", "id": "msci_inc", "label": "msci_inc", "shape": 2, "title": ["msci_inc", "\nPrior: ", "federal_national_mortgage_association", "\n Event: ", ""]}, {"group": "", "id": "partnerre_ltd", "label": "partnerre_ltd", "shape": 3, "title": ["partnerre_ltd", "\nPrior: ", "maiden_holdings_ltd", "\n Event: ", ""]}, {"group": "", "id": "agilent_technologies_inc", "label": "agilent_technologies_inc", "shape": 1, "title": ["agilent_technologies_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "nrg_energy", "label": "nrg_energy", "shape": 3, "title": ["nrg_energy", "\nPrior: ", "dominion_energy_inc", "\n Event: ", ""]}, {"group": "", "id": "pearson_plc", "label": "pearson_plc", "shape": 2, "title": ["pearson_plc", "\nPrior: ", "moodys_corp_/de/", "\n Event: ", ""]}, {"group": "", "id": "verizon_communications_inc", "label": "verizon_communications_inc", "shape": 3, "title": ["verizon_communications_inc", "\nPrior: ", "comcast_corp_a", "\n Event: ", ""]}, {"group": "", "id": "suntrust_banks_inc", "label": "suntrust_banks_inc", "shape": 3, "title": ["suntrust_banks_inc", "\nPrior: ", "mgic_investment_corp", "\n Event: ", ""]}, {"group": "Corporate", "id": "moodys_corp_/de/", "label": "moodys_corp_/de/", "shape": 1, "title": ["moodys_corp_/de/", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", "Corporate"]}, {"group": "", "id": "toshiba_corp", "label": "toshiba_corp", "shape": 3, "title": ["toshiba_corp", "\nPrior: ", "dominion_energy_inc", "\n Event: ", ""]}, {"group": "", "id": "estee_lauder_companies_inc", "label": "estee_lauder_companies_inc", "shape": 2, "title": ["estee_lauder_companies_inc", "\nPrior: ", "sandp_global_inc", "\n Event: ", ""]}, {"group": "", "id": "ironwood_pharmaceuticals_inc", "label": "ironwood_pharmaceuticals_inc", "shape": 3, "title": ["ironwood_pharmaceuticals_inc", "\nPrior: ", "corcept_therapeutics_inc", "\n Event: ", ""]}, {"group": "", "id": "zimmer_biomet_holdings", "label": "zimmer_biomet_holdings", "shape": 1, "title": ["zimmer_biomet_holdings", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "hp_inc", "label": "hp_inc", "shape": 2, "title": ["hp_inc", "\nPrior: ", "agilent_technologies_inc", "\n Event: ", ""]}, {"group": "", "id": "franklin_financial_network_inc", "label": "franklin_financial_network_inc", "shape": 1, "title": ["franklin_financial_network_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "stewart_information_services_corp", "label": "stewart_information_services_corp", "shape": 3, "title": ["stewart_information_services_corp", "\nPrior: ", "fidelity_national_financial", "\n Event: ", ""]}, {"group": "", "id": "dna_brands_inc", "label": "dna_brands_inc", "shape": 2, "title": ["dna_brands_inc", "\nPrior: ", "agilent_technologies_inc", "\n Event: ", ""]}, {"group": "", "id": "bruker_corp", "label": "bruker_corp", "shape": 2, "title": ["bruker_corp", "\nPrior: ", "agilent_technologies_inc", "\n Event: ", ""]}, {"group": "", "id": "visa_inc", "label": "visa_inc", "shape": 1, "title": ["visa_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "t-mobile_us", "label": "t-mobile_us", "shape": 3, "title": ["t-mobile_us", "\nPrior: ", "crown_castle_international_corp", "\n Event: ", ""]}, {"group": "", "id": "cme_group_inc", "label": "cme_group_inc", "shape": 3, "title": ["cme_group_inc", "\nPrior: ", "msci_inc", "\n Event: ", ""]}, {"group": "Corporate", "id": "coinbase_global_inc", "label": "coinbase_global_inc", "shape": 2, "title": ["coinbase_global_inc", "\nPrior: ", "intercontinental_exchange", "\n Event: ", "Corporate"]}, {"group": "", "id": "command_security_corp", "label": "command_security_corp", "shape": 2, "title": ["command_security_corp", "\nPrior: ", "federal_national_mortgage_association", "\n Event: ", ""]}, {"group": "", "id": "vereit_inc", "label": "vereit_inc", "shape": 1, "title": ["vereit_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "intercontinental_exchange", "label": "intercontinental_exchange", "shape": 1, "title": ["intercontinental_exchange", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "rockwell_automation_inc", "label": "rockwell_automation_inc", "shape": 3, "title": ["rockwell_automation_inc", "\nPrior: ", "hp_inc", "\n Event: ", ""]}, {"group": "", "id": "harte_hanks_inc", "label": "harte_hanks_inc", "shape": 3, "title": ["harte_hanks_inc", "\nPrior: ", "equifax_inc", "\n Event: ", ""]}, {"group": "", "id": "ennis_inc", "label": "ennis_inc", "shape": 1, "title": ["ennis_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "goodyear_tire_and_rubber_co_/oh/", "label": "goodyear_tire_and_rubber_co_/oh/", "shape": 3, "title": ["goodyear_tire_and_rubber_co_/oh/", "\nPrior: ", "kelly_services_inc", "\n Event: ", ""]}, {"group": "Corporate", "id": "brightsphere_investment_group_inc", "label": "brightsphere_investment_group_inc", "shape": 1, "title": ["brightsphere_investment_group_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", "Corporate"]}, {"group": "", "id": "lattice_semiconductor_corp", "label": "lattice_semiconductor_corp", "shape": 2, "title": ["lattice_semiconductor_corp", "\nPrior: ", "maiden_holdings_ltd", "\n Event: ", ""]}, {"group": "", "id": "alliance_data_systems_corp", "label": "alliance_data_systems_corp", "shape": 3, "title": ["alliance_data_systems_corp", "\nPrior: ", "corelogic", "\n Event: ", ""]}, {"group": "", "id": "wandt_offshore_inc", "label": "wandt_offshore_inc", "shape": 2, "title": ["wandt_offshore_inc", "\nPrior: ", "oasis_petroleum_inc", "\n Event: ", ""]}, {"group": "", "id": "mgic_investment_corp", "label": "mgic_investment_corp", "shape": 2, "title": ["mgic_investment_corp", "\nPrior: ", "federal_home_loan_mortgage_corp", "\n Event: ", ""]}, {"group": "", "id": "altimmune_inc", "label": "altimmune_inc", "shape": 3, "title": ["altimmune_inc", "\nPrior: ", "emergent_biosolutions", "\n Event: ", ""]}, {"group": "", "id": "canadian_pacific_railway_ltd/cn", "label": "canadian_pacific_railway_ltd/cn", "shape": 2, "title": ["canadian_pacific_railway_ltd/cn", "\nPrior: ", "mastercard_inc", "\n Event: ", ""]}, {"group": "", "id": "ims_health_holdings_inc", "label": "ims_health_holdings_inc", "shape": 2, "title": ["ims_health_holdings_inc", "\nPrior: ", "moodys_corp_/de/", "\n Event: ", ""]}, {"group": "", "id": "wipro_ltd", "label": "wipro_ltd", "shape": 3, "title": ["wipro_ltd", "\nPrior: ", "international_business_machines_corp", "\n Event: ", ""]}, {"group": "", "id": "columbia_sportswear_co", "label": "columbia_sportswear_co", "shape": 3, "title": ["columbia_sportswear_co", "\nPrior: ", "international_business_machines_corp", "\n Event: ", ""]}, {"group": "", "id": "twitter_inc", "label": "twitter_inc", "shape": 2, "title": ["twitter_inc", "\nPrior: ", "international_business_machines_corp", "\n Event: ", ""]}, {"group": "", "id": "dominion_energy_inc", "label": "dominion_energy_inc", "shape": 2, "title": ["dominion_energy_inc", "\nPrior: ", "berkshire_hathaway_inc", "\n Event: ", ""]}, {"group": "", "id": "bhp_billiton_plc", "label": "bhp_billiton_plc", "shape": 3, "title": ["bhp_billiton_plc", "\nPrior: ", "mrc_global_inc", "\n Event: ", ""]}, {"group": "", "id": "oasis_petroleum_inc", "label": "oasis_petroleum_inc", "shape": 1, "title": ["oasis_petroleum_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "qep_resources", "label": "qep_resources", "shape": 2, "title": ["qep_resources", "\nPrior: ", "oasis_petroleum_inc", "\n Event: ", ""]}, {"group": "", "id": "goldman_sachs_group_inc", "label": "goldman_sachs_group_inc", "shape": 2, "title": ["goldman_sachs_group_inc", "\nPrior: ", "federal_home_loan_mortgage_corp", "\n Event: ", ""]}, {"group": "", "id": "superconductor_technologies_inc", "label": "superconductor_technologies_inc", "shape": 3, "title": ["superconductor_technologies_inc", "\nPrior: ", "bruker_corp", "\n Event: ", ""]}, {"group": "", "id": "capital_one_financial_corp", "label": "capital_one_financial_corp", "shape": 2, "title": ["capital_one_financial_corp", "\nPrior: ", "realogy_holdings_corp", "\n Event: ", ""]}, {"group": "", "id": "comcast_corp_a", "label": "comcast_corp_a", "shape": 2, "title": ["comcast_corp_a", "\nPrior: ", "cbs_corp", "\n Event: ", ""]}, {"group": "", "id": "chase_corp", "label": "chase_corp", "shape": 1, "title": ["chase_corp", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "discover_financial_services", "label": "discover_financial_services", "shape": 2, "title": ["discover_financial_services", "\nPrior: ", "visa_inc", "\n Event: ", ""]}, {"group": "", "id": "rmr_real_estate_income_fund", "label": "rmr_real_estate_income_fund", "shape": 3, "title": ["rmr_real_estate_income_fund", "\nPrior: ", "mgic_investment_corp", "\n Event: ", ""]}, {"group": "Corporate", "id": "ciena_corp", "label": "ciena_corp", "shape": 2, "title": ["ciena_corp", "\nPrior: ", "smtc_corp", "\n Event: ", "Corporate"]}, {"group": "", "id": "globus_medical_inc", "label": "globus_medical_inc", "shape": 2, "title": ["globus_medical_inc", "\nPrior: ", "zimmer_biomet_holdings", "\n Event: ", ""]}, {"group": "", "id": "city_office_reit_inc", "label": "city_office_reit_inc", "shape": 1, "title": ["city_office_reit_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "vivos_inc", "label": "vivos_inc", "shape": 1, "title": ["vivos_inc", "\nPrior: ", "jp_morgan_chase_and_co", "\n Event: ", ""]}, {"group": "", "id": "mrc_global_inc", "label": "mrc_global_inc", "shape": 2, "title": ["mrc_global_inc", "\nPrior: ", "bank_of_america_corp", "\n Event: ", ""]}, {"group": "", "id": "home_depot_inc", "label": "home_depot_inc", "shape": 2, "title": ["home_depot_inc", "\nPrior: ", "berkshire_hathaway_inc", "\n Event: ", ""]}, {"group": "", "id": "cumulus_media_inc", "label": "cumulus_media_inc", "shape": 2, "title": ["cumulus_media_inc", "\nPrior: ", "cbs_corp", "\n Event: ", ""]}, {"group": "", "id": "lions_gate_entertainment_corp_/cn/", "label": "lions_gate_entertainment_corp_/cn/", "shape": 2, "title": ["lions_gate_entertainment_corp_/cn/", "\nPrior: ", "cbs_corp", "\n Event: ", ""]}, {"group": "", "id": "ally_financial", "label": "ally_financial", "shape": 2, "title": ["ally_financial", "\nPrior: ", "federal_home_loan_mortgage_corp", "\n Event: ", ""]}, {"group": "", "id": "national_australia_bank_ltd", "label": "national_australia_bank_ltd", "shape": 3, "title": ["national_australia_bank_ltd", "\nPrior: ", "fiserv_inc", "\n Event: ", ""]}]);
+                  edges = new vis.DataSet([{"color": 1, "from": "jp_morgan_chase_and_co", "to": "oci_partners_lp", "value": 51.0}, {"color": 2, "from": "pra_group_inc", "to": "regions_financial_corp", "value": 104.0}, {"color": 3, "from": "lattice_semiconductor_corp", "to": "united_microelectronics_corp", "value": 16.0}, {"color": 3, "from": "international_business_machines_corp", "to": "kenexa_corp", "value": 91.0}, {"color": 3, "from": "pepsico_inc", "to": "cse_global_ltd", "value": 130.0}, {"color": 3, "from": "hp_inc", "to": "teradata_corp", "value": 55.0}, {"color": 3, "from": "rpm_international_inc/de/", "to": "sika_ag", "value": 12.0}, {"color": 2, "from": "federal_national_mortgage_association", "to": "leidos_holdings_inc", "value": 864.0}, {"color": 3, "from": "tenet_healthcare_corp", "to": "terraform_power_inc", "value": 20.0}, {"color": 3, "from": "msci_inc", "to": "societe_generale", "value": 45.0}, {"color": 2, "from": "duke_realty_corp", "to": "brixmor_property_group_inc", "value": 2961.0}, {"color": 2, "from": "morningstar_inc", "to": "ubs_group_ag", "value": 102912.0}, {"color": 2, "from": "agilent_technologies_inc", "to": "perkinelmer_inc", "value": 96.0}, {"color": 2, "from": "maiden_holdings_ltd", "to": "voya_financial_inc", "value": 2052.0}, {"color": 3, "from": "nasdaq_inc", "to": "trimas_corp", "value": 18.0}, {"color": 3, "from": "emergent_biosolutions", "to": "pfizer_inc", "value": 2034.0}, {"color": 2, "from": "agilent_technologies_inc", "to": "shimadzu_corp", "value": 42.0}, {"color": 3, "from": "morningstar_inc", "to": "vanguard_group", "value": 11934.0}, {"color": 3, "from": "estee_lauder_companies_inc", "to": "ralph_lauren_corp", "value": 42.0}, {"color": 3, "from": "canadian_pacific_railway_ltd/cn", "to": "tsr_inc", "value": 187.0}, {"color": 3, "from": "perkinelmer_inc", "to": "fmc_corp", "value": 36.0}, {"color": 3, "from": "emergent_biosolutions", "to": "astellas_pharma_inc", "value": 32.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "public_storage", "value": 20655.0}, {"color": 3, "from": "dna_brands_inc", "to": "koc_holdings_as", "value": 4.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "maiden_holdings_ltd", "value": 10098.0}, {"color": 3, "from": "rpm_international_inc/de/", "to": "spx_corp", "value": 12.0}, {"color": 3, "from": "ally_financial", "to": "magellan_health_inc", "value": 165.0}, {"color": 2, "from": "berkshire_hathaway_inc", "to": "restaurant_brands_international", "value": 1536.0}, {"color": 3, "from": "estee_lauder_companies_inc", "to": "sap_se", "value": 2618.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "cpi_international_inc", "value": 51.0}, {"color": 2, "from": "morningstar_inc", "to": "apollo_global_management_llc", "value": 4780.0}, {"color": 2, "from": "starbucks_corp", "to": "square_inc", "value": 91.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "deutsche_bank", "value": 19890.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "pra_group_inc", "value": 204.0}, {"color": 2, "from": "brightsphere_investment_group_inc", "to": "bank_of_china_ltd_ad", "value": 432.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "general_dynamics_corp", "value": 459.0}, {"color": 2, "from": "mastercard_inc", "to": "ipsco_inc", "value": 189.0}, {"color": 2, "from": "maiden_holdings_ltd", "to": "emergent_biosolutions", "value": 72.0}, {"color": 3, "from": "pnc_financial_services_group_inc", "to": "bbandt_corp", "value": 221.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "duke_realty_corp", "value": 1020.0}, {"color": 3, "from": "maiden_holdings_ltd", "to": "endurance_specialty_holdings_ltd", "value": 18.0}, {"color": 2, "from": "federal_home_loan_mortgage_corp", "to": "pnc_financial_services_group_inc", "value": 8330.0}, {"color": 3, "from": "ally_financial", "to": "gap_inc", "value": 344.0}, {"color": 3, "from": "kimberly-clark_corp", "to": "bank_of_america_corp", "value": 84246.0}, {"color": 2, "from": "federal_national_mortgage_association", "to": "federal_home_loan_mortgage_corp", "value": 1708460.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "nomura_holdings_inc", "value": 3825.0}, {"color": 3, "from": "nasdaq_inc", "to": "cboe_global_markets_inc", "value": 468.0}, {"color": 2, "from": "bank_of_america_corp", "to": "deutsche_bank", "value": 8580.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "cold_spring_capital_inc", "value": 153.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "smtc_corp", "value": 102.0}, {"color": 2, "from": "fair_isaac_corp", "to": "equifax_inc", "value": 2112.0}, {"color": 3, "from": "emergent_biosolutions", "to": "pfenex_inc", "value": 16.0}, {"color": 2, "from": "federal_home_loan_mortgage_corp", "to": "the_northern_trust_company", "value": 3808.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "realogy_holdings_corp", "value": 204.0}, {"color": 2, "from": "smtc_corp", "to": "iec_electronics_corp", "value": 16.0}, {"color": 3, "from": "tenet_healthcare_corp", "to": "vanguard_group", "value": 98838.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "usa_capital_management_inc", "value": 229.5}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "sandp_global_inc", "value": 17671.5}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "federal_national_mortgage_association", "value": 8078.4}, {"color": 3, "from": "dominion_energy_inc", "to": "wec_energy_group_inc", "value": 108.0}, {"color": 3, "from": "perkinelmer_inc", "to": "tibco_software_inc", "value": 6.0}, {"color": 2, "from": "msa_safety_inc", "to": "united_rentals_inc_/de", "value": 108.0}, {"color": 2, "from": "chase_corp", "to": "american_biltrite_inc", "value": 8.0}, {"color": 2, "from": "starbucks_corp", "to": "pepsico_inc", "value": 858.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "fair_isaac_corp", "value": 2244.0}, {"color": 2, "from": "amazon_com_inc", "to": "kelly_services_inc", "value": 39.0}, {"color": 3, "from": "emc_corp", "to": "rci_hospitality_holdings_inc", "value": 268.0}, {"color": 2, "from": "starbucks_corp", "to": "sysco_corp", "value": 104.0}, {"color": 2, "from": "oasis_petroleum_inc", "to": "uniti_group_inc", "value": 50.0}, {"color": 2, "from": "sandp_global_inc", "to": "linkedin_corp", "value": 230.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "amazon_com_inc", "value": 663.0}, {"color": 3, "from": "ciena_corp", "to": "infinera_corp", "value": 42.0}, {"color": 3, "from": "wandt_offshore_inc", "to": "plains_gp_holdings_lp", "value": 48.0}, {"color": 2, "from": "smtc_corp", "to": "avnet_inc", "value": 20.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "ecolab_inc", "value": 408.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "mastercard_inc", "value": 3825.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "v_f_corp", "value": 1377.0}, {"color": 2, "from": "international_business_machines_corp", "to": "emc_corp", "value": 13.0}, {"color": 2, "from": "amazon_com_inc", "to": "nike_inc", "value": 130.0}, {"color": 3, "from": "the_northern_trust_company", "to": "harley_davidson_inc", "value": 50.0}, {"color": 3, "from": "allstate_corp", "to": "the_travelers_companies_inc", "value": 230.0}, {"color": 3, "from": "restaurant_brands_international", "to": "tim_hortons_inc", "value": 16.0}, {"color": 2, "from": "oasis_petroleum_inc", "to": "crown_castle_international_corp", "value": 385.0}, {"color": 3, "from": "kimberly-clark_corp", "to": "georgia_pacific_corp", "value": 9.0}, {"color": 2, "from": "federal_home_loan_mortgage_corp", "to": "allstate_corp", "value": 11960.0}, {"color": 2, "from": "berkshire_hathaway_inc", "to": "corcept_therapeutics_inc", "value": 480.0}, {"color": 2, "from": "chase_corp", "to": "jp_morgan_chase_and_co", "value": 214506.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "jp_morgan_investment_management_inc", "value": 2652.0}, {"color": 3, "from": "discover_financial_services", "to": "nn_inc", "value": 112.0}, {"color": 3, "from": "tenet_healthcare_corp", "to": "kindred_healthcare_inc", "value": 10.0}, {"color": 2, "from": "smtc_corp", "to": "sanmina_corp", "value": 10.0}, {"color": 3, "from": "ciena_corp", "to": "legacy_bancorp_inc", "value": 7.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "morningstar_inc", "value": 748.0}, {"color": 3, "from": "federal_home_loan_mortgage_corp", "to": "cognizant_technology_solutions_corp", "value": 9396.0}, {"color": 2, "from": "federal_national_mortgage_association", "to": "philip_morris_international_inc", "value": 15552.0}, {"color": 3, "from": "comcast_corp_a", "to": "the_carlyle_group_lp", "value": 80.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "msa_safety_inc", "value": 918.0}, {"color": 2, "from": "realogy_holdings_corp", "to": "fidelity_national_financial", "value": 8.0}, {"color": 2, "from": "oci_partners_lp", "to": "cf_industries_holdings", "value": 5.0}, {"color": 2, "from": "intercontinental_exchange", "to": "nasdaq_inc", "value": 6258.0}, {"color": 3, "from": "cumulus_media_inc", "to": "lincoln_national_corp", "value": 200.0}, {"color": 3, "from": "morningstar_inc", "to": "altaba_inc", "value": 45.0}, {"color": 2, "from": "agilent_technologies_inc", "to": "stratagene__corp", "value": 21.0}, {"color": 2, "from": "starbucks_corp", "to": "retail_opportunity_investments_corp", "value": 26.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "student_transportation_inc", "value": 204.0}, {"color": 2, "from": "franklin_financial_network_inc", "to": "fifth_third_bancorp", "value": 44.0}, {"color": 3, "from": "cf_industries_holdings", "to": "terra_nitrogen_co_l_p_/de", "value": 5.0}, {"color": 2, "from": "fair_isaac_corp", "to": "corelogic", "value": 960.0}, {"color": 3, "from": "cbs_corp", "to": "amazon_com_inc", "value": 546.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "aon_plc", "value": 1632.0}, {"color": 3, "from": "dominion_energy_inc", "to": "brp_inc", "value": 504.0}, {"color": 2, "from": "zimmer_biomet_holdings", "to": "boston_scientific_corp", "value": 840.0}, {"color": 3, "from": "tenet_healthcare_corp", "to": "humana_inc", "value": 35.0}, {"color": 2, "from": "berkshire_hathaway_inc", "to": "kraft_foods_group_inc", "value": 96.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "international_business_machines_corp", "value": 663.0}, {"color": 2, "from": "general_dynamics_corp", "to": "chicos_fas_inc", "value": 90.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "pimco_dynamic_credit_income_fun", "value": 5508.0}, {"color": 3, "from": "estee_lauder_companies_inc", "to": "coty_inc", "value": 42.0}, {"color": 3, "from": "lions_gate_entertainment_corp_/cn/", "to": "curtiss-wright_corp", "value": 72.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "cbs_corp", "value": 1428.0}, {"color": 2, "from": "msa_safety_inc", "to": "fastenal_co", "value": 72.0}, {"color": 3, "from": "nasdaq_inc", "to": "london_stock_exchange_group_plc", "value": 1566.0}, {"color": 2, "from": "federal_national_mortgage_association", "to": "mci_inc", "value": 216.0}, {"color": 3, "from": "corcept_therapeutics_inc", "to": "sun_pharmaceutical_industries_inc", "value": 90.0}, {"color": 3, "from": "msci_inc", "to": "evolent_health_inc", "value": 45.0}, {"color": 3, "from": "morningstar_inc", "to": "euronext_nv", "value": 140.0}, {"color": 3, "from": "perkinelmer_inc", "to": "honeywell_international_inc", "value": 348.0}, {"color": 3, "from": "canadian_pacific_railway_ltd/cn", "to": "air_products_and_chemicals_inc_/de/", "value": 672.0}, {"color": 2, "from": "sandp_global_inc", "to": "verisk_analytics_inc", "value": 216.0}, {"color": 2, "from": "cbs_corp", "to": "bp_plc", "value": 224.0}, {"color": 2, "from": "chase_corp", "to": "rpm_international_inc/de/", "value": 24.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "berkshire_hathaway_inc", "value": 11832.0}, {"color": 2, "from": "general_dynamics_corp", "to": "hlth_corp", "value": 9.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "coastal_financial_corp", "value": 19584.0}, {"color": 3, "from": "pepsico_inc", "to": "arc_group_inc", "value": 26.0}, {"color": 3, "from": "mgic_investment_corp", "to": "federal_national_mortgage_association", "value": 9828.0}, {"color": 2, "from": "oasis_petroleum_inc", "to": "cross_country_healthcare_inc", "value": 250.0}, {"color": 3, "from": "emergent_biosolutions", "to": "united_therapeutics_corp", "value": 16.0}, {"color": 3, "from": "cbs_corp", "to": "allied_capital_corp", "value": 28.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "starbucks_corp", "value": 1326.0}, {"color": 3, "from": "comcast_corp_a", "to": "dreamworks_animation_llc", "value": 660.0}, {"color": 3, "from": "equifax_inc", "to": "earthlink_holdings_llc", "value": 6.0}, {"color": 3, "from": "qep_resources", "to": "ultra_petroleum_corp", "value": 6.0}, {"color": 3, "from": "cbs_corp", "to": "netflix_inc", "value": 1276.0}, {"color": 2, "from": "bank_of_america_corp", "to": "ust_inc", "value": 114.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "bank_of_america_corp", "value": 8721.0}, {"color": 3, "from": "intercontinental_exchange", "to": "bnp_paribas", "value": 168.0}, {"color": 2, "from": "smtc_corp", "to": "jabil_inc", "value": 30.0}, {"color": 2, "from": "federal_national_mortgage_association", "to": "tenet_healthcare_corp", "value": 1080.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "first_republic_bank", "value": 9690.0}, {"color": 2, "from": "starbucks_corp", "to": "kimberly-clark_corp", "value": 117.0}, {"color": 2, "from": "oci_partners_lp", "to": "exxon_mobil_corp", "value": 36.0}, {"color": 2, "from": "coastal_financial_corp", "to": "fiserv_inc", "value": 56.0}, {"color": 2, "from": "agilent_technologies_inc", "to": "credit_suisse_group", "value": 7046.0}, {"color": 3, "from": "fifth_third_bancorp", "to": "credit_suisse_group", "value": 572.0}, {"color": 2, "from": "federal_national_mortgage_association", "to": "msci_inc", "value": 1715.0}, {"color": 3, "from": "maiden_holdings_ltd", "to": "partnerre_ltd", "value": 144.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "agilent_technologies_inc", "value": 357.0}, {"color": 3, "from": "dominion_energy_inc", "to": "nrg_energy", "value": 405.0}, {"color": 2, "from": "moodys_corp_/de/", "to": "pearson_plc", "value": 147.0}, {"color": 3, "from": "comcast_corp_a", "to": "verizon_communications_inc", "value": 767.0}, {"color": 3, "from": "mgic_investment_corp", "to": "suntrust_banks_inc", "value": 405.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "moodys_corp_/de/", "value": 2499.0}, {"color": 3, "from": "dominion_energy_inc", "to": "toshiba_corp", "value": 550.0}, {"color": 2, "from": "sandp_global_inc", "to": "estee_lauder_companies_inc", "value": 252.0}, {"color": 3, "from": "corcept_therapeutics_inc", "to": "ironwood_pharmaceuticals_inc", "value": 30.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "federal_home_loan_mortgage_corp", "value": 15249.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "zimmer_biomet_holdings", "value": 571.2}, {"color": 2, "from": "agilent_technologies_inc", "to": "hp_inc", "value": 2618.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "franklin_financial_network_inc", "value": 306.0}, {"color": 3, "from": "fidelity_national_financial", "to": "stewart_information_services_corp", "value": 24.0}, {"color": 2, "from": "agilent_technologies_inc", "to": "dna_brands_inc", "value": 21.0}, {"color": 2, "from": "agilent_technologies_inc", "to": "bruker_corp", "value": 63.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "visa_inc", "value": 8789.0}, {"color": 3, "from": "crown_castle_international_corp", "to": "t-mobile_us", "value": 1260.0}, {"color": 3, "from": "msci_inc", "to": "cme_group_inc", "value": 40.0}, {"color": 2, "from": "intercontinental_exchange", "to": "coinbase_global_inc", "value": 918.0}, {"color": 2, "from": "moodys_corp_/de/", "to": "fiserv_inc", "value": 147.0}, {"color": 2, "from": "federal_national_mortgage_association", "to": "command_security_corp", "value": 216.0}, {"color": 3, "from": "dominion_energy_inc", "to": "agilent_technologies_inc", "value": 63.0}, {"color": 2, "from": "moodys_corp_/de/", "to": "morningstar_inc", "value": 3348.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "vereit_inc", "value": 1428.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "intercontinental_exchange", "value": 7221.6}, {"color": 3, "from": "hp_inc", "to": "rockwell_automation_inc", "value": 77.0}, {"color": 3, "from": "equifax_inc", "to": "harte_hanks_inc", "value": 18.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "ennis_inc", "value": 408.0}, {"color": 3, "from": "kelly_services_inc", "to": "goodyear_tire_and_rubber_co_/oh/", "value": 468.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "brightsphere_investment_group_inc", "value": 816.0}, {"color": 2, "from": "maiden_holdings_ltd", "to": "lattice_semiconductor_corp", "value": 360.0}, {"color": 3, "from": "corelogic", "to": "alliance_data_systems_corp", "value": 12.0}, {"color": 2, "from": "oasis_petroleum_inc", "to": "wandt_offshore_inc", "value": 336.0}, {"color": 2, "from": "federal_home_loan_mortgage_corp", "to": "mgic_investment_corp", "value": 1300.0}, {"color": 3, "from": "emergent_biosolutions", "to": "altimmune_inc", "value": 20.0}, {"color": 2, "from": "mastercard_inc", "to": "canadian_pacific_railway_ltd/cn", "value": 2268.0}, {"color": 3, "from": "hp_inc", "to": "toshiba_corp", "value": 685.0}, {"color": 2, "from": "moodys_corp_/de/", "to": "ims_health_holdings_inc", "value": 126.0}, {"color": 3, "from": "international_business_machines_corp", "to": "wipro_ltd", "value": 156.0}, {"color": 3, "from": "international_business_machines_corp", "to": "columbia_sportswear_co", "value": 364.0}, {"color": 2, "from": "international_business_machines_corp", "to": "twitter_inc", "value": 540.0}, {"color": 2, "from": "berkshire_hathaway_inc", "to": "dominion_energy_inc", "value": 2592.0}, {"color": 3, "from": "mrc_global_inc", "to": "bhp_billiton_plc", "value": 28.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "oasis_petroleum_inc", "value": 510.0}, {"color": 2, "from": "oasis_petroleum_inc", "to": "qep_resources", "value": 345.0}, {"color": 2, "from": "federal_home_loan_mortgage_corp", "to": "goldman_sachs_group_inc", "value": 78848.0}, {"color": 3, "from": "bruker_corp", "to": "superconductor_technologies_inc", "value": 12.0}, {"color": 2, "from": "realogy_holdings_corp", "to": "capital_one_financial_corp", "value": 116.0}, {"color": 3, "from": "hp_inc", "to": "tsr_inc", "value": 66.0}, {"color": 2, "from": "cbs_corp", "to": "comcast_corp_a", "value": 280.0}, {"color": 2, "from": "visa_inc", "to": "discover_financial_services", "value": 462.0}, {"color": 3, "from": "mgic_investment_corp", "to": "rmr_real_estate_income_fund", "value": 680.0}, {"color": 2, "from": "bank_of_america_corp", "to": "first_republic_bank", "value": 2166.0}, {"color": 2, "from": "smtc_corp", "to": "ciena_corp", "value": 56.0}, {"color": 2, "from": "zimmer_biomet_holdings", "to": "globus_medical_inc", "value": 70.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "city_office_reit_inc", "value": 5508.0}, {"color": 1, "from": "jp_morgan_chase_and_co", "to": "vivos_inc", "value": 357.0}, {"color": 2, "from": "bank_of_america_corp", "to": "mrc_global_inc", "value": 912.0}, {"color": 2, "from": "berkshire_hathaway_inc", "to": "home_depot_inc", "value": 528.0}, {"color": 2, "from": "cbs_corp", "to": "cumulus_media_inc", "value": 112.0}, {"color": 2, "from": "cbs_corp", "to": "lions_gate_entertainment_corp_/cn/", "value": 140.0}, {"color": 2, "from": "federal_home_loan_mortgage_corp", "to": "ally_financial", "value": 21020.0}, {"color": 3, "from": "fiserv_inc", "to": "national_australia_bank_ltd", "value": 70.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+                    network.on("click", neighbourhoodHighlight);
+                  
+
+                  
+                    network.on("selectNode", neighbourhoodHighlight);
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
