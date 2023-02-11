@@ -70,7 +70,7 @@ for i, row in graph_df.iterrows():
 st_data = st_folium(m, width = 1200)
 
 for i, row in graph_df.iterrows():
-    print([row['LATITUDE'], row['LONGITUDE']])
+    print(row['LATITUDE'], row['LONGITUDE'], row['ENDING_NODE'])
 
 # Footer
 st.sidebar.markdown(
