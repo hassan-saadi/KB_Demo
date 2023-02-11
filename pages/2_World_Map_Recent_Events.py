@@ -1,5 +1,5 @@
 import pandas as pd
-import snowflake.connector as snowflake
+import snowflake.connector
 import os
 from PIL import Image
 import streamlit.components.v1 as components
@@ -20,36 +20,18 @@ st.text('Connection Related Events in Categories: Natural Disaster, \nLegal, Pol
 data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", data['GRAPH'].unique())
 
-import streamlit as st
-
-def snow():
-    """
-       This function takes a user id, password, and account and creates a snowflake connection using the snowflake python connector
-
-    :param id: id, saved in os environment variables
-    :param passwd: password, saved in os environment variables
-    :param account: account, saved in os environment variables
-    :param database: per global constant or defined in function call
-    :param schema: per global constant or defined in function call
-    :return: cursor that connects to snowflake  and the connection itself
-    """
-    ctx = snowflake.connect(
-        user=os.environ["snowflake_user"],
-        password=os.environ['snowflake_password'],
-        account=os.environ['snowflake_account'],
-        database="FORGEAI_ARTICLES_V0660",
-        schema="ARTICLES_V0660"
+@st.cache_resource
+def init_connection():
+    return snowflake.connector.connect(
+        **st.secrets["snowflake"], client_session_keep_alive=True
     )
-    print('Snowflake connected to database:{}'.format(database))
-    return ctx.cursor(), ctx
 
-
-@st.cache_data
-def mapdata():
-    cs, ctx = snow()
-
-    try:
-        cs.execute("""
+@st.cache_data(ttl=600)
+def run_query(query):
+    with conn.cursor() as cur:
+        cur.execute(query)
+        return cur.fetchall()
+query = """
             select distinct any_value(graph), any_value(to_date(nvl(docdatetime, processdatetime))) as date, ENDING_NODE, any_value(url), 
             any_value(latitude) as latitude, any_value(longitude) as longitude
             from "SCRATCH_FORGEAI"."ANDYC"."KBWEB" kb
@@ -64,16 +46,9 @@ def mapdata():
             and label not in ('earnings call', 'Earnings Call')
             and latitude is not NULL
             and docdatetime >= DATEADD(day, -30, CURRENT_DATE())
-            group by 3 limit 600;""")
-        rows = cs.fetchall()
-    except:
-        print("database connection error")
-    finally:
-        cs.close()
-    ctx.close()
-    return pd.DataFrame(rows, columns = ['GRAPH', 'DATE', 'ENDING_NODE', 'URL', 'LATITUDE', 'LONGITUDE'])
-
-mapdf = mapdata()
+            group by 3 limit 600;"""
+rows = run_query(query)
+mapdf =  pd.DataFrame(rows, columns = ['GRAPH', 'DATE', 'ENDING_NODE', 'URL', 'LATITUDE', 'LONGITUDE'])
 mapdf
 # center on Liberty Bell, add marker
 m = folium.Map(location=[39.949610, -75.150282], zoom_start=10)
