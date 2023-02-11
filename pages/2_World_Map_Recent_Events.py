@@ -63,8 +63,7 @@ graph_df = mapdf[mapdf['GRAPH']==graphname]
 m = folium.Map(control_scale=True, attr="CQ RiskConnector")
 
 for i, row in graph_df.iterrows():
-    folium.Marker([row['LATITUDE'], row['LONGITUDE']], popup="https://fiscalnote.com/", tooltip=row['ENDING_NODE'], 
-                   icon=folium.Icon(icon='marker', color=row['SENTIMENT_COLOR'])).add_to(m)
+    folium.Marker([row['LATITUDE'], row['LONGITUDE']], popup="https://fiscalnote.com/", tooltip=row['ENDING_NODE']).add_to(m)
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width = 1200)
