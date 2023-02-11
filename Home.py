@@ -7,6 +7,7 @@ from streamlit_agraph import agraph, Node, Edge, Config
 import streamlit as st
 import numpy as np
 import requests
+st.set_page_config(page_title = 'CQ RiskConnector', layout="wide")
 st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg', width = 40)
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
 st.sidebar.caption('Improve Your Change Quotient')
