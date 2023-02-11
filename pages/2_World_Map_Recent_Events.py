@@ -64,7 +64,7 @@ for i, row in graph_df.iterrows():
                    color = row['SENTIMENT_COLOR']).add_to(m)
 
 # call to render Folium map in Streamlit
-st_data = st_folium(l, width=1000)
+st_data = st_folium(m)
 
 # Footer
 st.sidebar.markdown(
