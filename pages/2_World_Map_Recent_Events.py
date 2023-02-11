@@ -20,7 +20,7 @@ st.text('Connection Related Events in Categories: Natural Disaster, \nLegal, Pol
 data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", data['GRAPH'].unique())
 
-@st.cache_resource
+#@st.cache_resource
 def init_connection():
     return snowflake.connector.connect(
         **st.secrets["snowflake"], client_session_keep_alive=True
