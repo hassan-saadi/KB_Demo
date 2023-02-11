@@ -7,7 +7,7 @@ from streamlit_agraph import agraph, Node, Edge, Config
 import streamlit as st
 import numpy as np
 import requests
-st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg')
+st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg', width = 50, height=50)
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
 st.sidebar.title ('Welcome to the RiskConnector Sample Preview')
 st.sidebar.text ('Limited connections shown')
