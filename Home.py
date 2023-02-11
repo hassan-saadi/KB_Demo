@@ -10,7 +10,7 @@ import requests
 st.set_page_config(page_title = 'CQ RiskConnector', layout="wide")
 st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg', width = 40)
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
-st.sidebar.markdown("Improve Your :blue[C]hange :blue[Q]uotient")
+st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.sidebar.title ('Welcome to the RiskConnector Sample')
 st.sidebar.caption ('Limited connections shown')
 data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
