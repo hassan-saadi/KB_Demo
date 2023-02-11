@@ -16,7 +16,7 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.text('Connection Related Business Impacting Events/News')
-
+m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = 100%, tiles='StamenWaterColor')
 
 #@st.cache_resource
 def init_connection():
@@ -58,7 +58,7 @@ graphname = st.sidebar.selectbox("Please select a company as a starting node:", 
 graph_df = mapdf[mapdf['GRAPH']==graphname]
 #graph_df
 
-m = folium.Map(control_scale=True, attr="CQ RiskConnector")
+
 
 for index, row in graph_df.iterrows():
     folium.Marker(location = [row.loc['LATITUDE'], row.loc['LONGITUDE']], popup="https://fiscalnote.com/", tooltip=row.loc['ENDING_NODE']).add_to(m)
