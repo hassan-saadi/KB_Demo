@@ -17,7 +17,7 @@ st.sidebar.title ('Welcome to the RiskConnector Sample')
 st.sidebar.caption ('Limited connections shown')
 st.text('Connection Related Events in Categories: Natural Disaster, \nLegal, Political, Government, Supply Chain, Contracts, Banking Operations, Financing')
 
-data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
+#data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
 
 
 #@st.cache_resource
@@ -55,9 +55,10 @@ select distinct any_value(graph), any_value(node_distance), any_value(to_date(nv
             ;"""
 rows = run_query(query)
 mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE','SENTIMENT_COLOR', 'URL', 'LATITUDE', 'LONGITUDE'])
-graphname = st.sidebar.selectbox("Please select a company as a starting node:", data['GRAPH'].unique())
+graphs = mapdf['GRAPH'].unique()
+graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 graph_df = mapdf[mapdf['GRAPH']==graphname]
-
+graph_df
 
 m = folium.Map(control_scale=True, attr="CQ RiskConnector")
 for i, row in graph_df.iterrows():
