@@ -58,15 +58,19 @@ mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 graph_df = mapdf[mapdf['GRAPH']==graphname]
-graph_df
+#graph_df
 
 m = folium.Map(control_scale=True, attr="CQ RiskConnector")
+
 for i, row in graph_df.iterrows():
     folium.Marker([row['LATITUDE'], row['LONGITUDE']], popup="https://fiscalnote.com/", tooltip=row['ENDING_NODE'], 
                    icon=folium.Icon(icon='marker', color=row['SENTIMENT_COLOR'])).add_to(m)
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width = 1200)
+
+for i, row in graph_df.iterrows():
+    print([row['LATITUDE'], row['LONGITUDE']])
 
 # Footer
 st.sidebar.markdown(
