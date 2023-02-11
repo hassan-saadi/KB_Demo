@@ -18,7 +18,7 @@ st.sidebar.caption ('Limited connections shown')
 st.text('Connection Related Events in Categories: Natural Disaster, \nLegal, Political, Government, Supply Chain, Contracts, Banking Operations, Financing')
 
 data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
-graphname = st.sidebar.selectbox("Please select a company as a starting node:", data['GRAPH'].unique())
+
 
 #@st.cache_resource
 def init_connection():
@@ -50,15 +50,17 @@ query = """
             group by 3 limit 600;"""
 rows = run_query(query)
 mapdf =  pd.DataFrame(rows, columns = ['GRAPH', 'DATE', 'ENDING_NODE', 'URL', 'LATITUDE', 'LONGITUDE'])
-mapdf
-# center on Liberty Bell, add marker
-m = folium.Map(location=[39.949610, -75.150282], zoom_start=10)
+graphname = st.sidebar.selectbox("Please select a company as a starting node:", data['GRAPH'].unique())
+graph_df = mapdf[mapdf['GRAPH']==graphname]
+
+
+m = folium.Map()
 folium.Marker(
     [39.949610, -5.150282], popup="https://fiscalnote.com/", tooltip="Liberty Bell"
 ).add_to(m)
 
 # call to render Folium map in Streamlit
-st_data = st_folium(m, width=725)
+st_data = st_folium(m, width=1000)
 
 # Footer
 st.sidebar.markdown(
