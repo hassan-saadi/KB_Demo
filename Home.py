@@ -9,9 +9,9 @@ import numpy as np
 import requests
 st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg', width = 40)
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
-st.sidebar.text('Improve Your Change Quotient')
+st.sidebar.caption('Improve Your Change Quotient')
 st.sidebar.title ('Welcome to the RiskConnector Sample')
-st.sidebar.text ('Limited connections shown')
+st.sidebar.caption ('Limited connections shown')
 data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", data['GRAPH'].unique())
 
