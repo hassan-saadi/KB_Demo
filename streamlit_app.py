@@ -7,8 +7,8 @@ from streamlit_agraph import agraph, Node, Edge, Config
 import streamlit as st
 import numpy as np
 import requests
-
-st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
+st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg')
+#st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
 st.sidebar.title ('Welcome to the RiskConnector Sample Preview')
 st.sidebar.text ('Limited connections shown')
 data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
@@ -57,7 +57,7 @@ st.sidebar.markdown(
     """
     <h6><a href="https://fiscalnote.com/terms" target="_blank">Terms of Service</a></h6>
     <h6><a href="https://fiscalnote.com/privacy" target="_blank">Privacy policy</a></h6>
-    <h6>All rights reserved. Copyright 2023 FiscalNote.</h6>
     <h6><a href="mailto:Clinton.Stephens@fiscalnote.com">Learn More</a></h6>
+    <h6>All rights reserved. Copyright 2023 FiscalNote.</h6>
     """, unsafe_allow_html=True
     )
