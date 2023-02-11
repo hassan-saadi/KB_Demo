@@ -56,9 +56,7 @@ return_value = agraph(nodes=nodes,
 # Footer
 st.sidebar.markdown(
     """
-    <h6><a href="https://fiscalnote.com/terms" target="_blank">Terms of Service</a></h6>
-    <h6><a href="https://fiscalnote.com/privacy" target="_blank">Privacy policy</a></h6>
-    <h6><a href="mailto:Clinton.Stephens@fiscalnote.com">Learn More</a></h6>
-    <h6>All rights reserved. Copyright 2023 FiscalNote.</h6>
+    <h6><a href="https://fiscalnote.com/terms" target="_blank">Terms of Service</a></h6><h6><a href="https://fiscalnote.com/privacy" target="_blank">Privacy policy</a></h6>
+    <h6><a href="mailto:Clinton.Stephens@fiscalnote.com">Learn More</a></h6><h6>All rights reserved. Copyright 2023 FiscalNote.</h6>
     """, unsafe_allow_html=True
     )
