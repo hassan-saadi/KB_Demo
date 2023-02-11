@@ -64,7 +64,7 @@ graph_df = mapdf[mapdf['GRAPH']==graphname]
 for index, row in graph_df.iterrows():
     # Make a request to the website and extract the content
     
-    url = row['URL']
+    url = 'https://'+row['URL']
     r = requests.get(url)
     html_content = r.text
     soup = BeautifulSoup(html_content, "html.parser")
