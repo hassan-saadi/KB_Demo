@@ -64,7 +64,7 @@ for index, row in graph_df.iterrows():
     folium.Marker(location = [row.loc['LATITUDE'], row.loc['LONGITUDE']], popup="https://fiscalnote.com/", tooltip=row.loc['ENDING_NODE']).add_to(m)
 
 # call to render Folium map in Streamlit
-st_data = st_folium(m, width = 00)
+st_data = st_folium(m, width = 1000)
 
 
 # Footer
