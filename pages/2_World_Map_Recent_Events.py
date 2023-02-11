@@ -13,7 +13,7 @@ st.set_page_config(page_title = 'CQ RiskConnector', layout="wide")
 st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg', width = 40)
 st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
-st.title ('Welcome to the RiskConnector Sample')
+st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.text('Connection Related Business Impacting Events/News')
 
