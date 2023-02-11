@@ -62,10 +62,17 @@ graph_df = mapdf[mapdf['GRAPH']==graphname]
 
 
 for index, row in graph_df.iterrows():
-    pub_html = folium.Html(f"""<p style="text-align: center;"><span style="font-family: Didot, serif; font-size: 21px;">{name}</span></p>
-    <p style="text-align: center;"><iframe src={row['URL']}embed width="240" height="290" frameborder="0" scrolling="auto" allowtransparency="true"></iframe> 
-    """, script=True)
-    popup = folium.Popup(pub_html, max_width=700)
+    # Make a request to the website and extract the content
+    r = requests.get(row['url'])
+    url = row['url']
+    html_content = r.text
+    soup = BeautifulSoup(html_content, "html.parser")
+    title = soup.find("title").text
+    description = soup.find("meta", attrs={"name": "description"})["content"]
+
+    popup=f"<b>{title}</b><br>{description}<br><iframe src='{url}' width='300' height='200'></iframe>"
+    
+    
     folium.Marker(location = [row.loc['LATITUDE'], row.loc['LONGITUDE']], popup=popup, tooltip=row.loc['ENDING_NODE']).add_to(m)
 
 # call to render Folium map in Streamlit
