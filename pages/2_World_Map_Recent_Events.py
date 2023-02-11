@@ -71,9 +71,9 @@ for index, row in graph_df.iterrows():
     title = soup.find("title").text
     description = soup.find("meta", attrs={"name": "description"})["content"]
 
-    popup=f"<b>{title}</b><br>{description}<br><iframe src='{url}' width='300' height='200'></iframe>"
+    #popup=f"<b>{title}</b><br>{description}<br><iframe src='{url}' width='300' height='200'></iframe>"
     
-    
+    popup=folium.Html(f"<b>{title}</b><br>{description}<br><iframe src='{url}' width='300' height='200'></iframe>")
     folium.Marker(location = [row.loc['LATITUDE'], row.loc['LONGITUDE']], popup=popup, tooltip=row.loc['ENDING_NODE']).add_to(m)
 
 # call to render Folium map in Streamlit
