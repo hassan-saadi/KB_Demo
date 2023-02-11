@@ -13,11 +13,9 @@ st.set_page_config(page_title = 'CQ RiskConnector', layout="wide")
 st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg', width = 40)
 st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
-st.sidebar.title ('Welcome to the RiskConnector Sample')
-st.sidebar.caption ('Limited connections shown')
-st.text('Connection Related Events in Categories: Natural Disaster, \nLegal, Political, Government, Supply Chain, Contracts, Banking Operations, Financing')
-
-#data = pd.read_csv('https://raw.githubusercontent.com/andychak/KB_Demo/master/result.csv')
+st.title ('Welcome to the RiskConnector Sample')
+st.caption ('Limited connections shown')
+st.text('Connection Related Business Impacting Events/News')
 
 
 #@st.cache_resource
@@ -63,13 +61,11 @@ graph_df = mapdf[mapdf['GRAPH']==graphname]
 m = folium.Map(control_scale=True, attr="CQ RiskConnector")
 
 for i, row in graph_df.iterrows():
-    folium.Marker([row['LATITUDE'], row['LONGITUDE']], popup="https://fiscalnote.com/", tooltip=row['ENDING_NODE']).add_to(m)
+    folium.Marker(location = [round(row['LATITUDE'],2), round(row['LONGITUDE'],2)], popup="https://fiscalnote.com/", tooltip=row['ENDING_NODE']).add_to(m)
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width = 1200)
 
-for i, row in graph_df.iterrows():
-    st.write(row['LATITUDE'], row['LONGITUDE'], row['ENDING_NODE'])
 
 # Footer
 st.sidebar.markdown(
