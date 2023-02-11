@@ -16,7 +16,7 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.text('Connection Related Business Impacting Events/News')
-m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = 100%, tiles='StamenWaterColor')
+m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", tiles='StamenWaterColor')
 
 #@st.cache_resource
 def init_connection():
