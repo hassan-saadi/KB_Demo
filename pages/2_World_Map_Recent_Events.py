@@ -8,6 +8,7 @@ import streamlit as st
 import numpy as np
 from bs4 import BeautifulSoup
 import requests
+import branca
 import folium
 from streamlit_folium import st_folium
 st.set_page_config(page_title = 'CQ RiskConnector', layout="wide")
@@ -67,15 +68,13 @@ with documentlist as (
 rows = run_query(query)
 def popup_html(row):
     i = row
-    institution_name=df['INSTNM'].iloc[i] 
-    institution_url=df['URL'].iloc[i]
-    institution_type = df['CONTROL'].iloc[i] 
-    highest_degree=df['HIGHDEG'].iloc[i] 
-    city_state = df['CITY'].iloc[i] +", "+ df['STABBR'].iloc[i]                     
-    admission_rate = df['ADM_RATE'].iloc[i]
-    cost = df['COSTT4_A'].iloc[i]
-    instate_tuit = df['TUITIONFEE_IN'].iloc[i]
-    outstate_tuit = df['TUITIONFEE_OUT'].iloc[i]
+    institution_name=graph_df['ENDING_NODE'].iloc[i] 
+    institution_url=graph_df['URL'].iloc[i]
+    institution_type = graph_df['NODE_DISTANCE'].iloc[i] 
+    highest_degree=graph_df['DATE'].iloc[i] 
+    city_state = graph_df['TOPICS'].iloc[i] 
+    admission_rate = graph_df['IEVENT'].iloc[i]
+    
 
     left_col_color = "#19a7bd"
     right_col_color = "#f2f0d3"
@@ -109,18 +108,6 @@ def popup_html(row):
 <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Admission Rate</span></td>
 <td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(admission_rate) + """
 </tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Annual Cost of Attendance $</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(cost) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">In-state Tuition $</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(instate_tuit) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Out-of-state Tuition $</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(outstate_tuit) + """
-</tr>
 </tbody>
 </table>
 </html>
@@ -130,6 +117,7 @@ mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 graph_df = mapdf[mapdf['GRAPH']==graphname]
+"""
 for index, row in graph_df.iterrows():
    
     #popup = folium.Popup(folium.Html(html_table, script=True), max_width=500)
@@ -142,6 +130,14 @@ for index, row in graph_df.iterrows():
     longitude =  float(row['LONGITUDE'])
     folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
                  icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(m)
+"""
+for i in range(0,len(graph_df)):
+    html = popup_html(i)
+    iframe = branca.element.IFrame(html=html,width=510,height=280)
+    popup = folium.Popup(folium.Html(html, script=True), max_width=500)
+    folium.Marker([df['LATITUDE'].iloc[i],df['LONGITUDE'].iloc[i]],
+                  popup=popup,icon=folium.Icon(color=df['SENTIMENT_COLOR'].iloc[i], icon='building')).add_to(m)    
+m
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width = 1000)
