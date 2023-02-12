@@ -18,7 +18,7 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.caption("Key: :green[Favorable Business Impacting Events/News Sample.] :red[Unfavorable] :gray[Neutral]")
-m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=2)
+
 
 #@st.cache_resource
 def init_connection():
@@ -66,75 +66,24 @@ with documentlist as (
   order by 3 DESC
             ;"""
 rows = run_query(query)
-def popup_html(row):
-    
-    institution_name=row['ENDING_NODE']
-    institution_url=row['URL']
-    institution_type = row['NODE_DISTANCE']
-    highest_degree=row['DATE']
-    city_state = row['TOPICS']
-    admission_rate = row['IEVENT']
-    
-
-    left_col_color = "#19a7bd"
-    right_col_color = "#f2f0d3"
-    
-    html = """<!DOCTYPE html>
-<html>
-
-<head>
-<h4 style="margin-bottom:10"; width="200px">{}</h4>""".format(institution_name) + """
-
-</head>
-    <table style="height: 126px; width: 350px;">
-<tbody>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Institution Type</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(institution_type) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Institution URL</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(institution_url) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">City and State</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(city_state) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Highest Degree Awarded</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(highest_degree) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Admission Rate</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(admission_rate) + """
-</tr>
-</tbody>
-</table>
-</html>
-"""
-    return html
 mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE', 'URL', 'SENTIMENT_COLOR','LATITUDE', 'LONGITUDE', 'TOPICS','IEVENTS'])
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 graph_df = mapdf[mapdf['GRAPH']==graphname].reset_index()
-
+newsmap = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=3)
 for index, row in graph_df.iterrows():
-   
-    #popup = folium.Popup(folium.Html(html_table, script=True), max_width=500)
-    popup =folium.Popup("<b>"  + row['ENDING_NODE'] +"</b><br/>" + "<a href=" +row['URL'] + '" target="_blank">Story Link</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ row['IEVENTS'])
-    node = str(row['ENDING_NODE'])
-    nodenum = str(row['NODE_DISTANCE'])
-    tooltip =  node +  " Distance: "  + nodenum
+    popup =folium.Popup("<b>"  + row['ENDING_NODE'] +"</b><br/>" "Node Distance: " + str(row['NODE_DISTANCE']) + "<br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ row['IEVENTS'])
+    tooltip =  str(row['ENDING_NODE'])
     color = str(row['SENTIMENT_COLOR'])
     latitude = float(row['LATITUDE'])
     longitude =  float(row['LONGITUDE'])
     folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
-                 icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(m)
+                 icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(newsmap)
 
 
 
 # call to render Folium map in Streamlit
-st_data = st_folium(m, width = 1000)
+st_data = st_folium(newsmap, width = 1000)
 
 
 
