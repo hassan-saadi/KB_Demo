@@ -69,8 +69,64 @@ mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 graph_df = mapdf[mapdf['GRAPH']==graphname]
+def popup_html(row):
+    i = row
+    institution_name=graph_df['ENDING_NODE'].iloc[i] 
+    institution_url=graph_df['URL'].iloc[i]
+    institution_type = graph_df['DATE'].iloc[i] 
+    highest_degree=graph_df['TOPICS'].iloc[i] 
+    city_state = graph_df['IEVENTS'].iloc[i] 
+    admission_rate = graph_df['NODE_DISTANCE'].iloc[i] 
+    left_col_color = "#19a7bd"
+    right_col_color = "#f2f0d3"
+    
+    html = """<!DOCTYPE html>
+<html>
+<head>
+<h4 style="margin-bottom:10"; width="200px">{}</h4>""".format(institution_name) + """
+</head>
+    <table style="height: 126px; width: 350px;">
+<tbody>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Institution Type</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(institution_type) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Institution URL</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(institution_url) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">City and State</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(city_state) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Highest Degree Awarded</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(highest_degree) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Admission Rate</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(admission_rate) + """
+</tr>
+
+</tbody>
+</table>
+</html>
+"""
+    return html
+
+
+
+
+
+
+
+
+
+
 for index, row in graph_df.iterrows():
-    popup = ''
+    html = popup_html(row)
+    iframe = branca.element.IFrame(html=html,width=510,height=280)
+    popup = folium.Popup(folium.Html(html, script=True), max_width=500)
     node = str(row['ENDING_NODE'])
     nodenum = str(row['NODE_DISTANCE'])
     tooltip =  node +  "\n Node Distance: "  + nodenum
