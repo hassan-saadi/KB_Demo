@@ -132,9 +132,9 @@ for index, row in graph_df.iterrows():
                  icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(m)
 
 
-m
+
 # call to render Folium map in Streamlit
-#st_data = st_folium(m, width = 1000)
+st_data = st_folium(m, width = 1000)
 
 
 # Footer
