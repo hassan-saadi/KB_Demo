@@ -134,8 +134,8 @@ for index, row in graph_df.iterrows():
 
 
 # call to render Folium map in Streamlit
-st_data = st_folium(m, width = 1200)
-st.markdown("Key: :green[favorable news] :red[unfavorable news] :gray[neutral]")
+st_data = st_folium(m, width = 1000)
+st.caption("Key: :green[favorable news] :red[unfavorable news] :gray[neutral]")
 
 
 # Footer
