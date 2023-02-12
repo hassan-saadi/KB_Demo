@@ -116,7 +116,7 @@ def popup_html(row):
 mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE', 'URL', 'SENTIMENT_COLOR','LATITUDE', 'LONGITUDE', 'TOPICS','IEVENTS'])
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
-graph_df = mapdf[mapdf['GRAPH']==graphname]
+graph_df = mapdf[mapdf['GRAPH']==graphname].reset_index()
 
 for index, row in graph_df.iterrows():
    
