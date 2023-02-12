@@ -79,8 +79,9 @@ for index, row in graph_df.iterrows():
         {'selector': 'th', 'props': [('background-color', 'lightblue'), ('color', 'white')]},]
 
     # Convert the dataframe to an HTML table, including only the specified columns
-    html_table = df[columns].style.set_table_styles(styles).render()
-    popup = folium.Popup(folium.Html(html, script=True), max_width=500)
+    #html_table = df[columns].style.set_table_styles(styles).render()
+    html_table = df[columns].style.render()
+    popup = folium.Popup(folium.Html(html_table, script=True), max_width=500)
     #popup ="Topics: " + row['TOPICS'] + "Events: "+ row['IEVENTS']
     node = str(row['ENDING_NODE'])
     nodenum = str(row['NODE_DISTANCE'])
