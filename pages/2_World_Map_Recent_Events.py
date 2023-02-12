@@ -67,13 +67,13 @@ with documentlist as (
             ;"""
 rows = run_query(query)
 def popup_html(row):
-    i = row
-    institution_name=graph_df['ENDING_NODE'].iloc[i] 
-    institution_url=graph_df['URL'].iloc[i]
-    institution_type = graph_df['NODE_DISTANCE'].iloc[i] 
-    highest_degree=graph_df['DATE'].iloc[i] 
-    city_state = graph_df['TOPICS'].iloc[i] 
-    admission_rate = graph_df['IEVENT'].iloc[i]
+    
+    institution_name=row['ENDING_NODE']
+    institution_url=row['URL']
+    institution_type = row['NODE_DISTANCE']
+    highest_degree=row['DATE']
+    city_state = row['TOPICS']
+    admission_rate = row['IEVENT']
     
 
     left_col_color = "#19a7bd"
@@ -131,16 +131,20 @@ for index, row in graph_df.iterrows():
     folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
                  icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(m)
 """
-for i in range(0,len(graph_df)):
-    html = popup_html(i)
+for index, row in graph_df.iterrows():
+    html = popup_html(row)
     iframe = branca.element.IFrame(html=html,width=510,height=280)
     popup = folium.Popup(folium.Html(html, script=True), max_width=500)
-    folium.Marker([df['LATITUDE'].iloc[i],df['LONGITUDE'].iloc[i]],
-                  popup=popup,icon=folium.Icon(color=df['SENTIMENT_COLOR'].iloc[i], icon='building')).add_to(m)    
-m
+    tooltip =  node +  "Node Distance: "  + nodenum
+    color = str(row['SENTIMENT_COLOR'])
+    latitude = float(row['LATITUDE'])
+    longitude =  float(row['LONGITUDE'])
+    folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
+                 icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(m)
 
+m
 # call to render Folium map in Streamlit
-st_data = st_folium(m, width = 1000)
+#st_data = st_folium(m, width = 1000)
 
 
 # Footer
