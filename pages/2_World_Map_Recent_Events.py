@@ -16,7 +16,7 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
-st.text('Connection Related Business Impacting Events/News')
+st.text('Business Impacting Events/News Sample')
 m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%")
 
 #@st.cache_resource
