@@ -33,9 +33,12 @@ def run_query(query):
         cur.execute(query)
         return cur.fetchall()
 query = """
-select distinct any_value(graph), any_value(node_distance), any_value(to_date(nvl(docs.docdatetime, docs.processdatetime))) as date, ENDING_NODE, any_value(url), 
-            any_value(case when sentiment is NULL then 'gray' when sentiment <= -.02 then 'red' when sentiment >= .3 then 'green' ELSE 'gray' END) as sentimentcolor,
-            any_value(latitude) as latitude, any_value(longitude) as longitude
+with documentlist as (
+  select distinct any_value(docs.docid) as docid, any_value(graph) as graph, any_value(node_distance) as node_distance
+    ,any_value(to_date(nvl(docs.docdatetime, docs.processdatetime))) as date, ENDING_NODE 
+    ,any_value(url) as url 
+    ,any_value(case when sentiment is NULL then 'gray' when sentiment <= -.02 then 'red' when sentiment >= .3 then 'green' ELSE 'gray' END) as sentimentcolor
+    ,any_value(latitude) as latitude, any_value(longitude) as longitude
   from "SCRATCH_FORGEAI"."ANDYC"."KBWEB" kb
   //join "PROD_V06XX"."FORGEAI_SURGES"."DOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25
   join "PROD_V06XX"."FORGEAI_ARTICLES"."COMPANYDOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25 and docs.confidence >= .5
@@ -49,32 +52,27 @@ select distinct any_value(graph), any_value(node_distance), any_value(to_date(nv
   and url not like ('https://forgeai.net/naviga%')
   and label not in ('earnings call', 'Earnings Call')
   and latitude is not NULL
-  and docs.docdatetime >= DATEADD(day, -60, CURRENT_DATE())
+  and docs.docdatetime >= DATEADD(day, -90, CURRENT_DATE())
+  group by 5) 
+  select  any_value(graph), any_value(node_distance), any_value(date) as date, ENDING_NODE, any_value(url), 
+            any_value(sentimentcolor) as sentimentcolor,any_value(latitude) as latitude, any_value(longitude) as longitude
+            ,array_agg(distinct topics.name) as topics, array_agg(distinct ievents.label) as ievents
+  from documentlist
+  left join "PROD_V06XX"."ARTICLES_V0670"."DOCUMENTTOPICS" topics on topics.docid = documentlist.docid and topics.score >=.8
+  left join"PROD_V06XX"."ARTICLES_V0670"."INTRINSICEVENTS" ievents on ievents.docid = documentlist.docid and ievents.confidence >=.75
+  
   group by 4
+  order by 3 DESC
             ;"""
 rows = run_query(query)
-mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE','SENTIMENT_COLOR', 'URL', 'LATITUDE', 'LONGITUDE'])
+mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE', 'URL', 'SENTIMENT_COLOR','LATITUDE', 'LONGITUDE', 'TOPICS','IEVENTS'])
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 graph_df = mapdf[mapdf['GRAPH']==graphname]
-#graph_df
-
-
-
 for index, row in graph_df.iterrows():
-    # Make a request to the website and extract the content
-    
-    url = 'https://'+row['URL']
-    r = requests.get(url)
-    html_content = r.text
-    soup = BeautifulSoup(html_content, "html.parser")
-    title = soup.find("title").text
-    description = soup.find("meta", attrs={"name": "description"})["content"]
-
-    #popup=f"<b>{title}</b><br>{description}<br><iframe src='{url}' width='300' height='200'></iframe>"
-    
-    popup=folium.Html(f"<b>{title}</b><br>{description}<br><iframe src='{url}' width='300' height='200'></iframe>")
-    folium.Marker(location = [row.loc['LATITUDE'], row.loc['LONGITUDE']], popup=popup, tooltip=row.loc['ENDING_NODE']).add_to(m)
+    popup = ''
+    folium.Marker(location = [row['LATITUDE'], row['LONGITUDE']], popup=popup, tooltip=row['ENDING_NODE'],
+                 icon=folium.Icon(color=row['SENTIMENT_COLOR'], icon='building', prefix='fa')).add_to(m)
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width = 1000)
