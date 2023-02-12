@@ -18,7 +18,7 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.caption("Key: :green[Favorable Business Impacting Events/News Sample.]")
-st.caption(":Red[Favorable Business Impacting Events/News Sample.] :gray[Neutral]")
+st.caption(":red[Favorable Business Impacting Events/News Sample.] :gray[Neutral News/Events]")
 mapdict ={}
 #@st.cache_resource
 def init_connection():
