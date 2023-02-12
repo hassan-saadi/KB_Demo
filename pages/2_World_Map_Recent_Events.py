@@ -80,10 +80,9 @@ graph_df = mapdf[mapdf['GRAPH']==graphname]
 
 
 for index, row in graph_df.iterrows():
-    html = '<table border="1"><thead><tr><th>Item</th><th>Data</th></tr></thead><tbody><tr><td>Topics</td><td>'+row['TOPICS'] +"</td></tr>"
-    #<tr><td>Test 1</td><td>Test 2</td></tr>
-    #</tbody>
-    #</table>
+    html = '<thead><tr><th>Item</th><th>Data</th></tr></thead><tbody><tr><td>Topics</td><td>'+row['TOPICS'] +"</td></tr><tr><td>Events</td><td>"
+    row['IEVENTS']+ "</td></tr><tr><td>URL</td><td>" + row['URL'] + "</td></tr><tr><td>Node Distance</td><td>"row['NODE_DISTANCE']+
+    "</td></tr></tbody></table>"
     
     popup = folium.Popup(folium.Html(html, script=True), max_width=500)
     #popup = (row['TOPICS']) + (row['IEVENTS'])
