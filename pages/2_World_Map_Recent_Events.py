@@ -17,7 +17,7 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
-st.text('Business Impacting Events/News Sample')
+st.caption("Business Impacting Events/News Sample.   Key: :green[favorable news] :red[unfavorable news] :gray[neutral]")
 m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=2)
 
 #@st.cache_resource
@@ -135,7 +135,7 @@ for index, row in graph_df.iterrows():
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width = 1000)
-st.caption("Key: :green[favorable news] :red[unfavorable news] :gray[neutral]")
+
 
 
 # Footer
