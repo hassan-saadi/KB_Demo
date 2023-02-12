@@ -80,7 +80,7 @@ graph_df = mapdf[mapdf['GRAPH']==graphname]
 
 
 for index, row in graph_df.iterrows():
-    html = "<table border="1"><thead><tr><th>Item</th><th>Data</th></tr></thead><tbody><tr><td>Topics</td><td>"+row['TOPICS'] +"</td></tr>"
+    html = '<table border="1"><thead><tr><th>Item</th><th>Data</th></tr></thead><tbody><tr><td>Topics</td><td>'+row['TOPICS'] +"</td></tr>"
     #<tr><td>Test 1</td><td>Test 2</td></tr>
     #</tbody>
     #</table>
