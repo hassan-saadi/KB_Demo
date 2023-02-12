@@ -117,11 +117,11 @@ mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 graph_df = mapdf[mapdf['GRAPH']==graphname]
-"""
+
 for index, row in graph_df.iterrows():
    
     #popup = folium.Popup(folium.Html(html_table, script=True), max_width=500)
-    #popup ="Topics: " + row['TOPICS'] + "Events: "+ row['IEVENTS']
+    popup ="Topics: " + row['TOPICS'] + "Events: "+ row['IEVENTS']
     node = str(row['ENDING_NODE'])
     nodenum = str(row['NODE_DISTANCE'])
     tooltip =  node +  "Node Distance: "  + nodenum
@@ -130,17 +130,7 @@ for index, row in graph_df.iterrows():
     longitude =  float(row['LONGITUDE'])
     folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
                  icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(m)
-"""
-for index, row in graph_df.iterrows():
-    html = popup_html(row)
-    iframe = branca.element.IFrame(html=html,width=510,height=280)
-    popup = folium.Popup(folium.Html(html, script=True), max_width=500)
-    tooltip =  node +  "Node Distance: "  + nodenum
-    color = str(row['SENTIMENT_COLOR'])
-    latitude = float(row['LATITUDE'])
-    longitude =  float(row['LONGITUDE'])
-    folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
-                 icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(m)
+
 
 m
 # call to render Folium map in Streamlit
