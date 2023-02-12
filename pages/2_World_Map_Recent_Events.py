@@ -19,7 +19,7 @@ st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.caption("Key: :green[Favorable Business Impacting Events/News Sample.]")
 st.caption(":Red[Favorable Business Impacting Events/News Sample.] :gray[Neutral]")
-
+mapdict ={}
 #@st.cache_resource
 def init_connection():
     return snowflake.connector.connect(
@@ -68,22 +68,24 @@ with documentlist as (
 rows = run_query(query)
 mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE', 'URL', 'SENTIMENT_COLOR','LATITUDE', 'LONGITUDE', 'TOPICS','IEVENTS'])
 graphs = mapdf['GRAPH'].unique()
+
+for company in graphs:
+    graph_df = mapdf[mapdf['GRAPH']==company]    
+    mapdict[company] = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=3)
+    for index, row in graph_df.iterrows():
+        popup =folium.Popup("<b>"  + row['ENDING_NODE'] +"</b><br/>" "Node Distance: " + str(row['NODE_DISTANCE']) + "<br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ row['IEVENTS'])
+        tooltip =  str(row['ENDING_NODE'])
+        color = str(row['SENTIMENT_COLOR'])
+        latitude = float(row['LATITUDE'])
+        longitude =  float(row['LONGITUDE'])
+        folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
+                 icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(mapdict[company])
+
+
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
-graph_df = mapdf[mapdf['GRAPH']==graphname].reset_index()
-newsmap = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=3)
-for index, row in graph_df.iterrows():
-    popup =folium.Popup("<b>"  + row['ENDING_NODE'] +"</b><br/>" "Node Distance: " + str(row['NODE_DISTANCE']) + "<br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ row['IEVENTS'])
-    tooltip =  str(row['ENDING_NODE'])
-    color = str(row['SENTIMENT_COLOR'])
-    latitude = float(row['LATITUDE'])
-    longitude =  float(row['LONGITUDE'])
-    folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
-                 icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(newsmap)
-
-
 
 # call to render Folium map in Streamlit
-st_data = st_folium(newsmap, width = 1000)
+st_data = st_folium(mapdict[graphname], width = 1000)
 #graph_df
 
 
