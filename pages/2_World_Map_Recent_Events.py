@@ -49,9 +49,10 @@ with documentlist as (
   where starting_node != ending_node
   and ending_node not in ('pepsico_inc','coca-cola_company','goldman_sachs_group_inc','jp_morgan_chase_and_co'
         ,'alphabet_inc' ,'microsoft_corp', 'google')
-  and category in ('NaturalDisaster', 'Legal', 'Political', 'Government', 'SupplyChain', 'Contract', 'Basel', 'Financing', 'Corporate')
+  //and category in ('NaturalDisaster', 'Legal', 'Political', 'Government', 'SupplyChain', 'Contract', 'Basel', 'Financing', 'Corporate')
+  and category is not NULL
   and url not like ('https://forgeai.net/naviga%')
-  and label not in ('earnings call', 'Earnings Call')
+  //and label not in ('earnings call', 'Earnings Call')
   and latitude is not NULL
   and docs.docdatetime >= DATEADD(day, -90, CURRENT_DATE())
   group by 5) 
