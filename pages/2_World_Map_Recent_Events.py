@@ -18,7 +18,7 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.text('Business Impacting Events/News Sample')
-m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=2, attr="red=unfav, green=favorable, gray=neutral")
+m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=2)
 
 #@st.cache_resource
 def init_connection():
@@ -135,6 +135,7 @@ for index, row in graph_df.iterrows():
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width = 1200)
+st.markdown("Key: :green[favorable news] :red[unfavorable news] :gray[neutral]")
 
 
 # Footer
