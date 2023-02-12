@@ -71,9 +71,9 @@ graphname = st.sidebar.selectbox("Please select a company as a starting node:", 
 graph_df = mapdf[mapdf['GRAPH']==graphname]
 for index, row in graph_df.iterrows():
     popup = ''
-    tooltip = row['ENDING_NODE'] + "\n Node Distance: "  +row['NODE_DISTANCE']
-    folium.Marker(location = [row['LATITUDE'], row['LONGITUDE']], popup=popup, tooltip=tooltip,
-                 icon=folium.Icon(color=row['SENTIMENT_COLOR'], icon='building', prefix='fa')).add_to(m)
+    tooltip = row['ENDING_NODE'].astype('string') + "\n Node Distance: "  +row['NODE_DISTANCE'].astype('string')
+    folium.Marker(location = [row['LATITUDE'].astype('float'), row['LONGITUDE'].astype('float')], popup=popup, tooltip=tooltip,
+                 icon=folium.Icon(color=row['SENTIMENT_COLOR'].astype('string'), icon='building', prefix='fa')).add_to(m)
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width = 1000)
