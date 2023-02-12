@@ -73,7 +73,7 @@ for index, row in graph_df.iterrows():
    
     
     #popup = folium.Popup(folium.Html(html, script=True), max_width=500)
-    popup ="Topics: " + (', '.join(row['TOPICS'])) + "Events: "+ (', '.join(row['IEVENTS']))
+    popup ="Topics: " + row['TOPICS'] + "Events: "+ row['IEVENTS']
     node = str(row['ENDING_NODE'])
     nodenum = str(row['NODE_DISTANCE'])
     tooltip =  node +  "Node Distance: "  + nodenum
