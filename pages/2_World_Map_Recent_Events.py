@@ -73,10 +73,10 @@ for index, row in graph_df.iterrows():
    
     
     #popup = folium.Popup(folium.Html(html, script=True), max_width=500)
-    popup = (row['TOPICS']) + (row['IEVENTS'])
+    popup ="Topics: " + (', '.join(row['TOPICS'])) + "Events: "+ (', '.join(row['IEVENTS']))
     node = str(row['ENDING_NODE'])
     nodenum = str(row['NODE_DISTANCE'])
-    tooltip =  node +  "\n Node Distance: "  + nodenum
+    tooltip =  node +  "Node Distance: "  + nodenum
     color = str(row['SENTIMENT_COLOR'])
     latitude = float(row['LATITUDE'])
     longitude =  float(row['LONGITUDE'])
