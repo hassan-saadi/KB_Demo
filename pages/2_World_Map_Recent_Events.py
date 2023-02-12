@@ -71,9 +71,17 @@ graphname = st.sidebar.selectbox("Please select a company as a starting node:", 
 graph_df = mapdf[mapdf['GRAPH']==graphname]
 for index, row in graph_df.iterrows():
    
-    
-    #popup = folium.Popup(folium.Html(html, script=True), max_width=500)
-    popup ="Topics: " + row['TOPICS'] + "Events: "+ row['IEVENTS']
+    # Define the list of columns to include in the table
+    columns = ["ENDING_NODE", "URL", "DATE", "NODE_DISTANCE","TOPICS", "IEVENTS"]
+
+    # Define the CSS styles for the table
+    styles = [
+        {'selector': 'th', 'props': [('background-color', 'lightblue'), ('color', 'white')]},]
+
+    # Convert the dataframe to an HTML table, including only the specified columns
+    html_table = df[columns].style.set_table_styles(styles).render()
+    popup = folium.Popup(folium.Html(html, script=True), max_width=500)
+    #popup ="Topics: " + row['TOPICS'] + "Events: "+ row['IEVENTS']
     node = str(row['ENDING_NODE'])
     nodenum = str(row['NODE_DISTANCE'])
     tooltip =  node +  "Node Distance: "  + nodenum
