@@ -84,7 +84,7 @@ for index, row in graph_df.iterrows():
     
     """
     #popup = folium.Popup(folium.Html(html, script=True), max_width=500)
-    popup = str(row['THEMES']) + str(row['IEVENTS'])
+    popup = (row['TOPICS']) + (row['IEVENTS'])
     node = str(row['ENDING_NODE'])
     nodenum = str(row['NODE_DISTANCE'])
     tooltip =  node +  "\n Node Distance: "  + nodenum
