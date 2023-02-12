@@ -84,7 +84,7 @@ for index, row in graph_df.iterrows():
 
 # call to render Folium map in Streamlit
 st_data = st_folium(newsmap, width = 1000)
-
+graph_df
 
 
 # Footer
