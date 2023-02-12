@@ -18,7 +18,7 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.text('Business Impacting Events/News Sample')
-m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=2)
+m = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=2, attr="red=unfav, green=favorable, gray=neutral")
 
 #@st.cache_resource
 def init_connection():
@@ -124,7 +124,7 @@ for index, row in graph_df.iterrows():
     popup =folium.Popup("<a href=" +row['URL'] + '">'+ row['URL']+ '</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ row['IEVENTS'])
     node = str(row['ENDING_NODE'])
     nodenum = str(row['NODE_DISTANCE'])
-    tooltip =  node +  "Node Distance: "  + nodenum
+    tooltip =  node +  " Distance: "  + nodenum
     color = str(row['SENTIMENT_COLOR'])
     latitude = float(row['LATITUDE'])
     longitude =  float(row['LONGITUDE'])
@@ -134,7 +134,7 @@ for index, row in graph_df.iterrows():
 
 
 # call to render Folium map in Streamlit
-st_data = st_folium(m, width = 1000)
+st_data = st_folium(m, width = 1200)
 
 
 # Footer
