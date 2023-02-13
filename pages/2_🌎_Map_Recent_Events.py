@@ -66,18 +66,17 @@ with documentlist as (
 rows = run_query(query)
 mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE', 'URL', 'SENTIMENT_COLOR','LATITUDE', 'LONGITUDE', 'TOPICS','IEVENTS'])
 graphs = mapdf['GRAPH'].unique()
-
-for company in graphs:
-    graph_df = mapdf[mapdf['GRAPH']==company]    
-    layer = pdk.Layer("ScatterplotLayer",graph_df,get_position=["LATITUDE", "LONGITUDE"],get_color='SENTIMENT_COLOR',get_radius=100,
+graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
+graph_df = mapdf[mapdf['GRAPH']==graphname]    
+layer = pdk.Layer("ScatterplotLayer",graph_df,get_position=["LATITUDE", "LONGITUDE"],get_color='SENTIMENT_COLOR',get_radius=100,
         pickable=True #,get_tooltip=["ENDING_NODE", "NODE_DISTANCE", "TOPICS", "IEVENTS"],
         #tooltip={"html": "<b>"  + 'ENDING_NODE' +"</b><br/>" "Node Distance: " + str('NODE_DISTANCE') + "<br/><a href=" +'URL' + '" target="_blank">Story Link</a><br/>'+ "Topics: " + 'TOPICS' + "<br/>"+ "Events: "+ 'IEVENTS'}
         #tooltip={"html": "<b>"  + graph_df['ENDING_NODE'].iloc[0] +"</b><br/>" "Node Distance: " + str(graph_df['NODE_DISTANCE'].iloc[0]) + "<br/><a href=" + graph_df['URL'].iloc[0] + '" target="_blank">Story Link</a><br/>' + "Topics: " + graph_df['TOPICS'].iloc[0] + "<br/>" + "Events: "+ graph_df['IEVENTS'].iloc[0]}
         )
-    view_state = pdk.ViewState(longitude=-73.9972,latitude=40.7488,zoom=11,pitch=50,bearing=0)
-    mapdict[company] = pdk.Deck(layers=[layer], initial_view_state=view_state)
-graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
-st.pydeck_chart(mapdict[graphname])
+view_state = pdk.ViewState(longitude=-73.9972,latitude=40.7488,zoom=11,pitch=50,bearing=0)
+pdkmap = pdk.Deck(layers=[layer], initial_view_state=view_state)
+
+st.pydeck_chart(pdkmap)
 
 # Footer
 st.sidebar.markdown(
