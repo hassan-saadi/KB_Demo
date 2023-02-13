@@ -47,11 +47,12 @@ with documentlist as (
   where starting_node != ending_node
   and ending_node not in ('pepsico_inc','coca-cola_company','goldman_sachs_group_inc','jp_morgan_chase_and_co'
         ,'alphabet_inc' ,'microsoft_corp', 'google')
-  and category in ('NaturalDisaster', 'Legal', 'Political', 'Government', 'SupplyChain', 'Contract', 'Basel', 'Financing', 'Corporate')
+  //and category in ('NaturalDisaster', 'Legal', 'Political', 'Government', 'SupplyChain', 'Contract', 'Basel', 'Financing', 'Corporate')
   and category is not NULL
   and url not like ('https://forgeai.net/naviga%')
   and label not in ('earnings call', 'Earnings Call')
   and latitude is not NULL
+  and longitude is not NULL
   and docs.docdatetime >= DATEADD(day, -90, CURRENT_DATE())
   group by 5) 
   select  any_value(graph), any_value(node_distance), any_value(date) as date, ENDING_NODE, any_value(url), 
@@ -72,6 +73,10 @@ for company in graphs:
     graph_df = mapdf[mapdf['GRAPH']==company]    
     mapdict[company] = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=3)
     for index, row in graph_df.iterrows():
+        if pd.isnull(row['LATITUDE']) or pd.isnull(row['LONGITUDE']):
+            st.write(row['URL'])
+            
+            
         popup =folium.Popup("<b>"  + row['ENDING_NODE'] +"</b><br/>" "Node Distance: " + str(row['NODE_DISTANCE']) + "<br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ row['IEVENTS'])
         tooltip =  str(row['ENDING_NODE'])
         color = str(row['SENTIMENT_COLOR'])
