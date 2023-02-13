@@ -71,7 +71,8 @@ for company in graphs:
     graph_df = mapdf[mapdf['GRAPH']==company]    
     layer = pdk.Layer("ScatterplotLayer",graph_df,get_position=["LATITUDE", "LONGITUDE"],get_color='SENTIMENT_COLOR',get_radius=100,
         pickable=True,get_tooltip=["ENDING_NODE", "NODE_DISTANCE", "TOPICS", "IEVENTS"],
-        tooltip={"html": "<b>"  + 'ENDING_NODE' +"</b><br/>" "Node Distance: " + str('NODE_DISTANCE') + "<br/><a href=" +'URL' + '" target="_blank">Story Link</a><br/>'+ "Topics: " + 'TOPICS' + "<br/>"+ "Events: "+ 'IEVENTS'}
+        #tooltip={"html": "<b>"  + 'ENDING_NODE' +"</b><br/>" "Node Distance: " + str('NODE_DISTANCE') + "<br/><a href=" +'URL' + '" target="_blank">Story Link</a><br/>'+ "Topics: " + 'TOPICS' + "<br/>"+ "Events: "+ 'IEVENTS'}
+        tooltip={"html": "<b>"  + graph_df['ENDING_NODE'].iloc[0] +"</b><br/>" "Node Distance: " + str(graph_df['NODE_DISTANCE'].iloc[0]) + "<br/><a href=" + graph_df['URL'].iloc[0] + '" target="_blank">Story Link</a><br/>' + "Topics: " + graph_df['TOPICS'].iloc[0] + "<br/>" + "Events: "+ graph_df['IEVENTS'].iloc[0]}
         )
     view_state = pdk.ViewState(longitude=-73.9972,latitude=40.7488,zoom=11,pitch=50,bearing=0)
     mapdict[company] = pdk.Deck(layers=[layer], initial_view_state=view_state)
