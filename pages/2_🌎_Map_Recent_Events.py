@@ -1,16 +1,14 @@
 import pandas as pd
 import snowflake.connector
 import os
+import pydeck as pdk
 from PIL import Image
 import streamlit.components.v1 as components
-from streamlit_agraph import agraph, Node, Edge, Config
 import streamlit as st
 import numpy as np
 from bs4 import BeautifulSoup
 import requests
 import branca
-import folium
-from streamlit_folium import st_folium
 st.set_page_config(page_title = 'CQ RiskConnector', layout="wide")
 st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jpeg', width = 40)
 st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
@@ -18,15 +16,16 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.caption("Key: :green[Favorable Business Impacting Events/News Sample.] :red[Favorable Business Impacting Events/News Sample.] :gray[Neutral News/Events]")
-mapdict ={}
+
 @st.cache_resource
 def init_connection():
     return snowflake.connector.connect(
         **st.secrets["snowflake"], client_session_keep_alive=True
     )
 conn = init_connection()
-
+mapdict ={}
 @st.cache_data(ttl=600)
+#st.cache
 def run_query(query):
     with conn.cursor() as cur:
         cur.execute(query)
@@ -41,18 +40,17 @@ with documentlist as (
   from "SCRATCH_FORGEAI"."ANDYC"."KBWEB" kb
   //join "PROD_V06XX"."FORGEAI_SURGES"."DOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25
   join "PROD_V06XX"."FORGEAI_ARTICLES"."COMPANYDOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25 and docs.confidence >= .5
-  join "PROD_V06XX"."ARTICLES_V0670"."INTRINSICEVENTS" ievents on ievents.docid = docs.docid //and ievents.confidence >= 0.35
-  join "PROD_V06XX"."ARTICLES_V0670"."ENTITYASSERTIONS" serts on serts.docid = docs.docid and serts.confidence >= 0.65
+  join "PROD_V06XX"."ARTICLES_V0670"."INTRINSICEVENTS" ievents on ievents.docid = docs.docid //and ievents.confidence >= 0.15
+  join "PROD_V06XX"."ARTICLES_V0670"."ENTITYASSERTIONS" serts on serts.docid = docs.docid and serts.confidence >= 0.6
   join  "PROD_V06XX"."KG_V0660"."LOCATIONS" locs on locs.type = serts.assertedclass
   where starting_node != ending_node
   and ending_node not in ('pepsico_inc','coca-cola_company','goldman_sachs_group_inc','jp_morgan_chase_and_co'
         ,'alphabet_inc' ,'microsoft_corp', 'google')
-  //and category in ('NaturalDisaster', 'Legal', 'Political', 'Government', 'SupplyChain', 'Contract', 'Basel', 'Financing', 'Corporate')
+  and category in ('NaturalDisaster', 'Legal', 'Political', 'Government', 'SupplyChain', 'Contract', 'Basel', 'Financing', 'Corporate')
   and category is not NULL
   and url not like ('https://forgeai.net/naviga%')
   and label not in ('earnings call', 'Earnings Call')
   and latitude is not NULL
-  and longitude is not NULL
   and docs.docdatetime >= DATEADD(day, -90, CURRENT_DATE())
   group by 5) 
   select  any_value(graph), any_value(node_distance), any_value(date) as date, ENDING_NODE, any_value(url), 
@@ -71,25 +69,36 @@ graphs = mapdf['GRAPH'].unique()
 
 for company in graphs:
     graph_df = mapdf[mapdf['GRAPH']==company]    
-    mapdict[company] = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=3)
-    for index, row in graph_df.iterrows():
-        if pd.isnull(row['LATITUDE']) or pd.isnull(row['LONGITUDE']):
-            st.write(row['URL'])
-            
-            
-        popup =folium.Popup("<b>"  + row['ENDING_NODE'] +"</b><br/>" "Node Distance: " + str(row['NODE_DISTANCE']) + "<br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ row['IEVENTS'])
-        tooltip =  str(row['ENDING_NODE'])
-        color = str(row['SENTIMENT_COLOR'])
-        latitude = float(row['LATITUDE'])
-        longitude =  float(row['LONGITUDE'])
-        folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
-                 icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(mapdict[company])
+        
+        layer = pdk.Layer(
+        "ScatterplotLayer",
+        graph_df,
+        get_position=["LATITUDE", "LONGITUDE"],
+        get_color='SENTIMENT_COLOR',
+        get_radius=100,
+        pickable=True,
+        get_tooltip=["ENDING_NODE", "NODE_DISTANCE", "TOPICS", "IEVENTS"],
+        tooltip={"html": "<b>"  + row['ENDING_NODE'] +"</b><br/>" "Node Distance: " + str(row['NODE_DISTANCE']) + "<br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ 'IEVENTS'}
+        )
+
+        view_state = pdk.ViewState(
+        longitude=-73.9972,
+        latitude=40.7488,
+        zoom=11,
+        pitch=50,
+        bearing=0
+        )
+
+        mapdict[graphname] = pdk.Deck(layers=[layer], initial_view_state=view_state)
+
+
+
 
 
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
-
+st.pydeck_chart(mapdict[graphname])
 # call to render Folium map in Streamlit
-st_data = st_folium(mapdict[graphname], width = 1000)
+
 #graph_df
 
 
