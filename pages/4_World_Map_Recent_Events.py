@@ -19,15 +19,14 @@ st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.caption("Key: :green[Favorable Business Impacting Events/News Sample.] :red[Favorable Business Impacting Events/News Sample.] :gray[Neutral News/Events]")
 mapdict ={}
-#@st.cache_resource
+@st.cache_resource
 def init_connection():
     return snowflake.connector.connect(
         **st.secrets["snowflake"], client_session_keep_alive=True
     )
 conn = init_connection()
 
-#@st.cache_data(ttl=600)
-@st.cache
+@st.cache_data(ttl=600)
 def run_query(query):
     with conn.cursor() as cur:
         cur.execute(query)
