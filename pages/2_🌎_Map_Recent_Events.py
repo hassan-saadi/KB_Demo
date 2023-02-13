@@ -68,7 +68,7 @@ mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 graph_df = mapdf[mapdf['GRAPH']==graphname]    
-layer = pdk.Layer("ScatterplotLayer",graph_df,get_position=["LATITUDE", "LONGITUDE"],get_color='SENTIMENT_COLOR',get_radius=100,
+layer = pdk.Layer("ScatterplotLayer",data=graph_df,get_position=["LATITUDE", "LONGITUDE"],get_color=['SENTIMENT_COLOR'],get_radius=100,
         pickable=True #,get_tooltip=["ENDING_NODE", "NODE_DISTANCE", "TOPICS", "IEVENTS"],
         #tooltip={"html": "<b>"  + 'ENDING_NODE' +"</b><br/>" "Node Distance: " + str('NODE_DISTANCE') + "<br/><a href=" +'URL' + '" target="_blank">Story Link</a><br/>'+ "Topics: " + 'TOPICS' + "<br/>"+ "Events: "+ 'IEVENTS'}
         #tooltip={"html": "<b>"  + graph_df['ENDING_NODE'].iloc[0] +"</b><br/>" "Node Distance: " + str(graph_df['NODE_DISTANCE'].iloc[0]) + "<br/><a href=" + graph_df['URL'].iloc[0] + '" target="_blank">Story Link</a><br/>' + "Topics: " + graph_df['TOPICS'].iloc[0] + "<br/>" + "Events: "+ graph_df['IEVENTS'].iloc[0]}
