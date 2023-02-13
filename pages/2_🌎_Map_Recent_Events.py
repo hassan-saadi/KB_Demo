@@ -74,7 +74,7 @@ for company in graphs:
         tooltip={"html": "<b>"  + 'ENDING_NODE' +"</b><br/>" "Node Distance: " + str('NODE_DISTANCE') + "<br/><a href=" +'URL' + '" target="_blank">Story Link</a><br/>'+ "Topics: " + 'TOPICS' + "<br/>"+ "Events: "+ 'IEVENTS'}
         )
     view_state = pdk.ViewState(longitude=-73.9972,latitude=40.7488,zoom=11,pitch=50,bearing=0)
-    mapdict[graphname] = pdk.Deck(layers=[layer], initial_view_state=view_state)
+    mapdict[company] = pdk.Deck(layers=[layer], initial_view_state=view_state)
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 st.pydeck_chart(mapdict[graphname])
 
