@@ -18,7 +18,8 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 st.title ('CQ RiskConnector Sample')
 st.caption ('Limited connections shown')
 st.caption("Key: :green[Favorable Business Impacting Events/News Sample.] :red[Favorable Business Impacting Events/News Sample.] :gray[Neutral News/Events]")
-mapdict ={}
+mapdict = {}
+markerdict = {}
 @st.cache_resource
 def init_connection():
     return snowflake.connector.connect(
@@ -42,7 +43,7 @@ with documentlist as (
   //join "PROD_V06XX"."FORGEAI_SURGES"."DOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25
   join "PROD_V06XX"."FORGEAI_ARTICLES"."COMPANYDOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25 and docs.confidence >= .5
   join "PROD_V06XX"."ARTICLES_V0670"."INTRINSICEVENTS" ievents on ievents.docid = docs.docid //and ievents.confidence >= 0.35
-  join "PROD_V06XX"."ARTICLES_V0670"."ENTITYASSERTIONS" serts on serts.docid = docs.docid and serts.confidence >= 0.65
+  join "PROD_V06XX"."ARTICLES_V0670"."ENTITYASSERTIONS" serts on serts.docid = docs.docid and serts.confidence >= 0.5
   join  "PROD_V06XX"."KG_V0660"."LOCATIONS" locs on locs.type = serts.assertedclass
   where starting_node != ending_node
   and ending_node not in ('pepsico_inc','coca-cola_company','goldman_sachs_group_inc','jp_morgan_chase_and_co'
@@ -53,7 +54,7 @@ with documentlist as (
   and label not in ('earnings call', 'Earnings Call')
   and latitude is not NULL
   and longitude is not NULL
-  and docs.docdatetime >= DATEADD(day, -90, CURRENT_DATE())
+  and docs.docdatetime >= DATEADD(day, -14, CURRENT_DATE())
   group by 5) 
   select  any_value(graph), any_value(node_distance), any_value(date) as date, ENDING_NODE, any_value(url), 
             any_value(sentimentcolor) as sentimentcolor,any_value(latitude) as latitude, any_value(longitude) as longitude
@@ -68,28 +69,46 @@ with documentlist as (
 rows = run_query(query)
 mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE', 'URL', 'SENTIMENT_COLOR','LATITUDE', 'LONGITUDE', 'TOPICS','IEVENTS'])
 graphs = mapdf['GRAPH'].unique()
-
-for company in graphs:
-    graph_df = mapdf[mapdf['GRAPH']==company]    
-    mapdict[company] = folium.Map(control_scale=True, attr="CQ RiskConnector", width = "100%", zoom_start=3)
-    for index, row in graph_df.iterrows():
-        if pd.isnull(row['LATITUDE']) or pd.isnull(row['LONGITUDE']):
-            st.write(row['URL'])
-            
-            
-        popup =folium.Popup("<b>"  + row['ENDING_NODE'] +"</b><br/>" "Node Distance: " + str(row['NODE_DISTANCE']) + "<br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/>'+ "Topics: " + row['TOPICS'] + "<br/>"+ "Events: "+ row['IEVENTS'])
-        tooltip =  str(row['ENDING_NODE'])
-        color = str(row['SENTIMENT_COLOR'])
-        latitude = float(row['LATITUDE'])
-        longitude =  float(row['LONGITUDE'])
-        folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
-                 icon=folium.Icon(color=color, icon='building', prefix='fa')).add_to(mapdict[company])
-
-
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 
+graph_df = mapdf[mapdf['GRAPH']==graphname]
+newsmap = folium.Map(control_scale=True, width = "100%", zoom_start=4, tiles ='Stamen Terrain')
+
+fg = folium.FeatureGroup(name="Markers")
+for index, row in graph_df.iterrows():
+    events = row['IEVENTS'][1:-1].replace('"', '')
+    topics = row['TOPICS'][1:-1].replace('"', '')
+    htmlpop = "<b>" + row['ENDING_NODE'] +"<br/>" + str(row['DATE']) + "</b><br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/><table border="1"><tr><td style="background-color: lightgray;">Node Distance</td><td>' +\
+              str(row['NODE_DISTANCE']) + '</td></tr><tr><td style="background-color: lightgray;">Topics</td><td>' + topics +\
+              '</td></tr><tr><td style="background-color: lightgray;">Events</td><td>' + events +'</td></tr></table>'
+    popup =folium.Popup(htmlpop)
+    tooltip =  str(row['ENDING_NODE'])
+    color = str(row['SENTIMENT_COLOR'])
+    latitude = float(row['LATITUDE'])
+    longitude =  float(row['LONGITUDE'])
+    if color == 'green':
+        folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
+                 icon=folium.Icon(color=color, icon='thumbs-up', prefix='fa')).add_to(fg)
+    elif color == 'red':
+        folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
+                 icon=folium.Icon(color=color, icon='thumbs-down', prefix='fa')).add_to(fg)
+
+    else:
+        folium.Marker(location = [latitude, longitude], popup=popup, tooltip=tooltip,
+                 icon=folium.Icon(color=color, icon='circle', prefix='fa')).add_to(fg)
+fg.add_to(newsmap)
+
 # call to render Folium map in Streamlit
-st_data = st_folium(mapdict[graphname], width = 1000)
+st_folium(
+    newsmap,
+    key="new",
+    feature_group_to_add=fg,
+    #height=400,
+    width=1000,
+)
+#st_data = st_folium(newsmap,  width=1000)
+
+#st_data = st_folium(newsmap, key="new", feature_group_to_add=fg, width=1000)
 #graph_df
 
 
