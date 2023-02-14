@@ -21,7 +21,7 @@ category = st.sidebar.selectbox("Please select a category:", ["All_events",
 															  "Investigation"])
 
 if comp_pair == "(Goldman Sachs, J.P. Morgan)":
-	#filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_goldman_jpmorgan_{category}.csv"	
+	filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_goldman_jpmorgan_{category}.csv"	
 elif comp_pair == "(Microsoft, Alphabet)":
 	filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_alphabet_microsoft_{category}.csv"
 elif comp_pair == "(Pepsi, Coca-cola)":
