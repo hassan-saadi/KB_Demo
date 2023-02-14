@@ -81,7 +81,7 @@ for index, row in graph_df.iterrows():
     htmlpop = "<b>" + row['ENDING_NODE'] +"<br/>" + str(row['DATE']) + "</b><br/><a href=" +row['URL'] + '" target="_blank">'+row['TITLE']+'</a><br/>'+row['DESCRIPTION']+'<br/><table border="1"><tr><td style="background-color: lightgray;">Node Distance</td><td>' +\
               str(row['NODE_DISTANCE']) + '</td></tr><tr><td style="background-color: lightgray;">Topics</td><td>' + topics +\
               '</td></tr><tr><td style="background-color: lightgray;">Events</td><td>' + events +'</td></tr></table>'
-    popup =folium.Popup(htmlpop, min_width=400)
+    popup =folium.Popup(htmlpop, min_width=700)
     tooltip =  str(row['ENDING_NODE'])
     color = str(row['SENTIMENT_COLOR'])
     latitude = float(row['LATITUDE'])
