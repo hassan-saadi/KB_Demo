@@ -14,7 +14,7 @@ def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('utf-8')
 
-st.title('Compare two companies graphs')
+st.title('Compare The Graphs of Two Companies')
 
 comp_pair = st.sidebar.selectbox("Please select a company pair:", ["(Goldman Sachs, J.P. Morgan)", 
 																   "(Microsoft, Alphabet)", 
