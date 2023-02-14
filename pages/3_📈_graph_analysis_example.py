@@ -8,7 +8,7 @@ st.sidebar.image('https://upload.wikimedia.org/wikipedia/commons/0/05/CQ_Logo.jp
 st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
 st.title ('CQ RiskConnector Graph Analytics')
-st.caption ('Limited connections shown')
+
 @st.cache
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
