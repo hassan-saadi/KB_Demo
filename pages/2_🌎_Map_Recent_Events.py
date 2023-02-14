@@ -54,7 +54,7 @@ with documentlist as (
   and label not in ('earnings call', 'Earnings Call')
   and latitude is not NULL
   and longitude is not NULL
-  and docs.docdatetime >= DATEADD(day, -14, CURRENT_DATE())
+  and docs.docdatetime >= DATEADD(day, -7, CURRENT_DATE())
   group by 5) 
   select  any_value(graph), any_value(node_distance), any_value(date) as date, ENDING_NODE, any_value(url), 
             any_value(sentimentcolor) as sentimentcolor,any_value(latitude) as latitude, any_value(longitude) as longitude
@@ -72,7 +72,7 @@ graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 
 graph_df = mapdf[mapdf['GRAPH']==graphname]
-newsmap = folium.Map(control_scale=True, width = "100%", zoom_start=4, tiles ='Stamen Terrain')
+newsmap = folium.Map(control_scale=True, width = "100%", zoom_start=5, tiles ='Stamen Terrain')
 
 fg = folium.FeatureGroup(name="Markers")
 for index, row in graph_df.iterrows():
