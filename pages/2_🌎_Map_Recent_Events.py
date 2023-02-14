@@ -36,7 +36,7 @@ query = """
 with documentlist as (
   select distinct any_value(docs.docid) as docid, any_value(graph) as graph, any_value(node_distance) as node_distance
     ,any_value(to_date(nvl(docs.docdatetime, docs.processdatetime))) as date, ENDING_NODE 
-    ,any_value(url) as url 
+    ,any_value(url) as url, any_value(title) as title, any_value(description) as description 
     ,any_value(case when sentiment is NULL then 'gray' when sentiment <= -.02 then 'red' when sentiment >= .3 then 'green' ELSE 'gray' END) as sentimentcolor
     ,any_value(latitude) as latitude, any_value(longitude) as longitude
   from "SCRATCH_FORGEAI"."ANDYC"."KBWEB" kb
@@ -54,9 +54,9 @@ with documentlist as (
   and label not in ('earnings call', 'Earnings Call')
   and latitude is not NULL
   and longitude is not NULL
-  and docs.docdatetime >= DATEADD(day, -7, CURRENT_DATE())
+  and docs.docdatetime >= DATEADD(day, -14, CURRENT_DATE())
   group by 5) 
-  select  any_value(graph), any_value(node_distance), any_value(date) as date, ENDING_NODE, any_value(url), 
+  select  any_value(graph), any_value(node_distance), any_value(date) as date, ENDING_NODE, any_value(url), any_value(title),any_value(description),
             any_value(sentimentcolor) as sentimentcolor,any_value(latitude) as latitude, any_value(longitude) as longitude
             ,array_agg(distinct topics.name) as topics, array_agg(distinct ievents.label) as ievents
   from documentlist
@@ -67,18 +67,18 @@ with documentlist as (
   order by 3 DESC
             ;"""
 rows = run_query(query)
-mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE', 'URL', 'SENTIMENT_COLOR','LATITUDE', 'LONGITUDE', 'TOPICS','IEVENTS'])
+mapdf =  pd.DataFrame(rows, columns = ['GRAPH','NODE_DISTANCE', 'DATE', 'ENDING_NODE', 'URL', 'TITLE', 'DESCRIPTION','SENTIMENT_COLOR','LATITUDE', 'LONGITUDE', 'TOPICS','IEVENTS'])
 graphs = mapdf['GRAPH'].unique()
 graphname = st.sidebar.selectbox("Please select a company as a starting node:", graphs)
 
 graph_df = mapdf[mapdf['GRAPH']==graphname]
-newsmap = folium.Map(control_scale=True, width = "100%", zoom_start=5, tiles ='Stamen Terrain')
+newsmap = folium.Map(control_scale=True, width = "100%", zoom_start=4, tiles ='Stamen Terrain')
 
 fg = folium.FeatureGroup(name="Markers")
 for index, row in graph_df.iterrows():
     events = row['IEVENTS'][1:-1].replace('"', '')
     topics = row['TOPICS'][1:-1].replace('"', '')
-    htmlpop = "<b>" + row['ENDING_NODE'] +"<br/>" + str(row['DATE']) + "</b><br/><a href=" +row['URL'] + '" target="_blank">Story Link</a><br/><table border="1"><tr><td style="background-color: lightgray;">Node Distance</td><td>' +\
+    htmlpop = "<b>" + row['ENDING_NODE'] +"<br/>" + str(row['DATE']) + "</b><br/><a href=" +row['URL'] + '" target="_blank">'+row['TITLE']+'</a><br/>'+row['DESCRIPTION']+'<br/><table border="1"><tr><td style="background-color: lightgray;">Node Distance</td><td>' +\
               str(row['NODE_DISTANCE']) + '</td></tr><tr><td style="background-color: lightgray;">Topics</td><td>' + topics +\
               '</td></tr><tr><td style="background-color: lightgray;">Events</td><td>' + events +'</td></tr></table>'
     popup =folium.Popup(htmlpop)
