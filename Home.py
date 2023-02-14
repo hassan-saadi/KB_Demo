@@ -44,8 +44,7 @@ config = Config(width=1200,
                 height=1200,
                 directed=True, 
                 physics=True, 
-                hierarchical=True,
-                layout='dot'
+                hierarchical=True
                 # **kwargs
                 )
 
