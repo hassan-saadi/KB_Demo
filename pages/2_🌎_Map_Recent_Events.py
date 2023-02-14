@@ -78,7 +78,7 @@ fg = folium.FeatureGroup(name="Markers")
 for index, row in graph_df.iterrows():
     events = row['IEVENTS'][1:-1].replace('"', '')
     topics = row['TOPICS'][1:-1].replace('"', '')
-    htmlpop = "<b>" + row['ENDING_NODE'] +"<br/>" + str(row['DATE']) + "</b><br/><a href=" +row['URL'] + '" target="_blank">'+row['TITLE']+'</a><br/>'+row['DESCRIPTION']+'<br/><table border="1"><tr><td style="background-color: lightgray;">Node Distance</td><td>' +\
+    htmlpop = "<b>" + row['ENDING_NODE'] +"<br/>" + str(row['DATE']) + "</b><br/><a href=" +row['URL'] + '" target="_blank">'+row['TITLE']+'</a><br/>'+row['DESCRIPTION']+'<br/><table style="border:1; width:100%"><tr><td style="background-color: lightgray;">Node Distance</td><td>' +\
               str(row['NODE_DISTANCE']) + '</td></tr><tr><td style="background-color: lightgray;">Topics</td><td>' + topics +\
               '</td></tr><tr><td style="background-color: lightgray;">Events</td><td>' + events +'</td></tr></table>'
     popup =folium.Popup(htmlpop, min_width=700)
