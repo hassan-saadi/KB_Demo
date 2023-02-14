@@ -50,7 +50,7 @@ config = Config(width=1200,
 
 return_value = agraph(nodes=nodes, 
                       edges=edges, 
-                      config=config)
+                      config=config, layout='dot')
 
 
 
