@@ -13,7 +13,7 @@ st.markdown('Use this tool to understand the path of connected events. How much 
 data = pd.read_csv(url).fillna('')
 data = data.query("STARTING_NODE != ENDING_NODE")
 data = data.query("CLASS != '9/11 ATTACK'")
-data = data[data['CLASS'].isin(['ACCOUNTING FRAUD', 'BANK FRAUD', 'CORPORATE MISCONDUCT', 'HACK', 'HACKING', 'COMPUTER FRAUD',
+data = data[data['CLASS'].isin(['ACCOUNTING FRAUD', 'BANK FRAUD', 'CORPORATE MISCONDUCT', 'HACK', 'HACKING', 
                                 'CIVIL LAWSUIT', 'ANTI-TRUST VIOLATION', 'CLINICAL TRIAL', 'WIRE FRAUD', 'RANSOMWARE ATTACK',
                                 'LEGAL DISPUTE', 'MULTIDISTRICT LITIGATION', 'CYBER BREACH', 'CLASS-ACTION LAWSUIT',
                                 'PRIVACY BREACH', 'CRIMINAL INVESTIGATION', 'DDOS ATTACK', 'REGULATORY INVESTIGATION'])]
