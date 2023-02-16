@@ -12,11 +12,11 @@ st.title('CQ RiskConnector Limited Data Sample')
 st.markdown('Use this tool to understand the path of connected events. How much of the network do they touch? Forecast and display scenarios similar to tracking paths of a storm.')
 data = pd.read_csv(url).fillna('')
 data = data.query("STARTING_NODE != ENDING_NODE")
-data = data.query("CLASS != '9/11 ATTACK'")
-data = data[data['CLASS'].isin(['ACCOUNTING FRAUD', 'BANK FRAUD', 'CORPORATE MISCONDUCT', 'HACK', 'HACKING', 
-                                'CIVIL LAWSUIT', 'ANTI-TRUST VIOLATION', 'CLINICAL TRIAL', 'WIRE FRAUD', 'RANSOMWARE ATTACK',
-                                'LEGAL DISPUTE', 'MULTIDISTRICT LITIGATION', 'CYBER BREACH', 'CLASS-ACTION LAWSUIT',
-                                'PRIVACY BREACH', 'CRIMINAL INVESTIGATION', 'DDOS ATTACK', 'REGULATORY INVESTIGATION'])]
+#data = data.query("CLASS != '9/11 ATTACK'")
+#data = data[data['CLASS'].isin(['ACCOUNTING FRAUD', 'BANK FRAUD', 'CORPORATE MISCONDUCT', 'HACK', 'HACKING', 
+#                                'CIVIL LAWSUIT', 'ANTI-TRUST VIOLATION', 'CLINICAL TRIAL', 'WIRE FRAUD', 'RANSOMWARE ATTACK',
+#                                'LEGAL DISPUTE', 'MULTIDISTRICT LITIGATION', 'CYBER BREACH', 'CLASS-ACTION LAWSUIT',
+#                                'PRIVACY BREACH', 'CRIMINAL INVESTIGATION', 'DDOS ATTACK', 'REGULATORY INVESTIGATION'])]
 # Define the available graphs for the dropdown
 graphs = sorted(data['GRAPH'].unique())
 st.sidebar.caption('Track Connected Events Across Firms')
