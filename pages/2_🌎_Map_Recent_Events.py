@@ -52,11 +52,12 @@ with documentlist as (
   //join "PROD_V06XX"."FORGEAI_SURGES"."DOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25
   join "PROD_V06XX"."FORGEAI_ARTICLES"."COMPANYDOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25 and docs.confidence >= .5
   join "PROD_V06XX"."ARTICLES_V0670"."INTRINSICEVENTS" ievents on ievents.docid = docs.docid //and ievents.confidence >= 0.35
-  join "PROD_V06XX"."ARTICLES_V0670"."ENTITYASSERTIONS" serts on serts.docid = docs.docid and serts.confidence >= 0.5
+  join "PROD_V06XX"."ARTICLES_V0670"."ENTITYASSERTIONS" serts on serts.docid = docs.docid and serts.confidence >= 0.55
+  join "PROD_V06XX"."ARTICLES_V0670"."ENTITYLOCATIONS" elocs on elocs.docid = docs.docid and elocs.entityid = serts.entityid and elocs.sentenceid <=5
   join  "PROD_V06XX"."KG_V0660"."LOCATIONS" locs on locs.type = serts.assertedclass
   where starting_node != ending_node
   and ending_node not in ('pepsico_inc','coca-cola_company','goldman_sachs_group_inc','jp_morgan_chase_and_co'
-        ,'alphabet_inc' ,'microsoft_corp', 'google')
+        ,'alphabet_inc' ,'microsoft_corp', 'google', 'morgan_stanley_international_holdings_inc')
   //and category in ('NaturalDisaster', 'Legal', 'Political', 'Government', 'SupplyChain', 'Contract', 'Basel', 'Financing', 'Corporate')
   and category is not NULL
   and url not like ('https://forgeai.net/naviga%')
@@ -88,12 +89,7 @@ fg = folium.FeatureGroup(name="Markers")
 for index, row in graph_df.iterrows():
     events = row['IEVENTS'][1:-1].replace('"', '')
     topics = row['TOPICS'][1:-1].replace('"', '')
-    #htmlpop = "<b>" + row['ENDING_NODE'] + "<br/>" + str(row['DATE']) + "</b><br/><a href=" + row[
-    #    'URL'] + '" target="_blank">' + row['TITLE'] + '</a><br/>' + row[
-    #              'DESCRIPTION'] + '<br/><table style="border:1; width:100%"><tr><td style="background-color: lightgray;">Node Distance</td><td>' + \
-    #          str(row[
-    #                  'NODE_DISTANCE']) + '</td></tr><tr><td style="background-color: lightgray;">Topics</td><td>' + topics + \
-    #          '</td></tr><tr><td style="background-color: lightgray;">Events</td><td>' + events + '</td></tr></table>'
+  
     
     htmlpop = f"""<b> {row['ENDING_NODE']} <br/> {str(row['DATE'])} </b><br/><a href={row['URL']} 
                   " target="_blank"> {row['TITLE']} </a><br/> {row['DESCRIPTION']} <br/><table 
