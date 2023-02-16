@@ -9,28 +9,34 @@ st.sidebar.caption("Improving Your :blue[C]hange :blue[Q]uotient")
 #st.sidebar.image('https://fiscalnote-marketing.s3.amazonaws.com/logo-FN-white-red.png')
 st.title ('CQ RiskConnector Graph Analytics')
 
-@st.cache
+@st.cache_data
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('utf-8')
 
-st.title('Compare The Graphs of Two Companies')
+st.title('Compare The Graphs of A Group of Companies')
 
-comp_pair = st.sidebar.selectbox("Please select a company pair:", ["(Goldman Sachs, J.P. Morgan)", 
-																   "(Microsoft, Alphabet)", 
-																   "(Pepsi, Coca-cola)"])
+comp_group = st.sidebar.selectbox("Please select a company group:", ["(Goldman Sachs, J.P. Morgan, Morgan Stanley)",
+                                                                    "(Goldman Sachs, J.P. Morgan)",
+                                                                    "(Microsoft, Alphabet)", 
+                                                                    "(Pepsi, Coca-cola)"])
 category = st.sidebar.selectbox("Please select a category:", ["All_events", 
-															  "Criminal", 
-															  "Cyber", 
-															  "Disruption", 
-															  "Investigation"])
+                                                              "Criminal", 
+                                                              "Cyber", 
+                                                              "Disruption", 
+                                                              "Investigation"])
 
-if comp_pair == "(Goldman Sachs, J.P. Morgan)":
-	filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_goldman_jpmorgan_{category}.csv"	
-elif comp_pair == "(Microsoft, Alphabet)":
-	filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_alphabet_microsoft_{category}.csv"
-elif comp_pair == "(Pepsi, Coca-cola)":
-	filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_pepsi_coca_{category}.csv"
+if comp_group == "(Goldman Sachs, J.P. Morgan)":
+    filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_goldman_jpmorgan_{category}.csv"
+
+elif comp_group == "(Microsoft, Alphabet)":
+    filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_alphabet_microsoft_{category}.csv"
+
+elif comp_group == "(Pepsi, Coca-cola)":
+    filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_pepsi_coca_{category}.csv"
+
+elif comp_group == "(Goldman Sachs, J.P. Morgan, Morgan Stanley)":
+    filename = f"https://raw.githubusercontent.com/andychak/KB_Demo/master/data/graphs/df_goldman_jpmorgan_morganstanley_{category}.csv"
 
 df = pd.read_csv(filename, index_col=0)
 st.dataframe(df, width=2600, height=500)
