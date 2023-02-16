@@ -1,48 +1,48 @@
-,Feature,G_value_goldman,Gw_value_goldman,G_value_jpmorgan,Gw_value_jpmorgan
-0,number_nodes,9595.0,9595.0,9177.0,9177.0
-1,number_edges,55186.0,55186.0,47761.0,47761.0
-2,edges_weight_sum,55186.0,912226825856227.0,47761.0,577400807524948.0
-3,degree_mean,11.5,11.5,10.41,10.41
-4,degree_max,1527.0,1527.0,2122.0,2122.0
-5,degree_min,1.0,1.0,1.0,1.0
-6,indegree_mean,5.75,5.75,5.2,5.2
-7,indegree_max,56.0,56.0,53.0,53.0
-8,indegree_min,1.0,1.0,1.0,1.0
-9,outdegree_mean,5.75,5.75,5.2,5.2
-10,outdegree_max,1471.0,1471.0,2069.0,2069.0
-11,outdegree_min,0.0,0.0,0.0,0.0
-12,closeness_centrality_mean,0.07,0.07,0.05,0.05
-13,closeness_centrality_max,0.09,0.09,0.07,0.07
-14,closeness_centrality_min,0.0,0.0,0.04,0.04
-15,eigenvector_centrality_mean,0.01,0.01,0.01,0.01
-16,eigenvector_centrality_max,0.07,0.07,0.08,0.08
-17,eigenvector_centrality_min,-0.0,0.0,0.0,0.0
-18,pagerank_mean,0.0,0.0,0.0,0.0
-19,pagerank_max,0.0,0.05,0.0,0.03
-20,pagerank_min,0.0,0.0,0.0,0.0
-21,transitivity,0.0,0.0,0.0,0.0
-22,density,0.0,0.0,0.0,0.0
-23,overall_reciprocity,0.04,0.04,0.04,0.04
-24,wiener_index,inf,inf,inf,inf
-25,global_efficiency_F,0.31,0.31,0.32,0.32
-26,global_efficiency_T,0.0,0.0,0.0,0.0
-27,local_efficiency_F,0.23,0.23,0.22,0.22
-28,local_efficiency_T,0.12,0.12,0.1,0.1
-29,cycle_basis_F,44402.0,44402.0,37656.0,37656.0
-30,cycle_basis_T,2619.0,2619.0,2079.0,2079.0
-31,triad_003,146690248420.0,146690248420.0,128361891538.0,128361891538.0
-32,triad_012,473892470.0,473892470.0,393033644.0,393033644.0
-33,triad_102,11246191.0,11246191.0,8325760.0,8325760.0
-34,triad_021D,3190949.0,3190949.0,4126146.0,4126146.0
-35,triad_021U,236813.0,236813.0,184807.0,184807.0
-36,triad_021C,689868.0,689868.0,522003.0,522003.0
-37,triad_111D,25611.0,25611.0,17703.0,17703.0
-38,triad_111U,134785.0,134785.0,170684.0,170684.0
-39,triad_030T,18381.0,18381.0,19267.0,19267.0
-40,triad_030C,1031.0,1031.0,685.0,685.0
-41,triad_201,1991.0,1991.0,2135.0,2135.0
-42,triad_120D,1046.0,1046.0,906.0,906.0
-43,triad_120U,2285.0,2285.0,2631.0,2631.0
-44,triad_120C,922.0,922.0,800.0,800.0
-45,triad_210,358.0,358.0,352.0,352.0
-46,triad_300,44.0,44.0,39.0,39.0
+,Feature,weighted_graph_goldman,weighted_graph_jpmorgan
+0,number of nodes,9595.0,9177.0
+1,number of edges,55186.0,47761.0
+2,weighted edges sum,912372507666573.0,583941575135127.0
+3,average node connections,11.5,10.41
+4,maximum node connections,1527.0,2122.0
+5,minimum node connections,1.0,1.0
+6,average node incoming connections,5.75,5.2
+7,maximum node incoming connections,56.0,53.0
+8,minimum node incoming connections,1.0,1.0
+9,average node outcoming connections,5.75,5.2
+10,maximum node outcoming connections,1471.0,2069.0
+11,minimum node outcoming connections,0.0,0.0
+12,average closeness to other nodes,0.07,0.05
+13,maximum closeness to other nodes,0.09,0.07
+14,minimum closeness to other nodes,0.0,0.04
+15,average node importance based on neighbors,0.01,0.01
+16,maximum node importance based on neighbors,0.07,0.08
+17,minimum node importance based on neighbors,0.0,0.0
+18,average node importance based on incoming links,0.0,0.0
+19,maximum node importance based on incoming links,0.05,0.03
+20,minimum node importance based on incoming links,0.0,0.0
+21,probability of connected communities,0.0,0.0
+22,density,0.0,0.0
+23,overall_reciprocity,0.04,0.04
+24,wiener_index,inf,inf
+25,global_efficiency_F,0.31,0.32
+26,global_efficiency_T,0.0,0.0
+27,local_efficiency_F,0.23,0.22
+28,local_efficiency_T,0.12,0.1
+29,cycle_basis_F,44402.0,37656.0
+30,cycle_basis_T,2619.0,2079.0
+31,triad_003,146690248420.0,128361891538.0
+32,triad_012,473892470.0,393033644.0
+33,triad_102,11246191.0,8325760.0
+34,triad_021D,3190949.0,4126146.0
+35,triad_021U,236813.0,184807.0
+36,triad_021C,689868.0,522003.0
+37,triad_111D,25611.0,17703.0
+38,triad_111U,134785.0,170684.0
+39,triad_030T,18381.0,19267.0
+40,triad_030C,1031.0,685.0
+41,triad_201,1991.0,2135.0
+42,triad_120D,1046.0,906.0
+43,triad_120U,2285.0,2631.0
+44,triad_120C,922.0,800.0
+45,triad_210,358.0,352.0
+46,triad_300,44.0,39.0

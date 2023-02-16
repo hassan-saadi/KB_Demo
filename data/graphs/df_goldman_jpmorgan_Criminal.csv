@@ -1,48 +1,48 @@
-,Feature,G_value_goldman,Gw_value_goldman,G_value_jpmorgan,Gw_value_jpmorgan
-0,number_nodes,84.0,84.0,64.0,64.0
-1,number_edges,61.0,61.0,44.0,44.0
-2,edges_weight_sum,61.0,124631653126.0,44.0,41205294059.0
-3,degree_mean,1.45,1.45,1.38,1.38
-4,degree_max,4.0,4.0,4.0,4.0
-5,degree_min,1.0,1.0,1.0,1.0
-6,indegree_mean,0.73,0.73,0.69,0.69
-7,indegree_max,1.0,1.0,2.0,2.0
-8,indegree_min,0.0,0.0,0.0,0.0
-9,outdegree_mean,0.73,0.73,0.69,0.69
-10,outdegree_max,4.0,4.0,4.0,4.0
-11,outdegree_min,0.0,0.0,0.0,0.0
-12,closeness_centrality_mean,0.0,0.0,0.01,0.01
-13,closeness_centrality_max,0.01,0.01,0.03,0.03
-14,closeness_centrality_min,0.0,0.0,0.0,0.0
-15,eigenvector_centrality_mean,0.0,0.02,0.0,0.02
-16,eigenvector_centrality_max,0.39,0.44,0.43,0.73
-17,eigenvector_centrality_min,-0.54,-0.3,-0.55,-0.38
-18,pagerank_mean,0.01,0.01,0.02,0.02
-19,pagerank_max,0.02,0.02,0.04,0.04
-20,pagerank_min,0.0,0.0,0.01,0.01
-21,transitivity,0.0,0.0,0.0,0.0
-22,density,0.01,0.01,0.01,0.01
-23,overall_reciprocity,0.03,0.03,0.0,0.0
-24,wiener_index,inf,inf,inf,inf
-25,global_efficiency_F,0.01,0.01,0.01,0.01
-26,global_efficiency_T,0.0,0.0,0.0,0.0
-27,local_efficiency_F,0.0,0.0,0.02,0.02
-28,local_efficiency_T,0.0,0.0,0.0,0.0
-29,cycle_basis_F,32.0,32.0,19.0,19.0
-30,cycle_basis_T,32.0,32.0,19.0,19.0
-31,triad_003,92995.0,92995.0,40121.0,40121.0
-32,triad_012,2200.0,2200.0,1536.0,1536.0
-33,triad_102,82.0,82.0,0.0,0.0
-34,triad_021D,7.0,7.0,6.0,6.0
-35,triad_021U,0.0,0.0,1.0,1.0
-36,triad_021C,0.0,0.0,0.0,0.0
-37,triad_111D,0.0,0.0,0.0,0.0
-38,triad_111U,0.0,0.0,0.0,0.0
-39,triad_030T,0.0,0.0,0.0,0.0
-40,triad_030C,0.0,0.0,0.0,0.0
-41,triad_201,0.0,0.0,0.0,0.0
-42,triad_120D,0.0,0.0,0.0,0.0
-43,triad_120U,0.0,0.0,0.0,0.0
-44,triad_120C,0.0,0.0,0.0,0.0
-45,triad_210,0.0,0.0,0.0,0.0
-46,triad_300,0.0,0.0,0.0,0.0
+,Feature,weighted_graph_goldman,weighted_graph_jpmorgan
+0,number of nodes,84.0,64.0
+1,number of edges,61.0,44.0
+2,weighted edges sum,124631653126.0,41205294059.0
+3,average node connections,1.45,1.38
+4,maximum node connections,4.0,4.0
+5,minimum node connections,1.0,1.0
+6,average node incoming connections,0.73,0.69
+7,maximum node incoming connections,1.0,2.0
+8,minimum node incoming connections,0.0,0.0
+9,average node outcoming connections,0.73,0.69
+10,maximum node outcoming connections,4.0,4.0
+11,minimum node outcoming connections,0.0,0.0
+12,average closeness to other nodes,0.0,0.01
+13,maximum closeness to other nodes,0.01,0.03
+14,minimum closeness to other nodes,0.0,0.0
+15,average node importance based on neighbors,0.02,0.01
+16,maximum node importance based on neighbors,0.5,0.7
+17,minimum node importance based on neighbors,-0.24,-0.32
+18,average node importance based on incoming links,0.01,0.02
+19,maximum node importance based on incoming links,0.02,0.04
+20,minimum node importance based on incoming links,0.0,0.01
+21,probability of connected communities,0.0,0.0
+22,density,0.01,0.01
+23,overall_reciprocity,0.03,0.0
+24,wiener_index,inf,inf
+25,global_efficiency_F,0.01,0.01
+26,global_efficiency_T,0.0,0.0
+27,local_efficiency_F,0.0,0.02
+28,local_efficiency_T,0.0,0.0
+29,cycle_basis_F,32.0,19.0
+30,cycle_basis_T,32.0,19.0
+31,triad_003,92995.0,40121.0
+32,triad_012,2200.0,1536.0
+33,triad_102,82.0,0.0
+34,triad_021D,7.0,6.0
+35,triad_021U,0.0,1.0
+36,triad_021C,0.0,0.0
+37,triad_111D,0.0,0.0
+38,triad_111U,0.0,0.0
+39,triad_030T,0.0,0.0
+40,triad_030C,0.0,0.0
+41,triad_201,0.0,0.0
+42,triad_120D,0.0,0.0
+43,triad_120U,0.0,0.0
+44,triad_120C,0.0,0.0
+45,triad_210,0.0,0.0
+46,triad_300,0.0,0.0
