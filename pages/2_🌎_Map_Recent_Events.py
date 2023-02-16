@@ -48,7 +48,7 @@ with documentlist as (
     ,any_value(url) as url, any_value(title) as title, any_value(description) as description 
     ,any_value(case when sentiment is NULL then 'gray' when sentiment <= -.02 then 'red' when sentiment >= .3 then 'green' ELSE 'gray' END) as sentimentcolor
     ,any_value(latitude) as latitude, any_value(longitude) as longitude, any_value(ABS(MOD(HASH(ENDING_NODE), 1000000))/10000000) as hash_value
-  from "SCRATCH_FORGEAI"."ANDYC"."KBWEB" kb
+  from "SCRATCH_FORGEAI"."ANDYC"."KBWEB2" kb
   //join "PROD_V06XX"."FORGEAI_SURGES"."DOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25
   join "PROD_V06XX"."FORGEAI_ARTICLES"."COMPANYDOCUMENTS" docs on docs.uripath = kb.ENDING_NODE and docs.saliency_V1 >=.25 and docs.confidence >= .5
   join "PROD_V06XX"."ARTICLES_V0670"."INTRINSICEVENTS" ievents on ievents.docid = docs.docid //and ievents.confidence >= 0.35
