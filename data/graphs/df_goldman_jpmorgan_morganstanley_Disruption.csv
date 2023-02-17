@@ -1,0 +1,48 @@
+,Feature,weighted_graph_goldman,weighted_graph_jpmorgan,weighted_graph_morganstanley
+0,number of nodes,75.0,51.0,140.0
+1,number of edges,47.0,34.0,83.0
+2,weighted edges sum,218865483377.0,536461298.0,489640349964.0
+3,average node connections,1.25,1.33,1.19
+4,maximum node connections,3.0,2.0,3.0
+5,minimum node connections,1.0,1.0,1.0
+6,average node incoming connections,0.63,0.67,0.59
+7,maximum node incoming connections,1.0,1.0,2.0
+8,minimum node incoming connections,0.0,0.0,0.0
+9,average node outcoming connections,0.63,0.67,0.59
+10,maximum node outcoming connections,3.0,2.0,3.0
+11,minimum node outcoming connections,0.0,0.0,0.0
+12,average closeness to other nodes,0.01,0.01,0.0
+13,maximum closeness to other nodes,0.01,0.03,0.01
+14,minimum closeness to other nodes,0.0,0.0,0.0
+15,average node importance based on neighbors,0.01,0.0,0.0
+16,maximum node importance based on neighbors,0.74,0.55,0.64
+17,minimum node importance based on neighbors,-0.32,-0.64,-0.66
+18,average node importance based on incoming links,0.01,0.02,0.01
+19,maximum node importance based on incoming links,0.04,0.05,0.02
+20,minimum node importance based on incoming links,0.01,0.01,0.0
+21,probability of connected communities,0.0,0.0,0.0
+22,density,0.01,0.01,0.0
+23,overall_reciprocity,0.0,0.0,0.0
+24,wiener_index,inf,inf,inf
+25,global_efficiency_F,0.01,0.02,0.01
+26,global_efficiency_T,0.0,0.0,0.0
+27,local_efficiency_F,0.01,0.0,0.0
+28,local_efficiency_T,0.0,0.0,0.0
+29,cycle_basis_F,14.0,14.0,18.0
+30,cycle_basis_T,14.0,14.0,18.0
+31,triad_003,65121.0,19848.0,438620.0
+32,triad_012,2399.0,974.0,8950.0
+33,triad_102,0.0,0.0,0.0
+34,triad_021D,5.0,2.0,9.0
+35,triad_021U,0.0,0.0,1.0
+36,triad_021C,0.0,1.0,0.0
+37,triad_111D,0.0,0.0,0.0
+38,triad_111U,0.0,0.0,0.0
+39,triad_030T,0.0,0.0,0.0
+40,triad_030C,0.0,0.0,0.0
+41,triad_201,0.0,0.0,0.0
+42,triad_120D,0.0,0.0,0.0
+43,triad_120U,0.0,0.0,0.0
+44,triad_120C,0.0,0.0,0.0
+45,triad_210,0.0,0.0,0.0
+46,triad_300,0.0,0.0,0.0
